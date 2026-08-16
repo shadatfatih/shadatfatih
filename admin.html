@@ -3,244 +3,727 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Admin Panel — Shadat Fatih</title>
+<title>Admin — Shadat Fatih</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+:root{
+  --bg:#f5f6f8;
+  --card:#fff;
+  --text:#111827;
+  --muted:#6b7280;
+  --line:#e5e7eb;
+  --black:#111;
+  --red:#b91c1c;
+  --green:#15803d;
+  --blue:#2563eb;
+  --shadow:0 10px 35px rgba(0,0,0,.06);
+}
+
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;color:#111}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
 button,input,textarea,select{font:inherit}
+
 button{cursor:pointer}
 
-#loginPage{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#111;padding:20px}
-.login{width:100%;max-width:400px;background:#fff;padding:30px;border-radius:18px}
-.login h1{text-align:center}
-.logo{width:65px;height:65px;border-radius:50%;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;margin:auto;font-weight:bold;font-size:22px}
-.field{margin:15px 0}
-label{display:block;font-weight:bold;font-size:14px;margin-bottom:7px}
-input,textarea,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:9px;outline:none}
-textarea{min-height:130px;resize:vertical}
-.primary{width:100%;padding:13px;background:#111;color:#fff;border:0;border-radius:9px;font-weight:bold}
-.error{display:none;background:#ffecec;color:#a00;padding:10px;border-radius:8px}
+.hidden{display:none!important}
+
+/* LOGIN */
+
+#loginPage{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:
+    radial-gradient(circle at top right,#3b3b3b,transparent 35%),
+    #0d0d0d;
+}
+
+.login-box{
+  width:100%;
+  max-width:410px;
+  background:white;
+  padding:34px;
+  border-radius:24px;
+  box-shadow:0 25px 70px rgba(0,0,0,.35);
+}
+
+.login-logo{
+  width:68px;
+  height:68px;
+  border-radius:18px;
+  background:#111;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  font-weight:800;
+  margin:0 auto 18px;
+}
+
+.login-box h1{
+  text-align:center;
+  margin:0;
+}
+
+.login-sub{
+  text-align:center;
+  color:var(--muted);
+  margin:8px 0 25px;
+}
+
+.field{margin-bottom:17px}
+
+.field label{
+  display:block;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:7px;
+}
+
+input,textarea,select{
+  width:100%;
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:11px;
+  padding:12px 13px;
+  outline:none;
+  transition:.2s;
+}
+
+input:focus,textarea:focus,select:focus{
+  border-color:#111;
+  box-shadow:0 0 0 3px rgba(0,0,0,.06);
+}
+
+textarea{
+  min-height:150px;
+  resize:vertical;
+}
+
+.login-btn{
+  width:100%;
+  padding:13px;
+  border:0;
+  border-radius:11px;
+  background:#111;
+  color:#fff;
+  font-weight:800;
+}
+
+.error{
+  background:#fee2e2;
+  color:#991b1b;
+  padding:11px;
+  border-radius:10px;
+  margin-bottom:15px;
+  font-size:13px;
+}
+
+/* ADMIN */
 
 #adminPage{display:none}
 
 .sidebar{
-position:fixed;left:0;top:0;width:250px;height:100vh;
-background:#111;color:#fff;padding:20px;z-index:10
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:255px;
+  background:#111;
+  color:#fff;
+  padding:22px 15px;
+  z-index:100;
+  overflow-y:auto;
 }
-.brand{font-size:22px;font-weight:bold;padding:10px 0 25px}
-.brand span{color:#c52323}
 
-.menu button{
-width:100%;padding:12px;margin:3px 0;
-background:transparent;color:#bbb;border:0;border-radius:8px;
-text-align:left;font-weight:bold
+.brand{
+  padding:8px 12px 28px;
+  font-size:21px;
+  font-weight:900;
+  letter-spacing:-.5px;
 }
-.menu button:hover,.menu button.active{background:#292929;color:#fff}
+
+.brand span{color:#dc2626}
+
+.nav-title{
+  color:#777;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1px;
+  padding:10px 12px 7px;
+}
+
+.nav button{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  border:0;
+  background:transparent;
+  color:#aaa;
+  padding:11px 12px;
+  margin:3px 0;
+  border-radius:10px;
+  text-align:left;
+  font-weight:700;
+}
+
+.nav button:hover,
+.nav button.active{
+  background:#252525;
+  color:white;
+}
 
 .logout{
-width:100%;margin-top:25px;padding:12px;
-background:#8f1515;color:#fff;border:0;border-radius:8px
+  width:100%;
+  border:0;
+  background:#641414;
+  color:#fff;
+  padding:12px;
+  border-radius:10px;
+  margin-top:22px;
+  font-weight:800;
 }
 
-.main{margin-left:250px}
-.top{
-height:70px;background:#fff;border-bottom:1px solid #eee;
-display:flex;align-items:center;justify-content:space-between;
-padding:0 25px;position:sticky;top:0;z-index:5
+.main{
+  margin-left:255px;
+  min-height:100vh;
 }
-.content{padding:25px;max-width:1500px;margin:auto}
 
-.section{display:none}
-.section.active{display:block}
-
-.cards{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:15px
+.topbar{
+  height:70px;
+  background:#fff;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  position:sticky;
+  top:0;
+  z-index:50;
 }
+
+.top-left{
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+
+.menu-mobile{
+  display:none;
+  border:0;
+  background:#111;
+  color:#fff;
+  padding:8px 11px;
+  border-radius:8px;
+}
+
+.admin-user{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.content{
+  max-width:1450px;
+  margin:auto;
+  padding:28px;
+}
+
+.page{display:none}
+.page.active{display:block}
+
+.page-heading{
+  margin-bottom:23px;
+}
+
+.page-heading h1{
+  margin:0 0 6px;
+  font-size:27px;
+}
+
+.page-heading p{
+  margin:0;
+  color:var(--muted);
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  margin-bottom:22px;
+}
+
+.stat{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:21px;
+  box-shadow:var(--shadow);
+}
+
+.stat-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.stat-icon{
+  width:40px;
+  height:40px;
+  border-radius:11px;
+  background:#f3f4f6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.stat small{
+  color:var(--muted);
+  font-weight:700;
+}
+
+.stat strong{
+  display:block;
+  font-size:30px;
+  margin-top:10px;
+}
+
+/* CARDS */
+
 .card{
-background:#fff;border-radius:14px;padding:20px;
-box-shadow:0 5px 20px #0000000b;margin-bottom:20px
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:22px;
+  box-shadow:var(--shadow);
+  margin-bottom:20px;
 }
-.stat strong{display:block;font-size:30px;margin-top:8px}
-.stat small{color:#777}
+
+.card h2{
+  margin:0 0 18px;
+  font-size:18px;
+}
+
+/* CATEGORIES */
 
 .categories{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:15px
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
 }
-.category{
-background:#fff;border-radius:14px;padding:20px;
-border:1px solid #eee;cursor:pointer
-}
-.category:hover{border-color:#111}
-.category b{font-size:25px}
-.category h3{margin:8px 0 5px}
-.category p{margin:0;color:#777;font-size:14px}
 
-.formgrid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:15px
+.category{
+  border:1px solid var(--line);
+  background:#fff;
+  padding:19px;
+  border-radius:15px;
+  transition:.2s;
+  cursor:pointer;
 }
+
+.category:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--shadow);
+  border-color:#bbb;
+}
+
+.cat-code{
+  font-size:23px;
+  font-weight:900;
+}
+
+.category h3{
+  margin:8px 0 5px;
+  font-size:17px;
+}
+
+.category p{
+  color:var(--muted);
+  margin:0;
+  font-size:13px;
+  line-height:1.5;
+}
+
+/* FORM */
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:17px;
+}
+
 .full{grid-column:1/-1}
 
-.actions{display:flex;gap:8px;flex-wrap:wrap}
+.form-actions{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+}
+
 .btn{
-border:0;border-radius:8px;padding:10px 14px;font-weight:bold
+  border:0;
+  border-radius:9px;
+  padding:10px 14px;
+  font-weight:800;
 }
-.black{background:#111;color:#fff}
-.red{background:#a81919;color:#fff}
-.green{background:#18864b;color:#fff}
-.gray{background:#eee;color:#111}
 
-table{width:100%;border-collapse:collapse}
-th,td{text-align:left;padding:12px;border-bottom:1px solid #eee}
-th{background:#fafafa;font-size:13px}
-td{font-size:14px}
+.btn-black{background:#111;color:#fff}
+.btn-green{background:#15803d;color:#fff}
+.btn-red{background:#b91c1c;color:#fff}
+.btn-gray{background:#f0f0f0;color:#111}
+.btn-blue{background:#2563eb;color:#fff}
 
-.tablewrap{overflow-x:auto}
-
-.status{
-padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold
+.toolbar{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:15px;
 }
-.published{background:#e4f8ec;color:#08733d}
-.draft{background:#eee;color:#555}
 
-.search{margin-bottom:15px}
+.toolbar input{max-width:450px}
 
-#loading{
-display:none;position:fixed;inset:0;
-background:#ffffffcc;z-index:1000;
-align-items:center;justify-content:center
+/* TABLE */
+
+.table-wrap{
+  overflow-x:auto;
 }
-.loader{
-width:40px;height:40px;border:4px solid #ddd;
-border-top-color:#111;border-radius:50%;
-animation:spin .8s linear infinite
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:780px;
 }
-@keyframes spin{to{transform:rotate(360deg)}}
+
+th,td{
+  padding:13px 11px;
+  text-align:left;
+  border-bottom:1px solid var(--line);
+  vertical-align:middle;
+}
+
+th{
+  color:#6b7280;
+  font-size:12px;
+  text-transform:uppercase;
+}
+
+td{
+  font-size:14px;
+}
+
+.badge{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:800;
+}
+
+.badge-published{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.badge-draft{
+  background:#f3f4f6;
+  color:#4b5563;
+}
+
+.badge-cat{
+  background:#111;
+  color:#fff;
+}
+
+.actions{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+
+/* GALLERY */
+
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
+  gap:17px;
+}
+
+.gallery-item{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:15px;
+  overflow:hidden;
+}
+
+.gallery-item img{
+  width:100%;
+  height:170px;
+  object-fit:cover;
+  display:block;
+}
+
+.gallery-info{
+  padding:13px;
+}
+
+.gallery-info h3{
+  margin:0 0 10px;
+  font-size:14px;
+}
+
+/* LOADER */
+
+#loader{
+  position:fixed;
+  inset:0;
+  background:rgba(255,255,255,.75);
+  backdrop-filter:blur(4px);
+  z-index:9999;
+  display:none;
+  align-items:center;
+  justify-content:center;
+}
+
+.spinner{
+  width:42px;
+  height:42px;
+  border:4px solid #ddd;
+  border-top-color:#111;
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
+/* TOAST */
 
 #toast{
-display:none;position:fixed;right:20px;bottom:20px;
-background:#111;color:#fff;padding:13px 18px;
-border-radius:9px;z-index:2000
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  background:#111;
+  color:#fff;
+  padding:13px 17px;
+  border-radius:10px;
+  z-index:10000;
+  display:none;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
 }
 
-.mobile{display:none}
+/* RESPONSIVE */
 
-@media(max-width:900px){
-.sidebar{transform:translateX(-100%);transition:.2s}
-.sidebar.open{transform:translateX(0)}
-.main{margin-left:0}
-.mobile{display:block;background:#111;color:#fff;border:0;padding:8px 11px;border-radius:6px}
-.cards{grid-template-columns:1fr 1fr}
-.categories{grid-template-columns:1fr 1fr}
-.formgrid{grid-template-columns:1fr}
-.full{grid-column:auto}
+@media(max-width:1000px){
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .categories{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:750px){
+
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .menu-mobile{
+    display:block;
+  }
+
+  .admin-user{
+    display:none;
+  }
+
+  .content{
+    padding:17px;
+  }
+
+  .topbar{
+    padding:0 17px;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .full{
+    grid-column:auto;
+  }
 }
 
 @media(max-width:500px){
-.cards,.categories{grid-template-columns:1fr}
-.content{padding:15px}
-.top{padding:0 15px}
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  .stat{
+    padding:15px;
+  }
+
+  .stat strong{
+    font-size:24px;
+  }
+
+  .categories{
+    grid-template-columns:1fr;
+  }
+
+  .page-heading h1{
+    font-size:23px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div id="loading"><div class="loader"></div></div>
+<!-- LOADER -->
+<div id="loader">
+  <div class="spinner"></div>
+</div>
+
 <div id="toast"></div>
 
-<!-- LOGIN -->
 
-<div id="loginPage">
+<!-- ================= LOGIN ================= -->
 
-<div class="login">
+<section id="loginPage">
 
-<div class="logo">SF</div>
+  <div class="login-box">
 
-<h1>Admin Login</h1>
-<p style="text-align:center;color:#777">Shadat Fatih Administration</p>
+    <div class="login-logo">SF</div>
 
-<div id="loginError" class="error"></div>
+    <h1>SHADAT FATIH</h1>
 
-<form id="loginForm">
+    <div class="login-sub">
+      Secure Administration
+    </div>
 
-<div class="field">
-<label>Email</label>
-<input id="email" type="email" required>
-</div>
+    <div id="loginError" class="error hidden"></div>
 
-<div class="field">
-<label>Password</label>
-<input id="password" type="password" required>
-</div>
+    <form id="loginForm">
 
-<button class="primary">🔐 Login</button>
+      <div class="field">
+        <label>Email</label>
+        <input id="loginEmail"
+               type="email"
+               placeholder="Admin email"
+               required>
+      </div>
 
-</form>
+      <div class="field">
+        <label>Password</label>
+        <input id="loginPassword"
+               type="password"
+               placeholder="Password"
+               required>
+      </div>
 
-</div>
-</div>
+      <button class="login-btn">
+        🔐 Login to Admin
+      </button>
+
+    </form>
+
+  </div>
+
+</section>
 
 
-<!-- ADMIN -->
+<!-- ================= ADMIN ================= -->
 
 <div id="adminPage">
 
+<!-- SIDEBAR -->
+
 <aside class="sidebar" id="sidebar">
 
-<div class="brand">
-SHADAT <span>FATIH</span>
-</div>
+  <div class="brand">
+    SHADAT <span>FATIH</span>
+  </div>
 
-<div class="menu">
+  <div class="nav">
 
-<button class="active" data-page="dashboard">
-📊 Dashboard
-</button>
+    <div class="nav-title">MAIN</div>
 
-<button data-page="posts">
-📝 All Posts
-</button>
+    <button class="active" data-page="dashboard">
+      📊 Dashboard
+    </button>
 
-<button data-page="categories">
-📚 Main Categories
-</button>
+    <button data-page="posts">
+      📝 Posts & Notices
+    </button>
 
-<button data-page="gallery">
-🖼️ Gallery
-</button>
+    <button data-page="categories">
+      📚 Categories
+    </button>
 
-<button data-page="pdf">
-📄 PDF Documents
-</button>
+    <div class="nav-title">MEDIA</div>
 
-</div>
+    <button data-page="gallery">
+      🖼️ Gallery
+    </button>
 
-<button class="logout" id="logout">
-🚪 Secure Logout
-</button>
+    <button data-page="pdf">
+      📄 PDF Documents
+    </button>
+
+  </div>
+
+  <button class="logout" id="logoutBtn">
+    🚪 Secure Logout
+  </button>
 
 </aside>
 
 
+<!-- MAIN -->
+
 <main class="main">
 
-<header class="top">
+<header class="topbar">
 
-<div style="display:flex;gap:12px;align-items:center">
-<button class="mobile" id="mobileMenu">☰</button>
-<h2 id="pageTitle">Dashboard</h2>
-</div>
+  <div class="top-left">
 
-<span id="adminEmail" style="color:#777;font-size:13px"></span>
+    <button class="menu-mobile" id="menuMobile">
+      ☰
+    </button>
+
+    <strong id="pageTitle">Dashboard</strong>
+
+  </div>
+
+  <div class="admin-user" id="adminEmail"></div>
 
 </header>
 
@@ -248,1234 +731,1887 @@ SHADAT <span>FATIH</span>
 <div class="content">
 
 
-<!-- DASHBOARD -->
+<!-- ================= DASHBOARD ================= -->
 
-<section id="dashboard" class="section active">
+<section class="page active" id="dashboard">
 
-<h1>Dashboard</h1>
-<p style="color:#777">Manage your entire education website.</p>
+  <div class="page-heading">
 
-<div class="cards">
+    <h1>Dashboard</h1>
 
-<div class="card stat">
-<small>Total Posts</small>
-<strong id="totalPosts">0</strong>
-</div>
+    <p>
+      Manage your education website from one place.
+    </p>
 
-<div class="card stat">
-<small>Published</small>
-<strong id="published">0</strong>
-</div>
-
-<div class="card stat">
-<small>Drafts</small>
-<strong id="drafts">0</strong>
-</div>
-
-<div class="card stat">
-<small>Gallery</small>
-<strong id="galleryCount">0</strong>
-</div>
-
-</div>
-
-<div class="card">
-
-<h2>📚 Main Categories</h2>
-
-<div class="categories">
-
-<div class="category" onclick="openCategory('NU')">
-<b>NU</b>
-<h3>National University</h3>
-<p>ভর্তি, পরীক্ষা, ফরম পূরণ, ফলাফল ও নোটিশ।</p>
-</div>
-
-<div class="category" onclick="openCategory('CB')">
-<b>CB</b>
-<h3>Chittagong Education Board</h3>
-<p>SSC, HSC ও বোর্ডের গুরুত্বপূর্ণ আপডেট।</p>
-</div>
-
-<div class="category" onclick="openCategory('AD')">
-<b>AD</b>
-<h3>Admissions</h3>
-<p>Admission ও আবেদন সংক্রান্ত তথ্য।</p>
-</div>
-
-<div class="category" onclick="openCategory('EX')">
-<b>EX</b>
-<h3>Exam & Routine</h3>
-<p>পরীক্ষা, সময়সূচি ও রুটিন।</p>
-</div>
-
-<div class="category" onclick="openCategory('RS')">
-<b>RS</b>
-<h3>Results</h3>
-<p>SSC, HSC ও বিশ্ববিদ্যালয়ের ফলাফল।</p>
-</div>
-
-<div class="category" onclick="openCategory('NT')">
-<b>NT</b>
-<h3>Notice</h3>
-<p>গুরুত্বপূর্ণ শিক্ষা নোটিশ।</p>
-</div>
-
-</div>
-</div>
-
-</section>
+  </div>
 
 
-<!-- POSTS -->
+  <div class="stats">
 
-<section id="posts" class="section">
+    <div class="stat">
 
-<h1>📝 Posts / Notices</h1>
+      <div class="stat-top">
+        <small>Total Posts</small>
+        <div class="stat-icon">📝</div>
+      </div>
 
-<div class="card">
+      <strong id="totalPosts">0</strong>
 
-<h2 id="formTitle">Create New Post</h2>
-
-<form id="postForm">
-
-<input type="hidden" id="postId">
-
-<div class="formgrid">
-
-<div class="field">
-<label>Category</label>
-
-<select id="category" required>
-
-<option value="NU">NU — National University</option>
-<option value="CB">CB — Chittagong Education Board</option>
-<option value="AD">AD — Admissions</option>
-<option value="EX">EX — Exam & Routine</option>
-<option value="RS">RS — Results</option>
-<option value="NT">NT — Notice</option>
-
-</select>
-</div>
-
-<div class="field">
-<label>Status</label>
-
-<select id="status">
-
-<option value="published">🌐 Published</option>
-<option value="draft">📝 Draft</option>
-
-</select>
-</div>
-
-<div class="field full">
-<label>Title</label>
-<input id="title" required placeholder="Post title">
-</div>
-
-<div class="field full">
-<label>Content</label>
-<textarea id="content" required placeholder="Write your post..."></textarea>
-</div>
-
-<div class="field">
-<label>Image</label>
-<input id="image" type="file" accept="image/*">
-</div>
-
-<div class="field">
-<label>PDF</label>
-<input id="pdf" type="file" accept="application/pdf">
-</div>
-
-</div>
-
-<div class="actions">
-
-<button class="btn black">
-💾 Save Post
-</button>
-
-<button type="button" class="btn gray" id="cancelEdit" style="display:none">
-Cancel Edit
-</button>
-
-</div>
-
-</form>
-
-</div>
+    </div>
 
 
-<div class="card">
+    <div class="stat">
 
-<h2>All Posts</h2>
+      <div class="stat-top">
+        <small>Published</small>
+        <div class="stat-icon">🌐</div>
+      </div>
 
-<input class="search" id="search" placeholder="🔍 Search posts...">
+      <strong id="publishedPosts">0</strong>
 
-<div class="tablewrap">
+    </div>
 
-<table>
 
-<thead>
-<tr>
-<th>Category</th>
-<th>Title</th>
-<th>Status</th>
-<th>Date</th>
-<th>Actions</th>
-</tr>
-</thead>
+    <div class="stat">
 
-<tbody id="postTable"></tbody>
+      <div class="stat-top">
+        <small>Drafts</small>
+        <div class="stat-icon">📝</div>
+      </div>
 
-</table>
+      <strong id="draftPosts">0</strong>
 
-</div>
+    </div>
 
-</div>
+
+    <div class="stat">
+
+      <div class="stat-top">
+        <small>Gallery</small>
+        <div class="stat-icon">🖼️</div>
+      </div>
+
+      <strong id="galleryCount">0</strong>
+
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>📚 Main Categories</h2>
+
+    <div class="categories">
+
+      <div class="category" onclick="selectCategory('NU')">
+        <div class="cat-code">NU</div>
+        <h3>National University</h3>
+        <p>ভর্তি, পরীক্ষা, ফরম পূরণ, ফলাফল ও নোটিশ।</p>
+      </div>
+
+      <div class="category" onclick="selectCategory('CB')">
+        <div class="cat-code">CB</div>
+        <h3>Chittagong Education Board</h3>
+        <p>SSC, HSC ও বোর্ডের গুরুত্বপূর্ণ আপডেট।</p>
+      </div>
+
+      <div class="category" onclick="selectCategory('AD')">
+        <div class="cat-code">AD</div>
+        <h3>Admissions</h3>
+        <p>Admission ও আবেদন সংক্রান্ত তথ্য।</p>
+      </div>
+
+      <div class="category" onclick="selectCategory('EX')">
+        <div class="cat-code">EX</div>
+        <h3>Exam & Routine</h3>
+        <p>পরীক্ষা, সময়সূচি ও রুটিন।</p>
+      </div>
+
+      <div class="category" onclick="selectCategory('RS')">
+        <div class="cat-code">RS</div>
+        <h3>Results</h3>
+        <p>SSC, HSC ও বিশ্ববিদ্যালয়ের ফলাফল।</p>
+      </div>
+
+      <div class="category" onclick="selectCategory('NT')">
+        <div class="cat-code">NT</div>
+        <h3>Notice</h3>
+        <p>গুরুত্বপূর্ণ শিক্ষা নোটিশ।</p>
+      </div>
+
+    </div>
+
+  </div>
 
 </section>
 
 
-<!-- CATEGORIES -->
+<!-- ================= POSTS ================= -->
 
-<section id="categories" class="section">
+<section class="page" id="posts">
 
-<h1>📚 Main Categories</h1>
+  <div class="page-heading">
 
-<p style="color:#777">
-Choose a category to manage its posts.
-</p>
+    <h1>📝 Posts & Notices</h1>
 
-<div class="categories">
+    <p>
+      Create, edit, publish, draft and delete website posts.
+    </p>
 
-<div class="category" onclick="openCategory('NU')">
-<b>NU</b>
-<h3>National University</h3>
-<p>ভর্তি, পরীক্ষা, ফরম পূরণ, ফলাফল ও নোটিশ।</p>
-</div>
+  </div>
 
-<div class="category" onclick="openCategory('CB')">
-<b>CB</b>
-<h3>Chittagong Education Board</h3>
-<p>SSC, HSC ও বোর্ডের গুরুত্বপূর্ণ আপডেট।</p>
-</div>
 
-<div class="category" onclick="openCategory('AD')">
-<b>AD</b>
-<h3>Admissions</h3>
-<p>Admission ও আবেদন সংক্রান্ত তথ্য।</p>
-</div>
+  <div class="card">
 
-<div class="category" onclick="openCategory('EX')">
-<b>EX</b>
-<h3>Exam & Routine</h3>
-<p>পরীক্ষা, সময়সূচি ও রুটিন।</p>
-</div>
+    <h2 id="postFormTitle">
+      ➕ Create New Post
+    </h2>
 
-<div class="category" onclick="openCategory('RS')">
-<b>RS</b>
-<h3>Results</h3>
-<p>SSC, HSC ও বিশ্ববিদ্যালয়ের ফলাফল।</p>
-</div>
+    <form id="postForm">
 
-<div class="category" onclick="openCategory('NT')">
-<b>NT</b>
-<h3>Notice</h3>
-<p>গুরুত্বপূর্ণ শিক্ষা নোটিশ।</p>
-</div>
+      <input type="hidden" id="editId">
 
-</div>
+      <div class="form-grid">
+
+        <div class="field">
+
+          <label>Category</label>
+
+          <select id="postCategory" required>
+
+            <option value="NU">
+              NU — National University
+            </option>
+
+            <option value="CB">
+              CB — Chittagong Education Board
+            </option>
+
+            <option value="AD">
+              AD — Admissions
+            </option>
+
+            <option value="EX">
+              EX — Exam & Routine
+            </option>
+
+            <option value="RS">
+              RS — Results
+            </option>
+
+            <option value="NT">
+              NT — Notice
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>Status</label>
+
+          <select id="postStatus">
+
+            <option value="published">
+              🌐 Published
+            </option>
+
+            <option value="draft">
+              📝 Draft
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="field full">
+
+          <label>Title</label>
+
+          <input id="postTitle"
+                 placeholder="Write post title..."
+                 required>
+
+        </div>
+
+
+        <div class="field full">
+
+          <label>Content</label>
+
+          <textarea id="postContent"
+                    placeholder="Write your notice or update..."
+                    required></textarea>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>🖼️ Image</label>
+
+          <input id="postImage"
+                 type="file"
+                 accept="image/*">
+
+        </div>
+
+
+        <div class="field">
+
+          <label>📄 PDF</label>
+
+          <input id="postPdf"
+                 type="file"
+                 accept="application/pdf">
+
+        </div>
+
+      </div>
+
+
+      <div class="form-actions">
+
+        <button class="btn btn-black">
+          💾 Save Post
+        </button>
+
+        <button type="button"
+                class="btn btn-gray hidden"
+                id="cancelEdit">
+          Cancel Edit
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="toolbar">
+
+      <input id="searchPosts"
+             placeholder="🔍 Search title, category or content...">
+
+      <select id="filterCategory"
+              style="max-width:220px">
+
+        <option value="">All Categories</option>
+        <option value="NU">NU</option>
+        <option value="CB">CB</option>
+        <option value="AD">AD</option>
+        <option value="EX">EX</option>
+        <option value="RS">RS</option>
+        <option value="NT">NT</option>
+
+      </select>
+
+    </div>
+
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Category</th>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Action</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="postsTable"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
 
 </section>
 
 
-<!-- GALLERY -->
+<!-- ================= CATEGORIES ================= -->
 
-<section id="gallery" class="section">
+<section class="page" id="categories">
 
-<h1>🖼️ Gallery</h1>
+  <div class="page-heading">
 
-<div class="card">
+    <h1>📚 Main Categories</h1>
 
-<form id="galleryForm">
+    <p>
+      Manage posts under each education category.
+    </p>
 
-<div class="field">
-<label>Image Title</label>
-<input id="galleryTitle" required>
-</div>
+  </div>
 
-<div class="field">
-<label>Image</label>
-<input id="galleryFile" type="file" accept="image/*" required>
-</div>
 
-<button class="btn black">
-🖼️ Upload Image
-</button>
+  <div class="categories">
 
-</form>
+    <div class="category" onclick="selectCategory('NU')">
+      <div class="cat-code">NU</div>
+      <h3>National University</h3>
+      <p>ভর্তি, পরীক্ষা, ফরম পূরণ, ফলাফল ও নোটিশ।</p>
+    </div>
 
-</div>
+    <div class="category" onclick="selectCategory('CB')">
+      <div class="cat-code">CB</div>
+      <h3>Chittagong Education Board</h3>
+      <p>SSC, HSC ও বোর্ডের গুরুত্বপূর্ণ আপডেট।</p>
+    </div>
 
-<div class="card">
+    <div class="category" onclick="selectCategory('AD')">
+      <div class="cat-code">AD</div>
+      <h3>Admissions</h3>
+      <p>Admission ও আবেদন সংক্রান্ত তথ্য।</p>
+    </div>
 
-<h2>Gallery Images</h2>
+    <div class="category" onclick="selectCategory('EX')">
+      <div class="cat-code">EX</div>
+      <h3>Exam & Routine</h3>
+      <p>পরীক্ষা, সময়সূচি ও রুটিন।</p>
+    </div>
 
-<div id="galleryGrid"
-style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:15px">
-</div>
+    <div class="category" onclick="selectCategory('RS')">
+      <div class="cat-code">RS</div>
+      <h3>Results</h3>
+      <p>SSC, HSC ও বিশ্ববিদ্যালয়ের ফলাফল।</p>
+    </div>
 
-</div>
+    <div class="category" onclick="selectCategory('NT')">
+      <div class="cat-code">NT</div>
+      <h3>Notice</h3>
+      <p>গুরুত্বপূর্ণ শিক্ষা নোটিশ।</p>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= GALLERY ================= -->
+
+<section class="page" id="gallery">
+
+  <div class="page-heading">
+
+    <h1>🖼️ Gallery</h1>
+
+    <p>
+      Upload and manage website images.
+    </p>
+
+  </div>
+
+
+  <div class="card">
+
+    <form id="galleryForm">
+
+      <div class="field">
+
+        <label>Image Title</label>
+
+        <input id="galleryTitle"
+               placeholder="Image title..."
+               required>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>Select Image</label>
+
+        <input id="galleryFile"
+               type="file"
+               accept="image/*"
+               required>
+
+      </div>
+
+
+      <button class="btn btn-black">
+        🖼️ Upload Image
+      </button>
+
+    </form>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>Gallery Images</h2>
+
+    <div class="gallery-grid"
+         id="galleryGrid"></div>
+
+  </div>
 
 </section>
 
 
-<!-- PDF -->
+<!-- ================= PDF ================= -->
 
-<section id="pdf" class="section">
+<section class="page" id="pdf">
 
-<h1>📄 PDF Documents</h1>
+  <div class="page-heading">
 
-<div class="card">
+    <h1>📄 PDF Documents</h1>
 
-<form id="pdfForm">
+    <p>
+      Upload and manage education documents.
+    </p>
 
-<div class="field">
-<label>PDF Title</label>
-<input id="pdfTitle" required>
-</div>
+  </div>
 
-<div class="field">
-<label>PDF File</label>
-<input id="pdfFile" type="file" accept="application/pdf" required>
-</div>
 
-<div class="field">
-<label>Status</label>
+  <div class="card">
 
-<select id="pdfStatus">
-<option value="published">Published</option>
-<option value="draft">Draft</option>
-</select>
+    <form id="pdfForm">
 
-</div>
+      <div class="field">
 
-<button class="btn black">
-📄 Upload PDF
-</button>
+        <label>PDF Title</label>
 
-</form>
+        <input id="pdfTitle"
+               placeholder="Document title..."
+               required>
 
-</div>
+      </div>
 
-<div class="card">
 
-<h2>Documents</h2>
+      <div class="field">
 
-<div class="tablewrap">
+        <label>PDF File</label>
 
-<table>
+        <input id="pdfFile"
+               type="file"
+               accept="application/pdf"
+               required>
 
-<thead>
-<tr>
-<th>Title</th>
-<th>Status</th>
-<th>Date</th>
-<th>Open</th>
-<th>Delete</th>
-</tr>
-</thead>
+      </div>
 
-<tbody id="pdfTable"></tbody>
 
-</table>
+      <div class="field">
 
-</div>
+        <label>Status</label>
 
-</div>
+        <select id="pdfStatus">
+
+          <option value="published">
+            🌐 Published
+          </option>
+
+          <option value="draft">
+            📝 Draft
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <button class="btn btn-black">
+        📄 Upload PDF
+      </button>
+
+    </form>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>Documents</h2>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Open</th>
+            <th>Delete</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="pdfTable"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
 
 </section>
+
 
 </div>
 </main>
+
 </div>
 
 
 <script>
 
-/* =========================
-SUPABASE
-========================= */
+/* =====================================================
+   SUPABASE CONFIG
+===================================================== */
 
-const SUPABASE_URL="https://ymwhodckmbybccufzjot.supabase.co";
-const SUPABASE_ANON_KEY="sb_publishable_u31olXCxIcSsMdUeyyt5UQ_YeCWKToH";
+const SUPABASE_URL =
+"https://ymwhodckmbybccufzjot.supabase.co";
 
-const GALLERY_BUCKET="gallery";
-const PDF_BUCKET="pdfs";
+const SUPABASE_ANON_KEY =
+"sb_publishable_u31olXCxIcSsMdUeyyt5UQ_YeCWKToH";
 
-const {createClient}=supabase;
+const GALLERY_BUCKET = "gallery";
+const PDF_BUCKET = "pdfs";
 
-const db=createClient(
-SUPABASE_URL,
-SUPABASE_ANON_KEY,
-{
-auth:{
-persistSession:true,
-autoRefreshToken:true
-}
-}
+const db = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY,
+  {
+    auth:{
+      persistSession:true,
+      autoRefreshToken:true
+    }
+  }
 );
 
 
-/* =========================
-HELPERS
-========================= */
+/* =====================================================
+   HELPERS
+===================================================== */
 
-const $=id=>document.getElementById(id);
+const $ = id => document.getElementById(id);
 
-function loading(x){
-$("loading").style.display=x?"flex":"none";
+function showLoader(){
+  $("loader").style.display="flex";
 }
 
-function toast(text){
-$("toast").textContent=text;
-$("toast").style.display="block";
-
-setTimeout(()=>{
-$("toast").style.display="none";
-},3000);
+function hideLoader(){
+  $("loader").style.display="none";
 }
 
-function esc(x){
-return String(x??"")
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;");
+function toast(message){
+  $("toast").textContent=message;
+  $("toast").style.display="block";
+
+  setTimeout(()=>{
+    $("toast").style.display="none";
+  },3000);
 }
 
-function date(x){
-return x?new Date(x).toLocaleDateString("en-BD"):"";
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+function formatDate(value){
+
+  if(!value)return "";
+
+  return new Date(value).toLocaleDateString(
+    "en-BD",
+    {
+      year:"numeric",
+      month:"short",
+      day:"numeric"
+    }
+  );
+
 }
 
 
-/* =========================
-AUTH
-========================= */
+/* =====================================================
+   AUTH
+===================================================== */
 
-async function checkAuth(){
+async function checkSession(){
 
-const {data}=await db.auth.getSession();
+  const {data} =
+    await db.auth.getSession();
 
-if(data.session){
-openAdmin(data.session);
-}else{
-$("loginPage").style.display="flex";
+  if(data.session){
+
+    openAdmin(data.session);
+
+  }else{
+
+    $("loginPage").style.display="flex";
+
+  }
+
 }
 
-}
+
+$("loginForm").addEventListener(
+  "submit",
+  async event => {
+
+    event.preventDefault();
+
+    showLoader();
+
+    $("loginError").classList.add("hidden");
+
+    try{
+
+      const email =
+        $("loginEmail").value.trim();
+
+      const password =
+        $("loginPassword").value;
+
+      const {data,error} =
+        await db.auth.signInWithPassword({
+          email,
+          password
+        });
+
+      if(error)throw error;
+
+      openAdmin(data.session);
+
+      toast("Login successful");
+
+    }catch(error){
+
+      $("loginError").textContent =
+        error.message;
+
+      $("loginError")
+        .classList.remove("hidden");
+
+    }finally{
+
+      hideLoader();
+
+    }
+
+  }
+);
+
 
 async function openAdmin(session){
 
-$("loginPage").style.display="none";
-$("adminPage").style.display="block";
+  $("loginPage").style.display="none";
+  $("adminPage").style.display="block";
 
-$("adminEmail").textContent=session.user.email;
+  $("adminEmail").textContent =
+    session.user.email;
 
-await loadPosts();
-await loadDashboard();
-await loadGallery();
-await loadPDFs();
+  await loadEverything();
 
 }
 
-$("loginForm").addEventListener("submit",async e=>{
 
-e.preventDefault();
+$("logoutBtn").onclick =
+  async()=>{
 
-loading(true);
+    if(!confirm("Logout from Admin Panel?"))
+      return;
 
-try{
+    showLoader();
 
-const {data,error}=await db.auth.signInWithPassword({
-email:$("email").value.trim(),
-password:$("password").value
-});
+    await db.auth.signOut({
+      scope:"local"
+    });
 
-if(error)throw error;
+    location.reload();
 
-await openAdmin(data.session);
-
-toast("Login successful");
-
-}catch(error){
-
-$("loginError").textContent=error.message;
-$("loginError").style.display="block";
-
-}finally{
-loading(false);
-}
-
-});
+  };
 
 
-$("logout").onclick=async()=>{
+/* =====================================================
+   NAVIGATION
+===================================================== */
 
-if(!confirm("Logout from Admin Panel?"))return;
+const pageNames = {
 
-loading(true);
-
-await db.auth.signOut({scope:"local"});
-
-location.reload();
+  dashboard:"Dashboard",
+  posts:"Posts & Notices",
+  categories:"Categories",
+  gallery:"Gallery",
+  pdf:"PDF Documents"
 
 };
 
 
-/* =========================
-NAVIGATION
-========================= */
-
-document.querySelectorAll(".menu button")
+document
+.querySelectorAll(".nav button[data-page]")
 .forEach(button=>{
 
-button.onclick=()=>{
+  button.addEventListener("click",()=>{
 
-document.querySelectorAll(".menu button")
-.forEach(x=>x.classList.remove("active"));
+    const page =
+      button.dataset.page;
 
-button.classList.add("active");
+    document
+      .querySelectorAll(".nav button")
+      .forEach(x=>
+        x.classList.remove("active")
+      );
 
-document.querySelectorAll(".section")
-.forEach(x=>x.classList.remove("active"));
+    button.classList.add("active");
 
-const page=button.dataset.page;
+    document
+      .querySelectorAll(".page")
+      .forEach(x=>
+        x.classList.remove("active")
+      );
 
-$(page).classList.add("active");
+    $(page).classList.add("active");
 
-const titles={
-dashboard:"Dashboard",
-posts:"Posts / Notices",
-categories:"Main Categories",
-gallery:"Gallery",
-pdf:"PDF Documents"
-};
+    $("pageTitle").textContent =
+      pageNames[page];
 
-$("pageTitle").textContent=titles[page];
+    $("sidebar").classList.remove("open");
 
-$("sidebar").classList.remove("open");
-
-};
+  });
 
 });
 
 
-$("mobileMenu").onclick=()=>{
-$("sidebar").classList.toggle("open");
+$("menuMobile").onclick=()=>{
+  $("sidebar").classList.toggle("open");
 };
 
 
-/* =========================
-CATEGORY
-========================= */
-
-window.openCategory=function(cat){
-
-$("posts").classList.add("active");
-
-document.querySelectorAll(".section")
-.forEach(x=>{
-if(x.id!=="posts")x.classList.remove("active");
-});
-
-document.querySelectorAll(".menu button")
-.forEach(x=>x.classList.remove("active"));
-
-$("pageTitle").textContent=cat+" Posts";
-
-$("category").value=cat;
-
-renderPosts(allPosts.filter(x=>x.category===cat));
-
-};
-
-
-/* =========================
-POSTS
-========================= */
+/* =====================================================
+   POSTS
+===================================================== */
 
 let allPosts=[];
 
+
 async function loadPosts(){
 
-const {data,error}=await db
-.from("notices")
-.select("*")
-.order("created_at",{ascending:false});
+  const {data,error} =
+    await db
+      .from("public_posts")
+      .select("*")
+      .order("created_at",{ascending:false});
 
-if(error){
-console.error(error);
-toast(error.message);
-return;
-}
+  if(error){
 
-allPosts=data||[];
+    console.error(error);
 
-renderPosts(allPosts);
+    toast(error.message);
+
+    return;
+
+  }
+
+  allPosts=data || [];
+
+  renderPosts(allPosts);
 
 }
 
 
 function renderPosts(posts){
 
-const table=$("postTable");
+  const table =
+    $("postsTable");
 
-table.innerHTML="";
+  table.innerHTML="";
 
-if(!posts.length){
+  if(!posts.length){
 
-table.innerHTML=
-`<tr><td colspan="5">No posts found.</td></tr>`;
+    table.innerHTML=`
+      <tr>
+        <td colspan="5"
+            style="text-align:center;color:#777;padding:30px">
+          No posts found.
+        </td>
+      </tr>
+    `;
 
-return;
+    return;
+
+  }
+
+
+  posts.forEach(post=>{
+
+    table.innerHTML += `
+
+      <tr>
+
+        <td>
+          <span class="badge badge-cat">
+            ${escapeHTML(post.category)}
+          </span>
+        </td>
+
+        <td>
+          <strong>
+            ${escapeHTML(post.title)}
+          </strong>
+        </td>
+
+        <td>
+
+          <span class="badge ${
+            post.status==="published"
+              ? "badge-published"
+              : "badge-draft"
+          }">
+
+            ${
+              post.status==="published"
+                ? "Published"
+                : "Draft"
+            }
+
+          </span>
+
+        </td>
+
+        <td>
+          ${formatDate(post.created_at)}
+        </td>
+
+        <td>
+
+          <div class="actions">
+
+            <button
+              class="btn btn-gray"
+              onclick="editPost('${post.id}')">
+
+              ✏️ Edit
+
+            </button>
+
+            <button
+              class="btn btn-red"
+              onclick="deletePost('${post.id}')">
+
+              🗑️ Delete
+
+            </button>
+
+          </div>
+
+        </td>
+
+      </tr>
+
+    `;
+
+  });
 
 }
 
-posts.forEach(p=>{
 
-table.innerHTML+=`
+function filterPosts(){
 
-<tr>
+  const search =
+    $("searchPosts").value
+      .toLowerCase()
+      .trim();
 
-<td><strong>${esc(p.category)}</strong></td>
+  const category =
+    $("filterCategory").value;
 
-<td>${esc(p.title)}</td>
+  const filtered =
+    allPosts.filter(post=>{
 
-<td>
-<span class="status ${p.status}">
-${p.status==="published"?"Published":"Draft"}
-</span>
-</td>
+      const matchesSearch =
+        !search ||
+        String(post.title||"")
+          .toLowerCase()
+          .includes(search) ||
+        String(post.content||"")
+          .toLowerCase()
+          .includes(search) ||
+        String(post.category||"")
+          .toLowerCase()
+          .includes(search);
 
-<td>${date(p.created_at)}</td>
+      const matchesCategory =
+        !category ||
+        post.category===category;
 
-<td>
+      return matchesSearch &&
+             matchesCategory;
 
-<div class="actions">
+    });
 
-<button class="btn gray"
-onclick="editPost('${p.id}')">
-✏️ Edit
-</button>
-
-<button class="btn red"
-onclick="deletePost('${p.id}')">
-🗑️ Delete
-</button>
-
-</div>
-
-</td>
-
-</tr>
-
-`;
-
-});
+  renderPosts(filtered);
 
 }
 
 
-$("search").oninput=function(){
+$("searchPosts").oninput =
+  filterPosts;
 
-const q=this.value.toLowerCase();
+$("filterCategory").onchange =
+  filterPosts;
 
-renderPosts(
-allPosts.filter(p=>
-String(p.title||"").toLowerCase().includes(q)||
-String(p.category||"").toLowerCase().includes(q)||
-String(p.content||"").toLowerCase().includes(q)
-)
+
+/* =====================================================
+   SELECT CATEGORY
+===================================================== */
+
+window.selectCategory =
+function(category){
+
+  document
+    .querySelectorAll(".page")
+    .forEach(x=>
+      x.classList.remove("active")
+    );
+
+  $("posts").classList.add("active");
+
+  document
+    .querySelectorAll(".nav button")
+    .forEach(x=>
+      x.classList.remove("active")
+    );
+
+  document
+    .querySelector(
+      '.nav button[data-page="posts"]'
+    )
+    .classList.add("active");
+
+  $("pageTitle").textContent =
+    category+" Posts";
+
+  $("filterCategory").value =
+    category;
+
+  filterPosts();
+
+};
+
+
+/* =====================================================
+   CREATE / UPDATE POST
+===================================================== */
+
+$("postForm").addEventListener(
+  "submit",
+  async event=>{
+
+    event.preventDefault();
+
+    showLoader();
+
+    try{
+
+      const id =
+        $("editId").value;
+
+      const title =
+        $("postTitle").value.trim();
+
+      const content =
+        $("postContent").value.trim();
+
+      const category =
+        $("postCategory").value;
+
+      const status =
+        $("postStatus").value;
+
+      const imageFile =
+        $("postImage").files[0];
+
+      const pdfFile =
+        $("postPdf").files[0];
+
+
+      let image_url=null;
+      let pdf_url=null;
+
+
+      /* IMAGE */
+
+      if(imageFile){
+
+        const extension =
+          imageFile.name
+            .split(".")
+            .pop()
+            .toLowerCase();
+
+        const path =
+          `posts/${crypto.randomUUID()}.${extension}`;
+
+        const {error} =
+          await db.storage
+            .from(GALLERY_BUCKET)
+            .upload(
+              path,
+              imageFile,
+              {
+                contentType:imageFile.type,
+                upsert:false
+              }
+            );
+
+        if(error)throw error;
+
+        const {data} =
+          db.storage
+            .from(GALLERY_BUCKET)
+            .getPublicUrl(path);
+
+        image_url =
+          data.publicUrl;
+
+      }
+
+
+      /* PDF */
+
+      if(pdfFile){
+
+        if(
+          pdfFile.type !==
+          "application/pdf"
+        ){
+
+          throw new Error(
+            "Only PDF files are allowed."
+          );
+
+        }
+
+        const path =
+          `posts/${crypto.randomUUID()}.pdf`;
+
+        const {error} =
+          await db.storage
+            .from(PDF_BUCKET)
+            .upload(
+              path,
+              pdfFile,
+              {
+                contentType:"application/pdf",
+                upsert:false
+              }
+            );
+
+        if(error)throw error;
+
+        const {data} =
+          db.storage
+            .from(PDF_BUCKET)
+            .getPublicUrl(path);
+
+        pdf_url =
+          data.publicUrl;
+
+      }
+
+
+      const row = {
+
+        category,
+        title,
+        content,
+        status
+
+      };
+
+
+      if(image_url)
+        row.image_url=image_url;
+
+      if(pdf_url)
+        row.pdf_url=pdf_url;
+
+
+      /* INSERT */
+
+      if(!id){
+
+        const {error} =
+          await db
+            .from("public_posts")
+            .insert(row);
+
+        if(error)throw error;
+
+        toast(
+          status==="published"
+            ? "Post published successfully."
+            : "Post saved as draft."
+        );
+
+      }
+
+
+      /* UPDATE */
+
+      else{
+
+        const {error} =
+          await db
+            .from("public_posts")
+            .update(row)
+            .eq("id",id);
+
+        if(error)throw error;
+
+        toast("Post updated successfully.");
+
+      }
+
+
+      resetPost();
+
+      await loadPosts();
+      await loadDashboard();
+
+    }catch(error){
+
+      console.error(error);
+
+      toast(error.message);
+
+    }finally{
+
+      hideLoader();
+
+    }
+
+  }
 );
 
-};
 
+/* =====================================================
+   EDIT POST
+===================================================== */
 
-/* =========================
-SAVE POST
-========================= */
+window.editPost =
+function(id){
 
-$("postForm").addEventListener("submit",async e=>{
+  const post =
+    allPosts.find(
+      x=>String(x.id)===String(id)
+    );
 
-e.preventDefault();
+  if(!post)return;
 
-loading(true);
 
-try{
+  $("editId").value =
+    post.id;
 
-const id=$("postId").value;
+  $("postCategory").value =
+    post.category || "NT";
 
-const title=$("title").value.trim();
-const content=$("content").value.trim();
-const category=$("category").value;
-const status=$("status").value;
+  $("postStatus").value =
+    post.status || "draft";
 
-const imageFile=$("image").files[0];
-const pdfFile=$("pdf").files[0];
+  $("postTitle").value =
+    post.title || "";
 
-let image_url=null;
-let pdf_url=null;
+  $("postContent").value =
+    post.content || "";
 
 
-/* IMAGE */
+  $("postFormTitle").textContent =
+    "✏️ Edit Post";
 
-if(imageFile){
+  $("cancelEdit")
+    .classList.remove("hidden");
 
-const ext=imageFile.name.split(".").pop().toLowerCase();
-const path=`notices/${crypto.randomUUID()}.${ext}`;
 
-const {error}=await db.storage
-.from(GALLERY_BUCKET)
-.upload(path,imageFile,{
-contentType:imageFile.type
-});
-
-if(error)throw error;
-
-const {data}=db.storage
-.from(GALLERY_BUCKET)
-.getPublicUrl(path);
-
-image_url=data.publicUrl;
-
-}
-
-
-/* PDF */
-
-if(pdfFile){
-
-if(pdfFile.type!=="application/pdf")
-throw new Error("Only PDF files are allowed.");
-
-const path=`posts/${crypto.randomUUID()}.pdf`;
-
-const {error}=await db.storage
-.from(PDF_BUCKET)
-.upload(path,pdfFile,{
-contentType:"application/pdf"
-});
-
-if(error)throw error;
-
-const {data}=db.storage
-.from(PDF_BUCKET)
-.getPublicUrl(path);
-
-pdf_url=data.publicUrl;
-
-}
-
-
-/* INSERT */
-
-if(!id){
-
-const {data:userData}=await db.auth.getUser();
-
-const row={
-title,
-content,
-category,
-status,
-author_id:userData.user?.id||null
-};
-
-if(image_url)row.image_url=image_url;
-if(pdf_url)row.pdf_url=pdf_url;
-
-const {error}=await db
-.from("notices")
-.insert(row);
-
-if(error)throw error;
-
-toast("Post published/saved successfully.");
-
-}
-
-
-/* UPDATE */
-
-else{
-
-const row={
-title,
-content,
-category,
-status
-};
-
-if(image_url)row.image_url=image_url;
-if(pdf_url)row.pdf_url=pdf_url;
-
-const {error}=await db
-.from("notices")
-.update(row)
-.eq("id",id);
-
-if(error)throw error;
-
-toast("Post updated successfully.");
-
-}
-
-resetPost();
-
-await loadPosts();
-await loadDashboard();
-
-}catch(error){
-
-console.error(error);
-toast(error.message);
-
-}finally{
-
-loading(false);
-
-}
-
-});
-
-
-/* =========================
-EDIT
-========================= */
-
-window.editPost=function(id){
-
-const p=allPosts.find(x=>String(x.id)===String(id));
-
-if(!p)return;
-
-$("postId").value=p.id;
-$("category").value=p.category||"NT";
-$("title").value=p.title||"";
-$("content").value=p.content||"";
-$("status").value=p.status||"draft";
-
-$("formTitle").textContent="Edit Post";
-
-$("cancelEdit").style.display="inline-block";
-
-$("posts").scrollIntoView({behavior:"smooth"});
+  document
+    .querySelector(
+      "#posts .card"
+    )
+    .scrollIntoView({
+      behavior:"smooth"
+    });
 
 };
 
 
-/* =========================
-DELETE
-========================= */
+/* =====================================================
+   DELETE POST
+===================================================== */
 
-window.deletePost=async function(id){
+window.deletePost =
+async function(id){
 
-if(!confirm("Delete this post permanently?"))return;
+  if(
+    !confirm(
+      "Delete this post permanently?"
+    )
+  )return;
 
-loading(true);
+  showLoader();
 
-try{
+  try{
 
-const {error}=await db
-.from("notices")
-.delete()
-.eq("id",id);
+    const {error} =
+      await db
+        .from("public_posts")
+        .delete()
+        .eq("id",id);
 
-if(error)throw error;
+    if(error)throw error;
 
-toast("Post deleted.");
+    toast("Post deleted.");
 
-await loadPosts();
-await loadDashboard();
+    await loadPosts();
+    await loadDashboard();
 
-}catch(error){
+  }catch(error){
 
-toast(error.message);
+    toast(error.message);
 
-}finally{
+  }finally{
 
-loading(false);
+    hideLoader();
 
-}
+  }
 
 };
 
 
-/* =========================
-RESET
-========================= */
+/* =====================================================
+   RESET POST
+===================================================== */
 
 function resetPost(){
 
-$("postForm").reset();
-$("postId").value="";
-$("formTitle").textContent="Create New Post";
-$("cancelEdit").style.display="none";
+  $("postForm").reset();
+
+  $("editId").value="";
+
+  $("postFormTitle").textContent =
+    "➕ Create New Post";
+
+  $("cancelEdit")
+    .classList.add("hidden");
 
 }
 
-$("cancelEdit").onclick=resetPost;
+
+$("cancelEdit").onclick =
+  resetPost;
 
 
-/* =========================
-DASHBOARD
-========================= */
+/* =====================================================
+   DASHBOARD
+===================================================== */
 
 async function loadDashboard(){
 
-const posts=allPosts;
+  $("totalPosts").textContent =
+    allPosts.length;
 
-$("totalPosts").textContent=posts.length;
+  $("publishedPosts").textContent =
+    allPosts.filter(
+      x=>x.status==="published"
+    ).length;
 
-$("published").textContent=
-posts.filter(x=>x.status==="published").length;
+  $("draftPosts").textContent =
+    allPosts.filter(
+      x=>x.status==="draft"
+    ).length;
 
-$("drafts").textContent=
-posts.filter(x=>x.status==="draft").length;
 
-const {count}=await db
-.from("gallery")
-.select("id",{count:"exact",head:true});
+  const {count,error} =
+    await db
+      .from("gallery")
+      .select("id",{
+        count:"exact",
+        head:true
+      });
 
-$("galleryCount").textContent=count||0;
+  if(!error){
+
+    $("galleryCount").textContent =
+      count || 0;
+
+  }
 
 }
 
 
-/* =========================
-GALLERY
-========================= */
+/* =====================================================
+   GALLERY
+===================================================== */
 
 async function loadGallery(){
 
-const {data,error}=await db
-.from("gallery")
-.select("*")
-.order("created_at",{ascending:false});
+  const {data,error} =
+    await db
+      .from("gallery")
+      .select("*")
+      .order(
+        "created_at",
+        {ascending:false}
+      );
 
-if(error){
-console.error(error);
-return;
-}
+  if(error){
 
-const grid=$("galleryGrid");
+    console.error(error);
 
-grid.innerHTML="";
+    toast(error.message);
 
-(data||[]).forEach(x=>{
+    return;
 
-grid.innerHTML+=`
-
-<div class="card">
-
-<img src="${esc(x.image_url)}"
-style="width:100%;height:160px;object-fit:cover;border-radius:9px">
-
-<h3>${esc(x.title)}</h3>
-
-<button class="btn red"
-onclick="deleteGallery('${x.id}')">
-🗑️ Delete
-</button>
-
-</div>
-
-`;
-
-});
-
-}
+  }
 
 
-$("galleryForm").onsubmit=async e=>{
+  const grid =
+    $("galleryGrid");
 
-e.preventDefault();
+  grid.innerHTML="";
 
-loading(true);
 
-try{
+  if(!data || !data.length){
 
-const file=$("galleryFile").files[0];
+    grid.innerHTML=`
+      <p style="color:#777">
+        No images uploaded yet.
+      </p>
+    `;
 
-if(!file)throw new Error("Select an image.");
+    return;
 
-const ext=file.name.split(".").pop().toLowerCase();
+  }
 
-const path=`gallery/${crypto.randomUUID()}.${ext}`;
 
-const {error}=await db.storage
-.from(GALLERY_BUCKET)
-.upload(path,file,{
-contentType:file.type
-});
+  data.forEach(item=>{
 
-if(error)throw error;
+    grid.innerHTML += `
 
-const {data}=db.storage
-.from(GALLERY_BUCKET)
-.getPublicUrl(path);
+      <div class="gallery-item">
 
-const {error:dbError}=await db
-.from("gallery")
-.insert({
-title:$("galleryTitle").value.trim(),
-image_url:data.publicUrl,
-storage_path:path
-});
+        <img
+          src="${escapeHTML(item.image_url)}"
+          alt="${escapeHTML(item.title)}">
 
-if(dbError)throw dbError;
+        <div class="gallery-info">
 
-e.target.reset();
+          <h3>
+            ${escapeHTML(item.title)}
+          </h3>
 
-toast("Image uploaded.");
+          <button
+            class="btn btn-red"
+            onclick="deleteGallery('${item.id}')">
 
-await loadGallery();
-await loadDashboard();
+            🗑️ Delete
 
-}catch(error){
+          </button>
 
-toast(error.message);
+        </div>
 
-}finally{
+      </div>
 
-loading(false);
+    `;
+
+  });
 
 }
+
+
+$("galleryForm").addEventListener(
+  "submit",
+  async event=>{
+
+    event.preventDefault();
+
+    showLoader();
+
+    try{
+
+      const title =
+        $("galleryTitle")
+          .value
+          .trim();
+
+      const file =
+        $("galleryFile")
+          .files[0];
+
+      if(!file)
+        throw new Error(
+          "Please select an image."
+        );
+
+
+      const extension =
+        file.name
+          .split(".")
+          .pop()
+          .toLowerCase();
+
+      const path =
+        `gallery/${crypto.randomUUID()}.${extension}`;
+
+
+      const {error} =
+        await db.storage
+          .from(GALLERY_BUCKET)
+          .upload(
+            path,
+            file,
+            {
+              contentType:file.type,
+              upsert:false
+            }
+          );
+
+      if(error)throw error;
+
+
+      const {data} =
+        db.storage
+          .from(GALLERY_BUCKET)
+          .getPublicUrl(path);
+
+
+      const {error:insertError} =
+        await db
+          .from("gallery")
+          .insert({
+            title,
+            image_url:data.publicUrl,
+            storage_path:path
+          });
+
+      if(insertError)
+        throw insertError;
+
+
+      event.target.reset();
+
+      toast(
+        "Image uploaded successfully."
+      );
+
+      await loadGallery();
+      await loadDashboard();
+
+    }catch(error){
+
+      toast(error.message);
+
+    }finally{
+
+      hideLoader();
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   DELETE GALLERY
+===================================================== */
+
+window.deleteGallery =
+async function(id){
+
+  if(
+    !confirm(
+      "Delete this image permanently?"
+    )
+  )return;
+
+  showLoader();
+
+  try{
+
+    const {data,error} =
+      await db
+        .from("gallery")
+        .select("storage_path")
+        .eq("id",id)
+        .single();
+
+    if(error)throw error;
+
+
+    if(data.storage_path){
+
+      await db.storage
+        .from(GALLERY_BUCKET)
+        .remove([
+          data.storage_path
+        ]);
+
+    }
+
+
+    const {error:deleteError} =
+      await db
+        .from("gallery")
+        .delete()
+        .eq("id",id);
+
+    if(deleteError)
+      throw deleteError;
+
+
+    toast("Image deleted.");
+
+    await loadGallery();
+    await loadDashboard();
+
+  }catch(error){
+
+    toast(error.message);
+
+  }finally{
+
+    hideLoader();
+
+  }
 
 };
 
 
-window.deleteGallery=async function(id){
-
-if(!confirm("Delete this image?"))return;
-
-loading(true);
-
-try{
-
-const {data}=await db
-.from("gallery")
-.select("storage_path")
-.eq("id",id)
-.single();
-
-if(data?.storage_path){
-
-await db.storage
-.from(GALLERY_BUCKET)
-.remove([data.storage_path]);
-
-}
-
-const {error}=await db
-.from("gallery")
-.delete()
-.eq("id",id);
-
-if(error)throw error;
-
-toast("Image deleted.");
-
-await loadGallery();
-await loadDashboard();
-
-}catch(error){
-
-toast(error.message);
-
-}finally{
-
-loading(false);
-
-}
-
-};
-
-
-/* =========================
-PDF
-========================= */
+/* =====================================================
+   PDF
+===================================================== */
 
 async function loadPDFs(){
 
-const {data,error}=await db
-.from("pdf_documents")
-.select("*")
-.order("created_at",{ascending:false});
+  const {data,error} =
+    await db
+      .from("pdf_documents")
+      .select("*")
+      .order(
+        "created_at",
+        {ascending:false}
+      );
 
-if(error){
-console.error(error);
-return;
-}
+  if(error){
 
-const table=$("pdfTable");
+    console.error(error);
 
-table.innerHTML="";
+    toast(error.message);
 
-(data||[]).forEach(x=>{
+    return;
 
-table.innerHTML+=`
-
-<tr>
-
-<td>${esc(x.title)}</td>
-
-<td>
-<span class="status ${x.status}">
-${esc(x.status)}
-</span>
-</td>
-
-<td>${date(x.created_at)}</td>
-
-<td>
-<a class="btn gray"
-href="${esc(x.file_url)}"
-target="_blank">
-Open
-</a>
-</td>
-
-<td>
-<button class="btn red"
-onclick="deletePDF('${x.id}')">
-🗑️ Delete
-</button>
-</td>
-
-</tr>
-
-`;
-
-});
-
-}
+  }
 
 
-$("pdfForm").onsubmit=async e=>{
+  const table =
+    $("pdfTable");
 
-e.preventDefault();
+  table.innerHTML="";
 
-loading(true);
 
-try{
+  if(!data || !data.length){
 
-const file=$("pdfFile").files[0];
+    table.innerHTML=`
+      <tr>
+        <td colspan="5"
+            style="text-align:center;color:#777;padding:30px">
+          No PDF documents yet.
+        </td>
+      </tr>
+    `;
 
-if(!file)throw new Error("Select a PDF.");
+    return;
 
-if(file.type!=="application/pdf")
-throw new Error("Only PDF files are allowed.");
+  }
 
-const path=`documents/${crypto.randomUUID()}.pdf`;
 
-const {error}=await db.storage
-.from(PDF_BUCKET)
-.upload(path,file,{
-contentType:"application/pdf"
-});
+  data.forEach(pdf=>{
 
-if(error)throw error;
+    table.innerHTML += `
 
-const {data}=db.storage
-.from(PDF_BUCKET)
-.getPublicUrl(path);
+      <tr>
 
-const {error:dbError}=await db
-.from("pdf_documents")
-.insert({
-title:$("pdfTitle").value.trim(),
-file_url:data.publicUrl,
-storage_path:path,
-status:$("pdfStatus").value
-});
+        <td>
+          <strong>
+            ${escapeHTML(pdf.title)}
+          </strong>
+        </td>
 
-if(dbError)throw dbError;
+        <td>
 
-e.target.reset();
+          <span class="badge ${
+            pdf.status==="published"
+              ? "badge-published"
+              : "badge-draft"
+          }">
 
-toast("PDF uploaded.");
+            ${escapeHTML(pdf.status)}
 
-await loadPDFs();
+          </span>
 
-}catch(error){
+        </td>
 
-toast(error.message);
+        <td>
+          ${formatDate(pdf.created_at)}
+        </td>
 
-}finally{
+        <td>
 
-loading(false);
+          <a
+            class="btn btn-gray"
+            href="${escapeHTML(pdf.file_url)}"
+            target="_blank">
+
+            📄 Open
+
+          </a>
+
+        </td>
+
+        <td>
+
+          <button
+            class="btn btn-red"
+            onclick="deletePDF('${pdf.id}')">
+
+            🗑️ Delete
+
+          </button>
+
+        </td>
+
+      </tr>
+
+    `;
+
+  });
 
 }
+
+
+$("pdfForm").addEventListener(
+  "submit",
+  async event=>{
+
+    event.preventDefault();
+
+    showLoader();
+
+    try{
+
+      const title =
+        $("pdfTitle")
+          .value
+          .trim();
+
+      const status =
+        $("pdfStatus").value;
+
+      const file =
+        $("pdfFile")
+          .files[0];
+
+      if(!file)
+        throw new Error(
+          "Please select a PDF."
+        );
+
+
+      if(
+        file.type !==
+        "application/pdf"
+      ){
+
+        throw new Error(
+          "Only PDF files are allowed."
+        );
+
+      }
+
+
+      const path =
+        `documents/${crypto.randomUUID()}.pdf`;
+
+
+      const {error} =
+        await db.storage
+          .from(PDF_BUCKET)
+          .upload(
+            path,
+            file,
+            {
+              contentType:"application/pdf",
+              upsert:false
+            }
+          );
+
+      if(error)throw error;
+
+
+      const {data} =
+        db.storage
+          .from(PDF_BUCKET)
+          .getPublicUrl(path);
+
+
+      const {error:insertError} =
+        await db
+          .from("pdf_documents")
+          .insert({
+            title,
+            file_url:data.publicUrl,
+            storage_path:path,
+            status
+          });
+
+      if(insertError)
+        throw insertError;
+
+
+      event.target.reset();
+
+      toast(
+        "PDF uploaded successfully."
+      );
+
+      await loadPDFs();
+
+    }catch(error){
+
+      toast(error.message);
+
+    }finally{
+
+      hideLoader();
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   DELETE PDF
+===================================================== */
+
+window.deletePDF =
+async function(id){
+
+  if(
+    !confirm(
+      "Delete this PDF permanently?"
+    )
+  )return;
+
+  showLoader();
+
+  try{
+
+    const {data,error} =
+      await db
+        .from("pdf_documents")
+        .select("storage_path")
+        .eq("id",id)
+        .single();
+
+    if(error)throw error;
+
+
+    if(data.storage_path){
+
+      await db.storage
+        .from(PDF_BUCKET)
+        .remove([
+          data.storage_path
+        ]);
+
+    }
+
+
+    const {error:deleteError} =
+      await db
+        .from("pdf_documents")
+        .delete()
+        .eq("id",id);
+
+    if(deleteError)
+      throw deleteError;
+
+
+    toast("PDF deleted.");
+
+    await loadPDFs();
+
+  }catch(error){
+
+    toast(error.message);
+
+  }finally{
+
+    hideLoader();
+
+  }
 
 };
 
 
-window.deletePDF=async function(id){
+/* =====================================================
+   LOAD EVERYTHING
+===================================================== */
 
-if(!confirm("Delete this PDF?"))return;
+async function loadEverything(){
 
-loading(true);
+  showLoader();
 
-try{
+  try{
 
-const {data}=await db
-.from("pdf_documents")
-.select("storage_path")
-.eq("id",id)
-.single();
+    await loadPosts();
 
-if(data?.storage_path){
+    await loadDashboard();
 
-await db.storage
-.from(PDF_BUCKET)
-.remove([data.storage_path]);
+    await loadGallery();
 
-}
+    await loadPDFs();
 
-const {error}=await db
-.from("pdf_documents")
-.delete()
-.eq("id",id);
+  }finally{
 
-if(error)throw error;
+    hideLoader();
 
-toast("PDF deleted.");
-
-await loadPDFs();
-
-}catch(error){
-
-toast(error.message);
-
-}finally{
-
-loading(false);
+  }
 
 }
 
-};
 
+/* =====================================================
+   START
+===================================================== */
 
-/* =========================
-START
-========================= */
-
-checkAuth();
+checkSession();
 
 </script>
 
