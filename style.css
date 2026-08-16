@@ -1,0 +1,384 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --black: #111111;
+    --dark: #181818;
+    --white: #ffffff;
+    --cream: #f7f5f0;
+    --gray: #777777;
+    --border: #e8e6e1;
+    --accent: #b08a3c;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--white);
+    color: var(--black);
+    line-height: 1.6;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+    height: 72px;
+    padding: 0 6%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.logo span {
+    color: var(--accent);
+}
+
+.menu-btn {
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    border-radius: 50%;
+    font-size: 19px;
+    cursor: pointer;
+}
+
+
+/* =========================
+   MENU
+========================= */
+
+.menu {
+    display: none;
+    position: fixed;
+    top: 72px;
+    right: 5%;
+    width: 250px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+    z-index: 999;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.menu.active {
+    display: block;
+}
+
+.menu a {
+    display: block;
+    padding: 14px 18px;
+    color: var(--black);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+}
+
+.menu a:hover {
+    background: var(--cream);
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+    background: var(--black);
+    color: var(--white);
+    padding: 85px 6%;
+}
+
+.hero-content {
+    max-width: 760px;
+}
+
+.small-title {
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 18px;
+}
+
+.hero h1 {
+    font-size: clamp(38px, 8vw, 72px);
+    line-height: 1.1;
+    margin-bottom: 22px;
+    font-weight: 800;
+}
+
+.hero p:not(.small-title) {
+    color: #cccccc;
+    max-width: 600px;
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+.hero-btn {
+    display: inline-block;
+    background: var(--white);
+    color: var(--black);
+    padding: 13px 22px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+
+/* =========================
+   SECTIONS
+========================= */
+
+.categories,
+.updates {
+    padding: 75px 6%;
+}
+
+.section-title {
+    margin-bottom: 35px;
+}
+
+.section-title span {
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.section-title h2 {
+    font-size: 34px;
+    margin-top: 5px;
+}
+
+
+/* =========================
+   CATEGORY GRID
+========================= */
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.category {
+    text-decoration: none;
+    color: var(--black);
+    border: 1px solid var(--border);
+    padding: 25px;
+    border-radius: 10px;
+    transition: 0.25s;
+}
+
+.category:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
+
+.icon {
+    font-size: 28px;
+    margin-bottom: 14px;
+}
+
+.category h3 {
+    font-size: 17px;
+    margin-bottom: 7px;
+}
+
+.category p {
+    color: var(--gray);
+    font-size: 13px;
+}
+
+
+/* =========================
+   POSTS
+========================= */
+
+.updates {
+    background: var(--cream);
+}
+
+.post {
+    background: var(--white);
+    border: 1px solid var(--border);
+    padding: 25px;
+    margin-bottom: 18px;
+    border-radius: 10px;
+}
+
+.post-tag {
+    display: inline-block;
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+.post h3 {
+    font-size: 21px;
+    margin-bottom: 10px;
+}
+
+.post p {
+    color: var(--gray);
+    font-size: 14px;
+    max-width: 750px;
+}
+
+.post-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--gray);
+}
+
+.post-bottom a {
+    color: var(--black);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+
+/* =========================
+   ABOUT
+========================= */
+
+.about {
+    padding: 85px 6%;
+    max-width: 900px;
+}
+
+.about h2 {
+    font-size: 38px;
+    line-height: 1.15;
+    margin-bottom: 20px;
+}
+
+.about > p:last-child {
+    color: var(--gray);
+    max-width: 650px;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    background: var(--black);
+    color: var(--white);
+    padding: 45px 6%;
+}
+
+.footer-logo {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+}
+
+footer > p {
+    color: #999999;
+    font-size: 13px;
+}
+
+.footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin: 25px 0;
+}
+
+.footer-links a {
+    color: #dddddd;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.copyright {
+    padding-top: 20px;
+    border-top: 1px solid #333333;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    .header {
+        height: 64px;
+        padding: 0 5%;
+    }
+
+    .menu {
+        top: 64px;
+        right: 4%;
+        left: 4%;
+        width: auto;
+    }
+
+    .hero {
+        padding: 65px 5%;
+    }
+
+    .hero h1 {
+        font-size: 42px;
+    }
+
+    .categories,
+    .updates {
+        padding: 55px 5%;
+    }
+
+    .category-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-title h2 {
+        font-size: 29px;
+    }
+
+    .about {
+        padding: 60px 5%;
+    }
+
+    .about h2 {
+        font-size: 32px;
+    }
+
+    footer {
+        padding: 40px 5%;
+    }
+}
