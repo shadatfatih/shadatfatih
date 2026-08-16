@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Shadat Fatih | Post</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+
+<body class="home-page">
+
+
+<header class="header">
+
+    <a href="index.html" class="brand">
+
+        <span>SHADAT</span> FATIH
+
+    </a>
+
+
+    <div class="header-actions">
+
+        <a
+            href="index.html"
+            class="menu-btn"
+            style="text-decoration:none;"
+        >
+            ←
+        </a>
+
+    </div>
+
+</header>
+
+
+
+<main
+    style="
+        max-width:900px;
+        margin:60px auto;
+        padding:20px;
+    "
+>
+
+
+    <article
+        id="postContainer"
+        class="news-card"
+    >
+
+        <p>
+            পোস্ট লোড হচ্ছে...
+        </p>
+
+    </article>
+
+
+</main>
+
+
+
+<script>
+
+const SUPABASE_URL =
+"https://ymwhodckmbybccufzjot.supabase.co";
+
+
+const SUPABASE_ANON_KEY =
+"sb_publishable_u31olXCxIcSsMdUeyyt5UQ_YeCWKToH";
+
+
+const supabaseClient =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+);
+
+
+
+async function loadPost() {
+
+    const container =
+        document.getElementById(
+            "postContainer"
+        );
+
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+    const postId =
+        params.get("id");
+
+
+    if (!postId) {
+
+        container.innerHTML = `
+            <h2>পোস্ট পাওয়া যায়নি</h2>
+        `;
+
+        return;
+
+    }
+
+
+    const { data, error } =
+        await supabaseClient
+
+        .from("public_posts")
+
+        .select("*")
+
+        .eq("id", postId)
+
+        .eq("status", "published")
+
+        .single();
+
+
+    if (error || !data) {
+
+        console.error(error);
+
+
+        container.innerHTML = `
+            <h2>
+                পোস্ট পাওয়া যায়নি
+            </h2>
+
+            <p>
+                পোস্টটি মুছে ফেলা হয়েছে
+                অথবা প্রকাশিত নয়।
+            </p>
+        `;
+
+        return;
+
+    }
+
+
+
+    const categoryNames = {
+
+        NU: "NATIONAL UNIVERSITY",
+
+        CB: "CHATTOGRAM BOARD",
+
+        AD: "ADMISSION",
+
+        EX: "EXAM & ROUTINE",
+
+        RS: "RESULT",
+
+        NT: "NOTICE"
+
+    };
+
+
+    const category =
+        categoryNames[data.category]
+        || "EDUCATION UPDATE";
+
+
+
+    const date =
+        new Date(
+            data.created_at
+        ).toLocaleDateString(
+            "en-GB",
+            {
+                day: "2-digit",
+                month: "long",
+                year: "numeric"
+            }
+        );
+
+
+
+    container.innerHTML = `
+
+        <div class="news-top">
+
+            <span class="tag red">
+
+                ${category}
+
+            </span>
+
+
+            <span class="date">
+
+                ${date}
+
+            </span>
+
+        </div>
+
+
+        <h1>
+
+            ${escapeHTML(
+                data.title
+            )}
+
+        </h1>
+
+
+        <div
+            style="
+                margin-top:25px;
+                line-height:1.9;
+                white-space:pre-line;
+            "
+        >
+
+            ${escapeHTML(
+                data.content
+            )}
+
+        </div>
+
+    `;
+
+}
+
+
+
+function escapeHTML(value) {
+
+    return String(value || "")
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+
+loadPost();
+
+</script>
+
+
+</body>
+
+</html>
