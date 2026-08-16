@@ -1,859 +1,3358 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — Shadat Fatih</title>
 
-    <meta charset="UTF-8">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<style>
+:root{
+    --black:#111111;
+    --dark:#181818;
+    --dark2:#222222;
+    --white:#ffffff;
+    --cream:#f7f4ee;
+    --red:#9d1515;
+    --red2:#c52222;
+    --green:#18864b;
+    --gray:#777;
+    --border:#e4e4e4;
+    --shadow:0 10px 30px rgba(0,0,0,.08);
+}
 
-    <title>Admin Panel | Shadat Fatih</title>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
 
-    <meta name="robots"
-          content="noindex, nofollow">
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f5f5f5;
+    color:#111;
+}
 
-    <link rel="stylesheet"
-          href="style.css">
+button,
+input,
+textarea,
+select{
+    font:inherit;
+}
 
+button{
+    cursor:pointer;
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+#loginPage{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:
+        radial-gradient(circle at top left,#3a3a3a,transparent 35%),
+        linear-gradient(135deg,#101010,#222);
+}
+
+.login-box{
+    width:100%;
+    max-width:420px;
+    background:#fff;
+    border-radius:20px;
+    padding:35px;
+    box-shadow:0 25px 70px rgba(0,0,0,.35);
+}
+
+.logo{
+    width:65px;
+    height:65px;
+    margin:0 auto 18px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#111;
+    color:white;
+    font-size:25px;
+    font-weight:bold;
+}
+
+.login-box h1{
+    text-align:center;
+    margin-bottom:8px;
+}
+
+.login-box p{
+    text-align:center;
+    color:#777;
+    margin-bottom:28px;
+}
+
+.field{
+    margin-bottom:16px;
+}
+
+.field label{
+    display:block;
+    margin-bottom:7px;
+    font-size:14px;
+    font-weight:600;
+}
+
+.field input,
+.field textarea,
+.field select{
+    width:100%;
+    border:1px solid #ddd;
+    border-radius:10px;
+    padding:13px 14px;
+    outline:none;
+    background:white;
+}
+
+.field textarea{
+    min-height:130px;
+    resize:vertical;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus{
+    border-color:#111;
+}
+
+.primary-btn{
+    width:100%;
+    border:0;
+    border-radius:10px;
+    padding:14px;
+    background:#111;
+    color:white;
+    font-weight:bold;
+    transition:.2s;
+}
+
+.primary-btn:hover{
+    background:#333;
+}
+
+.error{
+    display:none;
+    background:#fff0f0;
+    color:#b00000;
+    padding:11px;
+    border-radius:9px;
+    margin-bottom:15px;
+    font-size:14px;
+}
+
+/* =========================
+   ADMIN
+========================= */
+
+#adminPage{
+    display:none;
+    min-height:100vh;
+}
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:250px;
+    height:100vh;
+    background:#111;
+    color:#fff;
+    padding:22px 15px;
+    z-index:1000;
+    overflow-y:auto;
+}
+
+.brand{
+    padding:10px 12px 25px;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.brand span{
+    color:#d12a2a;
+}
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+
+.menu button{
+    border:0;
+    background:transparent;
+    color:#bbb;
+    text-align:left;
+    padding:13px 14px;
+    border-radius:9px;
+    font-weight:600;
+}
+
+.menu button:hover,
+.menu button.active{
+    background:#292929;
+    color:#fff;
+}
+
+.logout{
+    margin-top:25px;
+    width:100%;
+    border:1px solid #444;
+    background:#1d1d1d;
+    color:#fff;
+    padding:12px;
+    border-radius:9px;
+}
+
+.logout:hover{
+    background:#a51b1b;
+}
+
+.main{
+    margin-left:250px;
+    min-height:100vh;
+}
+
+.topbar{
+    height:70px;
+    background:white;
+    border-bottom:1px solid #eee;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 30px;
+    position:sticky;
+    top:0;
+    z-index:500;
+}
+
+.topbar h2{
+    font-size:20px;
+}
+
+.user-email{
+    color:#777;
+    font-size:13px;
+}
+
+.content{
+    padding:30px;
+    max-width:1500px;
+    margin:auto;
+}
+
+.section{
+    display:none;
+}
+
+.section.active{
+    display:block;
+}
+
+.section-title{
+    margin-bottom:20px;
+}
+
+.section-title h1{
+    font-size:28px;
+    margin-bottom:5px;
+}
+
+.section-title p{
+    color:#777;
+}
+
+/* =========================
+   DASHBOARD
+========================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+    margin-bottom:25px;
+}
+
+.stat{
+    background:#fff;
+    border-radius:15px;
+    padding:22px;
+    box-shadow:var(--shadow);
+}
+
+.stat small{
+    color:#777;
+}
+
+.stat strong{
+    display:block;
+    font-size:32px;
+    margin-top:8px;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card{
+    background:#fff;
+    border-radius:15px;
+    padding:22px;
+    box-shadow:var(--shadow);
+    margin-bottom:20px;
+}
+
+.card h3{
+    margin-bottom:18px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.full{
+    grid-column:1/-1;
+}
+
+.actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    border:0;
+    border-radius:9px;
+    padding:11px 16px;
+    font-weight:600;
+}
+
+.btn-black{
+    background:#111;
+    color:#fff;
+}
+
+.btn-red{
+    background:#a81717;
+    color:#fff;
+}
+
+.btn-green{
+    background:#18864b;
+    color:#fff;
+}
+
+.btn-gray{
+    background:#eee;
+    color:#111;
+}
+
+.btn:hover{
+    opacity:.88;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,
+td{
+    text-align:left;
+    padding:13px 10px;
+    border-bottom:1px solid #eee;
+    vertical-align:middle;
+}
+
+th{
+    background:#fafafa;
+    font-size:13px;
+}
+
+td{
+    font-size:14px;
+}
+
+.status{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.status.published{
+    background:#e5f8ed;
+    color:#08723c;
+}
+
+.status.draft{
+    background:#eee;
+    color:#555;
+}
+
+.search{
+    width:100%;
+    padding:12px 14px;
+    border:1px solid #ddd;
+    border-radius:9px;
+    outline:none;
+    margin-bottom:15px;
+}
+
+/* =========================
+   UPLOAD
+========================= */
+
+.upload-box{
+    border:2px dashed #ccc;
+    border-radius:12px;
+    padding:30px;
+    text-align:center;
+    background:#fafafa;
+}
+
+.upload-box:hover{
+    border-color:#111;
+}
+
+.preview{
+    max-width:180px;
+    max-height:130px;
+    margin-top:15px;
+    border-radius:8px;
+    display:none;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+.mobile-menu{
+    display:none;
+    border:0;
+    background:#111;
+    color:#fff;
+    padding:9px 12px;
+    border-radius:7px;
+}
+
+@media(max-width:900px){
+
+    .sidebar{
+        transform:translateX(-100%);
+        transition:.25s;
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+    }
+
+    .mobile-menu{
+        display:block;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .full{
+        grid-column:auto;
+    }
+
+    .content{
+        padding:18px;
+    }
+
+    .topbar{
+        padding:0 15px;
+    }
+
+    .user-email{
+        display:none;
+    }
+}
+
+@media(max-width:500px){
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .login-box{
+        padding:25px 20px;
+    }
+}
+
+/* =========================
+   LOADING
+========================= */
+
+#loading{
+    position:fixed;
+    inset:0;
+    background:rgba(255,255,255,.8);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:5000;
+}
+
+.loader{
+    width:42px;
+    height:42px;
+    border:4px solid #ddd;
+    border-top-color:#111;
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* =========================
+   TOAST
+========================= */
+
+#toast{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    background:#111;
+    color:#fff;
+    padding:14px 18px;
+    border-radius:10px;
+    display:none;
+    z-index:6000;
+    max-width:320px;
+}
+
+#toast.success{
+    background:#18864b;
+}
+
+#toast.error{
+    background:#a81717;
+}
+</style>
 </head>
 
-<body class="admin-page">
-
-
-<!-- =========================
-     ADMIN HEADER
-========================= -->
-
-<header class="admin-header">
-
-    <a href="index.html"
-       class="admin-brand">
-
-        <span>SHADAT</span> FATIH
-
-        <small>
-            ADMIN
-        </small>
-
-    </a>
-
-
-    <div class="admin-header-actions">
-
-        <a href="index.html"
-           class="admin-site-link">
-
-            View Website →
-
-        </a>
-
-        <button id="logoutBtn"
-                class="admin-logout"
-                hidden>
-
-            Logout
-
-        </button>
-
-    </div>
-
-</header>
-
-
+<body>
 
 <!-- =========================
-     LOGIN
+     LOADING
 ========================= -->
 
-<main class="admin-container">
+<div id="loading">
+    <div class="loader"></div>
+</div>
 
-<section id="loginSection"
-         class="admin-login">
-
-    <div class="admin-label">
-        SHADAT FATIH • ADMIN
-    </div>
-
-    <h1>
-        Admin Login
-    </h1>
-
-    <p>
-        Manage your website content
-    </p>
-
-
-    <form id="loginForm">
-
-        <label for="loginEmail">
-            Email
-        </label>
-
-        <input
-            type="email"
-            id="loginEmail"
-            placeholder="Admin email"
-            autocomplete="username"
-            required
-        >
-
-
-        <label for="loginPassword">
-            Password
-        </label>
-
-        <input
-            type="password"
-            id="loginPassword"
-            placeholder="Password"
-            autocomplete="current-password"
-            required
-        >
-
-
-        <button type="submit"
-                class="admin-login-btn">
-
-            Login
-
-        </button>
-
-    </form>
-
-
-    <p id="loginMessage"
-       class="admin-message">
-    </p>
-
-
-    <a href="index.html"
-       class="admin-back">
-
-        ← Back to website
-
-    </a>
-
-</section>
-
-
+<div id="toast"></div>
 
 <!-- =========================
-     DASHBOARD
+     LOGIN PAGE
 ========================= -->
 
-<section id="dashboard"
-         class="admin-dashboard"
-         hidden>
+<div id="loginPage">
 
+    <div class="login-box">
 
-    <div class="admin-dashboard-top">
+        <div class="logo">SF</div>
 
-        <div>
+        <h1>Admin Login</h1>
+        <p>Shadat Fatih Administration</p>
 
-            <div class="admin-label">
-                DASHBOARD
-            </div>
+        <div id="loginError" class="error"></div>
 
-            <h1>
-                Website Manager
-            </h1>
+        <form id="loginForm">
 
-            <p>
-                Manage notices, updates, images and files.
-            </p>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- =========================
-         STATS
-    ========================= -->
-
-    <div class="admin-stats">
-
-        <div class="admin-stat">
-
-            <span>
-                TOTAL POSTS
-            </span>
-
-            <strong id="totalPosts">
-                0
-            </strong>
-
-            <small>
-                All content
-            </small>
-
-        </div>
-
-
-        <div class="admin-stat">
-
-            <span>
-                PUBLISHED
-            </span>
-
-            <strong id="publishedPosts">
-                0
-            </strong>
-
-            <small>
-                Public
-            </small>
-
-        </div>
-
-
-        <div class="admin-stat">
-
-            <span>
-                DRAFTS
-            </span>
-
-            <strong id="draftPosts">
-                0
-            </strong>
-
-            <small>
-                Private
-            </small>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- =========================
-         ACTION BUTTONS
-    ========================= -->
-
-    <div class="admin-actions">
-
-        <button id="newPostBtn"
-                class="admin-action-btn">
-
-            + New Post
-
-        </button>
-
-
-        <button id="managePostsBtn"
-                class="admin-action-btn secondary">
-
-            Manage Posts
-
-        </button>
-
-    </div>
-
-
-
-    <!-- =========================
-         POST EDITOR
-    ========================= -->
-
-    <section id="postEditor"
-             class="admin-editor"
-             hidden>
-
-
-        <div class="admin-editor-heading">
-
-            <div>
-
-                <div class="admin-label">
-                    CREATE / EDIT
-                </div>
-
-                <h2>
-                    Publish New Update
-                </h2>
-
-            </div>
-
-        </div>
-
-
-
-        <form id="postForm">
-
-
-            <!-- TITLE -->
-
-            <label for="postTitle">
-                Title
-            </label>
-
-            <input
-                type="text"
-                id="postTitle"
-                placeholder="নোটিশ বা আপডেটের শিরোনাম"
-                required
-            >
-
-
-
-            <!-- CATEGORY -->
-
-            <label for="postCategory">
-                Category
-            </label>
-
-            <select id="postCategory"
-                    required>
-
-                <option value="">
-                    Select category
-                </option>
-
-                <option value="nu">
-                    National University
-                </option>
-
-                <option value="board">
-                    Chattogram Board
-                </option>
-
-                <option value="admission">
-                    Admission
-                </option>
-
-                <option value="exam">
-                    Exam & Routine
-                </option>
-
-                <option value="result">
-                    Result
-                </option>
-
-                <option value="education">
-                    Education Update
-                </option>
-
-            </select>
-
-
-
-            <!-- DATE -->
-
-            <label for="postDate">
-                Publication Date
-            </label>
-
-            <input
-                type="date"
-                id="postDate"
-                required
-            >
-
-
-
-            <!-- SHORT DESCRIPTION -->
-
-            <label for="postDescription">
-                Short Description
-            </label>
-
-            <textarea
-                id="postDescription"
-                rows="4"
-                placeholder="নোটিশের সংক্ষিপ্ত বিবরণ..."
-                required
-            ></textarea>
-
-
-
-            <!-- FULL CONTENT -->
-
-            <label for="postContent">
-                Full Content
-            </label>
-
-            <textarea
-                id="postContent"
-                rows="10"
-                placeholder="নোটিশের সম্পূর্ণ বিস্তারিত তথ্য..."
-            ></textarea>
-
-
-
-            <!-- IMAGE -->
-
-            <label for="postImage">
-                Cover Image
-            </label>
-
-            <div class="admin-upload-box">
-
+            <div class="field">
+                <label>Email</label>
                 <input
-                    type="file"
-                    id="postImage"
-                    accept="image/*"
+                    type="email"
+                    id="loginEmail"
+                    placeholder="Admin email"
+                    required
+                    autocomplete="username"
                 >
-
-                <small>
-                    JPG, PNG, WEBP — Gallery থেকে ছবি নির্বাচন করুন
-                </small>
-
             </div>
 
-
-            <!-- IMAGE PREVIEW -->
-
-            <div id="imagePreview"
-                 class="admin-image-preview"
-                 hidden>
-
-                <img id="previewImage"
-                     src=""
-                     alt="Preview">
-
-            </div>
-
-
-
-            <!-- PDF -->
-
-            <label for="postPdf">
-                Notice PDF
-            </label>
-
-            <div class="admin-upload-box">
-
+            <div class="field">
+                <label>Password</label>
                 <input
-                    type="file"
-                    id="postPdf"
-                    accept="application/pdf"
+                    type="password"
+                    id="loginPassword"
+                    placeholder="Password"
+                    required
+                    autocomplete="current-password"
                 >
-
-                <small>
-                    PDF file নির্বাচন করুন
-                </small>
-
             </div>
 
-
-
-            <!-- OFFICIAL URL -->
-
-            <label for="officialUrl">
-                Official Source URL
-            </label>
-
-            <input
-                type="url"
-                id="officialUrl"
-                placeholder="https://..."
-            >
-
-
-
-            <!-- PDF URL -->
-
-            <label for="pdfUrl">
-                External PDF URL
-            </label>
-
-            <input
-                type="url"
-                id="pdfUrl"
-                placeholder="https://..."
-            >
-
-
-
-            <!-- PUBLISH -->
-
-            <div class="admin-publish-row">
-
-                <label class="publish-toggle">
-
-                    <input
-                        type="checkbox"
-                        id="postPublished"
-                        checked
-                    >
-
-                    <span>
-                        Publish publicly
-                    </span>
-
-                </label>
-
-            </div>
-
-
-
-            <!-- ACTIONS -->
-
-            <div class="admin-form-actions">
-
-                <button
-                    type="submit"
-                    class="admin-save-btn">
-
-                    Save & Publish
-
-                </button>
-
-
-                <button
-                    type="button"
-                    id="saveDraftBtn"
-                    class="admin-draft-btn">
-
-                    Save Draft
-
-                </button>
-
-
-                <button
-                    type="button"
-                    id="cancelPostBtn"
-                    class="admin-cancel-btn">
-
-                    Cancel
-
-                </button>
-
-            </div>
+            <button class="primary-btn" type="submit">
+                🔐 Login
+            </button>
 
         </form>
 
-    </section>
+    </div>
+
+</div>
 
 
+<!-- =========================
+     ADMIN PAGE
+========================= -->
 
-    <!-- =========================
-         MANAGE POSTS
-    ========================= -->
+<div id="adminPage">
 
-    <section id="postManager"
-             class="admin-manager"
-             hidden>
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+            SHADAT <span>FATIH</span>
+        </div>
+
+        <div class="menu">
+
+            <button
+                class="active"
+                data-section="dashboard"
+            >
+                📊 Dashboard
+            </button>
+
+            <button data-section="notices">
+                📝 Notices / Updates
+            </button>
+
+            <button data-section="gallery">
+                🖼️ Gallery
+            </button>
+
+            <button data-section="pdf">
+                📄 PDF Documents
+            </button>
+
+        </div>
+
+        <button class="logout" id="logoutBtn">
+            🚪 Secure Logout
+        </button>
+
+    </aside>
 
 
-        <div class="admin-editor-heading">
+    <!-- MAIN -->
 
-            <div>
+    <main class="main">
 
-                <div class="admin-label">
-                    CONTENT MANAGEMENT
-                </div>
+        <header class="topbar">
 
-                <h2>
-                    Manage Posts
+            <div style="display:flex;align-items:center;gap:12px">
+
+                <button
+                    class="mobile-menu"
+                    id="mobileMenu"
+                >
+                    ☰
+                </button>
+
+                <h2 id="pageTitle">
+                    Dashboard
                 </h2>
 
             </div>
 
+            <div class="user-email" id="adminEmail"></div>
+
+        </header>
+
+
+        <div class="content">
+
+
+            <!-- =========================
+                 DASHBOARD
+            ========================= -->
+
+            <section
+                id="dashboard"
+                class="section active"
+            >
+
+                <div class="section-title">
+                    <h1>Dashboard</h1>
+                    <p>Manage your website content.</p>
+                </div>
+
+                <div class="stats">
+
+                    <div class="stat">
+                        <small>Total Notices</small>
+                        <strong id="totalNotices">0</strong>
+                    </div>
+
+                    <div class="stat">
+                        <small>Published</small>
+                        <strong id="publishedNotices">0</strong>
+                    </div>
+
+                    <div class="stat">
+                        <small>Drafts</small>
+                        <strong id="draftNotices">0</strong>
+                    </div>
+
+                    <div class="stat">
+                        <small>Gallery Images</small>
+                        <strong id="totalGallery">0</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>Recent Notices</h3>
+
+                    <div class="table-wrap">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="recentNotices"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 NOTICES
+            ========================= -->
+
+            <section
+                id="notices"
+                class="section"
+            >
+
+                <div class="section-title">
+                    <h1>Notices / Updates</h1>
+                    <p>Create, edit, publish or delete website notices.</p>
+                </div>
+
+
+                <div class="card">
+
+                    <h3 id="noticeFormTitle">
+                        Create New Notice
+                    </h3>
+
+                    <form id="noticeForm">
+
+                        <input
+                            type="hidden"
+                            id="noticeId"
+                        >
+
+                        <div class="form-grid">
+
+                            <div class="field">
+                                <label>Title</label>
+
+                                <input
+                                    type="text"
+                                    id="noticeTitle"
+                                    placeholder="Notice title"
+                                    required
+                                >
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>Category</label>
+
+                                <select id="noticeCategory">
+
+                                    <option value="Notice">
+                                        Notice
+                                    </option>
+
+                                    <option value="Update">
+                                        Update
+                                    </option>
+
+                                    <option value="Admission">
+                                        Admission
+                                    </option>
+
+                                    <option value="Exam">
+                                        Exam
+                                    </option>
+
+                                    <option value="Result">
+                                        Result
+                                    </option>
+
+                                    <option value="Event">
+                                        Event
+                                    </option>
+
+                                    <option value="Other">
+                                        Other
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="field full">
+
+                                <label>Content</label>
+
+                                <textarea
+                                    id="noticeContent"
+                                    placeholder="Write your notice..."
+                                    required
+                                ></textarea>
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>Status</label>
+
+                                <select id="noticeStatus">
+
+                                    <option value="published">
+                                        🌐 Published
+                                    </option>
+
+                                    <option value="draft">
+                                        📝 Draft
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>Featured Image</label>
+
+                                <input
+                                    type="file"
+                                    id="noticeImage"
+                                    accept="image/*"
+                                >
+
+                                <img
+                                    id="noticePreview"
+                                    class="preview"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="actions">
+
+                            <button
+                                class="btn btn-black"
+                                type="submit"
+                            >
+                                💾 Save Notice
+                            </button>
+
+                            <button
+                                class="btn btn-gray"
+                                type="button"
+                                id="cancelEdit"
+                                style="display:none"
+                            >
+                                Cancel Edit
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>All Notices</h3>
+
+                    <input
+                        class="search"
+                        id="noticeSearch"
+                        placeholder="🔍 Search notices..."
+                    >
+
+                    <div class="table-wrap">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="noticeTable"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 GALLERY
+            ========================= -->
+
+            <section
+                id="gallery"
+                class="section"
+            >
+
+                <div class="section-title">
+
+                    <h1>Gallery</h1>
+
+                    <p>
+                        Upload images to your website gallery.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>Upload Image</h3>
+
+                    <form id="galleryForm">
+
+                        <div class="field">
+
+                            <label>Image Title</label>
+
+                            <input
+                                type="text"
+                                id="galleryTitle"
+                                placeholder="Image title"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>Image</label>
+
+                            <div class="upload-box">
+
+                                <input
+                                    type="file"
+                                    id="galleryFile"
+                                    accept="image/*"
+                                    required
+                                >
+
+                                <br>
+
+                                <img
+                                    id="galleryPreview"
+                                    class="preview"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            class="btn btn-black"
+                            type="submit"
+                        >
+                            🖼️ Upload Image
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>Gallery Images</h3>
+
+                    <input
+                        class="search"
+                        id="gallerySearch"
+                        placeholder="🔍 Search gallery..."
+                    >
+
+                    <div
+                        id="galleryGrid"
+                        style="
+                        display:grid;
+                        grid-template-columns:
+                        repeat(auto-fill,minmax(200px,1fr));
+                        gap:18px;
+                        "
+                    ></div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 PDF
+            ========================= -->
+
+            <section
+                id="pdf"
+                class="section"
+            >
+
+                <div class="section-title">
+
+                    <h1>PDF Documents</h1>
+
+                    <p>
+                        Upload PDF documents and publish them.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>Upload PDF</h3>
+
+                    <form id="pdfForm">
+
+                        <div class="field">
+
+                            <label>PDF Title</label>
+
+                            <input
+                                type="text"
+                                id="pdfTitle"
+                                placeholder="Document title"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>PDF File</label>
+
+                            <input
+                                type="file"
+                                id="pdfFile"
+                                accept="application/pdf"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>Status</label>
+
+                            <select id="pdfStatus">
+
+                                <option value="published">
+                                    🌐 Published
+                                </option>
+
+                                <option value="draft">
+                                    📝 Draft
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <button
+                            class="btn btn-black"
+                            type="submit"
+                        >
+                            📄 Upload PDF
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>PDF Documents</h3>
+
+                    <input
+                        class="search"
+                        id="pdfSearch"
+                        placeholder="🔍 Search PDFs..."
+                    >
+
+                    <div class="table-wrap">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Open</th>
+                                    <th>Delete</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="pdfTable"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
         </div>
 
+    </main>
 
+</div>
 
-        <!-- SEARCH -->
-
-        <input
-            type="search"
-            id="adminSearch"
-            class="admin-search"
-            placeholder="Post খুঁজুন..."
-        >
-
-
-
-        <!-- POSTS -->
-
-        <div id="postList"
-             class="admin-post-list">
-
-            <div class="admin-empty">
-                এখনো কোনো post নেই।
-            </div>
-
-        </div>
-
-    </section>
-
-
-</section>
-
-</main>
-
-
-
-<!-- =========================
-     IMAGE PREVIEW SCRIPT
-========================= -->
 
 <script>
+
+/* =====================================================
+   SUPABASE CONFIGURATION
+===================================================== */
+
+/*
+   এখানে তোমার Supabase project-এর তথ্য বসাও।
+
+   Supabase Dashboard:
+   Project Settings
+   → API
+
+   এখানে শুধু anon/public key ব্যবহার করবে।
+
+   ❌ service_role key এখানে কখনো দেবে না।
+*/
+
+const SUPABASE_URL =
+    "YOUR_SUPABASE_PROJECT_URL";
+
+const SUPABASE_ANON_KEY =
+    "YOUR_SUPABASE_ANON_KEY";
+
+
+/* =====================================================
+   STORAGE BUCKET NAMES
+===================================================== */
+
+/*
+   Supabase Storage-এ তোমার তৈরি করা bucket-এর নাম
+   এখানে দিতে হবে।
+
+   সাধারণভাবে:
+   gallery
+   pdfs
+
+   তোমার bucket-এর নাম অন্য হলে শুধু এগুলো পরিবর্তন করো।
+*/
+
+const GALLERY_BUCKET = "gallery";
+
+const PDF_BUCKET = "pdfs";
+
+
+/* =====================================================
+   SUPABASE CLIENT
+===================================================== */
+
+const { createClient } =
+    supabase;
+
+const db =
+    createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY,
+        {
+            auth:{
+                persistSession:true,
+                autoRefreshToken:true,
+                detectSessionInUrl:true
+            }
+        }
+    );
+
+
+/* =====================================================
+   DOM
+===================================================== */
+
+const loginPage =
+    document.getElementById("loginPage");
+
+const adminPage =
+    document.getElementById("adminPage");
 
 const loginForm =
     document.getElementById("loginForm");
 
-const loginSection =
-    document.getElementById("loginSection");
+const loginError =
+    document.getElementById("loginError");
 
-const dashboard =
-    document.getElementById("dashboard");
+const loading =
+    document.getElementById("loading");
 
-const loginMessage =
-    document.getElementById("loginMessage");
-
-const logoutBtn =
-    document.getElementById("logoutBtn");
+const toast =
+    document.getElementById("toast");
 
 
-/*
-    TEMPORARY DEMO LOGIN
+/* =====================================================
+   HELPERS
+===================================================== */
 
-    Real secure authentication will be
-    connected with Supabase later.
-*/
+function showLoading(){
+    loading.style.display = "flex";
+}
+
+function hideLoading(){
+    loading.style.display = "none";
+}
+
+
+function showToast(message,type=""){
+    toast.textContent = message;
+
+    toast.className = "";
+
+    toast.id = "toast";
+
+    if(type){
+        toast.classList.add(type);
+    }
+
+    toast.style.display = "block";
+
+    setTimeout(()=>{
+        toast.style.display = "none";
+    },3500);
+}
+
+
+function escapeHTML(value){
+
+    if(value === null ||
+       value === undefined){
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+
+function formatDate(date){
+
+    if(!date){
+        return "";
+    }
+
+    return new Date(date)
+        .toLocaleDateString(
+            "en-BD",
+            {
+                year:"numeric",
+                month:"short",
+                day:"numeric"
+            }
+        );
+}
+
+
+/* =====================================================
+   AUTH CHECK
+===================================================== */
+
+async function checkAuth(){
+
+    showLoading();
+
+    try{
+
+        const {
+            data,
+            error
+        } = await db.auth.getSession();
+
+        if(error){
+            throw error;
+        }
+
+        if(data.session){
+
+            await openAdmin(
+                data.session
+            );
+
+        }else{
+
+            showLogin();
+
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+        showLogin();
+
+    }finally{
+
+        hideLoading();
+
+    }
+}
+
+
+/* =====================================================
+   SHOW LOGIN
+===================================================== */
+
+function showLogin(){
+
+    loginPage.style.display = "flex";
+
+    adminPage.style.display = "none";
+
+}
+
+
+/* =====================================================
+   OPEN ADMIN
+===================================================== */
+
+async function openAdmin(session){
+
+    loginPage.style.display = "none";
+
+    adminPage.style.display = "block";
+
+    document.getElementById("adminEmail")
+        .textContent =
+        session.user.email || "";
+
+    await loadDashboard();
+
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
 
 loginForm.addEventListener(
     "submit",
-    function(event) {
+    async function(event){
 
         event.preventDefault();
 
-        loginSection.hidden = true;
+        const email =
+            document.getElementById(
+                "loginEmail"
+            ).value.trim();
 
-        dashboard.hidden = false;
+        const password =
+            document.getElementById(
+                "loginPassword"
+            ).value;
 
-        logoutBtn.hidden = false;
+        loginError.style.display = "none";
 
-        loginMessage.textContent = "";
+        showLoading();
 
-    }
-);
+        try{
 
+            const {
+                data,
+                error
+            } = await db.auth.signInWithPassword({
+                email,
+                password
+            });
 
-/* LOGOUT */
+            if(error){
+                throw error;
+            }
 
-logoutBtn.addEventListener(
-    "click",
-    function() {
+            if(!data.session){
+                throw new Error(
+                    "Login session could not be created."
+                );
+            }
 
-        dashboard.hidden = true;
+            loginForm.reset();
 
-        loginSection.hidden = false;
+            await openAdmin(
+                data.session
+            );
 
-        logoutBtn.hidden = true;
+            showToast(
+                "Login successful.",
+                "success"
+            );
 
-        loginForm.reset();
+        }catch(error){
 
-    }
-);
+            console.error(error);
 
+            loginError.textContent =
+                error.message ||
+                "Invalid email or password.";
 
+            loginError.style.display =
+                "block";
 
-/* =========================
-   DASHBOARD BUTTONS
-========================= */
+        }finally{
 
-const newPostBtn =
-    document.getElementById("newPostBtn");
-
-const managePostsBtn =
-    document.getElementById("managePostsBtn");
-
-const postEditor =
-    document.getElementById("postEditor");
-
-const postManager =
-    document.getElementById("postManager");
-
-const cancelPostBtn =
-    document.getElementById("cancelPostBtn");
-
-
-newPostBtn.addEventListener(
-    "click",
-    function() {
-
-        postEditor.hidden = false;
-
-        postManager.hidden = true;
-
-        postEditor.scrollIntoView({
-            behavior: "smooth"
-        });
-
-    }
-);
-
-
-managePostsBtn.addEventListener(
-    "click",
-    function() {
-
-        postManager.hidden = false;
-
-        postEditor.hidden = true;
-
-        postManager.scrollIntoView({
-            behavior: "smooth"
-        });
-
-    }
-);
-
-
-cancelPostBtn.addEventListener(
-    "click",
-    function() {
-
-        postEditor.hidden = true;
-
-    }
-);
-
-
-
-/* =========================
-   IMAGE PREVIEW
-========================= */
-
-const imageInput =
-    document.getElementById("postImage");
-
-const imagePreview =
-    document.getElementById("imagePreview");
-
-const previewImage =
-    document.getElementById("previewImage");
-
-
-imageInput.addEventListener(
-    "change",
-    function() {
-
-        const file = this.files[0];
-
-        if (!file) {
-
-            imagePreview.hidden = true;
-
-            previewImage.src = "";
-
-            return;
+            hideLoading();
 
         }
 
+    }
+);
 
-        if (!file.type.startsWith("image/")) {
 
-            alert("শুধু image file নির্বাচন করুন।");
+/* =====================================================
+   AUTH STATE
+===================================================== */
 
-            this.value = "";
+db.auth.onAuthStateChange(
+    async (event,session)=>{
 
-            return;
+        if(event === "SIGNED_IN" &&
+           session){
+
+            await openAdmin(session);
 
         }
 
+        if(event === "SIGNED_OUT"){
 
-        const reader =
-            new FileReader();
+            showLogin();
+
+        }
+
+    }
+);
 
 
-        reader.onload =
-            function(event) {
+/* =====================================================
+   SECURE LOGOUT
+===================================================== */
 
-                previewImage.src =
-                    event.target.result;
+document.getElementById(
+    "logoutBtn"
+).addEventListener(
+    "click",
+    async ()=>{
 
-                imagePreview.hidden = false;
+        const confirmLogout =
+            confirm(
+                "Are you sure you want to logout?"
+            );
 
+        if(!confirmLogout){
+            return;
+        }
+
+        showLoading();
+
+        try{
+
+            const {
+                error
+            } = await db.auth.signOut({
+                scope:"local"
+            });
+
+            if(error){
+                throw error;
+            }
+
+            adminPage.style.display =
+                "none";
+
+            loginPage.style.display =
+                "flex";
+
+            showToast(
+                "Logged out successfully.",
+                "success"
+            );
+
+        }catch(error){
+
+            console.error(error);
+
+            showToast(
+                error.message ||
+                "Logout failed.",
+                "error"
+            );
+
+        }finally{
+
+            hideLoading();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+const menuButtons =
+    document.querySelectorAll(
+        ".menu button"
+    );
+
+menuButtons.forEach(button=>{
+
+    button.addEventListener(
+        "click",
+        ()=>{
+
+            menuButtons.forEach(btn=>{
+                btn.classList.remove(
+                    "active"
+                );
+            });
+
+            button.classList.add(
+                "active"
+            );
+
+            document
+                .querySelectorAll(
+                    ".section"
+                )
+                .forEach(section=>{
+                    section.classList.remove(
+                        "active"
+                    );
+                });
+
+            const target =
+                button.dataset.section;
+
+            document
+                .getElementById(target)
+                .classList.add(
+                    "active"
+                );
+
+            const titles = {
+                dashboard:"Dashboard",
+                notices:"Notices / Updates",
+                gallery:"Gallery",
+                pdf:"PDF Documents"
             };
 
+            document.getElementById(
+                "pageTitle"
+            ).textContent =
+                titles[target] || "Admin";
 
-        reader.readAsDataURL(file);
+            if(target === "notices"){
+                loadNotices();
+            }
 
-    }
-);
+            if(target === "gallery"){
+                loadGallery();
+            }
 
+            if(target === "pdf"){
+                loadPDFs();
+            }
 
+            document
+                .getElementById(
+                    "sidebar"
+                )
+                .classList.remove(
+                    "open"
+                );
 
-/* =========================
-   SAVE / PUBLISH
-========================= */
+        }
+    );
 
-const postForm =
-    document.getElementById("postForm");
-
-const saveDraftBtn =
-    document.getElementById("saveDraftBtn");
-
-
-postForm.addEventListener(
-    "submit",
-    function(event) {
-
-        event.preventDefault();
-
-        alert(
-            "Post editor ready. Database connection will be added next."
-        );
-
-    }
-);
+});
 
 
-saveDraftBtn.addEventListener(
+document.getElementById(
+    "mobileMenu"
+).addEventListener(
     "click",
-    function() {
-
-        alert(
-            "Draft system ready. Database connection will be added next."
-        );
-
+    ()=>{
+        document
+            .getElementById("sidebar")
+            .classList.toggle("open");
     }
 );
 
 
+/* =====================================================
+   DASHBOARD
+===================================================== */
 
-/* =========================
-   SEARCH
-========================= */
+async function loadDashboard(){
 
-const adminSearch =
-    document.getElementById("adminSearch");
+    await Promise.all([
+        loadNoticeStats(),
+        loadRecentNotices(),
+        loadGalleryCount()
+    ]);
 
-
-adminSearch.addEventListener(
-    "input",
-    function() {
-
-        const search =
-            this.value.toLowerCase().trim();
-
-        const posts =
-            document.querySelectorAll(".admin-post-item");
+}
 
 
-        posts.forEach(function(post) {
+/* =====================================================
+   NOTICE STATS
+===================================================== */
 
-            const text =
-                post.textContent.toLowerCase();
+async function loadNoticeStats(){
 
-            post.style.display =
-                text.includes(search)
-                    ? "block"
-                    : "none";
+    try{
+
+        const {
+            data,
+            error
+        } = await db
+            .from("notices")
+            .select(
+                "id,status"
+            );
+
+        if(error){
+            throw error;
+        }
+
+        const notices =
+            data || [];
+
+        const published =
+            notices.filter(
+                item =>
+                item.status === "published"
+            ).length;
+
+        const drafts =
+            notices.filter(
+                item =>
+                item.status === "draft"
+            ).length;
+
+        document.getElementById(
+            "totalNotices"
+        ).textContent =
+            notices.length;
+
+        document.getElementById(
+            "publishedNotices"
+        ).textContent =
+            published;
+
+        document.getElementById(
+            "draftNotices"
+        ).textContent =
+            drafts;
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =====================================================
+   GALLERY COUNT
+===================================================== */
+
+async function loadGalleryCount(){
+
+    try{
+
+        const {
+            count,
+            error
+        } = await db
+            .from("gallery")
+            .select(
+                "id",
+                {
+                    count:"exact",
+                    head:true
+                }
+            );
+
+        if(error){
+            throw error;
+        }
+
+        document.getElementById(
+            "totalGallery"
+        ).textContent =
+            count || 0;
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =====================================================
+   RECENT NOTICES
+===================================================== */
+
+async function loadRecentNotices(){
+
+    try{
+
+        const {
+            data,
+            error
+        } = await db
+            .from("notices")
+            .select(
+                "id,title,status,created_at"
+            )
+            .order(
+                "created_at",
+                {
+                    ascending:false
+                }
+            )
+            .limit(5);
+
+        if(error){
+            throw error;
+        }
+
+        const table =
+            document.getElementById(
+                "recentNotices"
+            );
+
+        table.innerHTML = "";
+
+        if(!data || !data.length){
+
+            table.innerHTML =
+                `<tr>
+                    <td colspan="3">
+                        No notices yet.
+                    </td>
+                </tr>`;
+
+            return;
+        }
+
+        data.forEach(item=>{
+
+            table.innerHTML +=
+                `<tr>
+
+                    <td>
+                        ${escapeHTML(item.title)}
+                    </td>
+
+                    <td>
+                        <span class="status ${
+                            item.status
+                        }">
+                            ${
+                                item.status ===
+                                "published"
+                                ? "Published"
+                                : "Draft"
+                            }
+                        </span>
+                    </td>
+
+                    <td>
+                        ${formatDate(item.created_at)}
+                    </td>
+
+                </tr>`;
 
         });
 
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =====================================================
+   NOTICE IMAGE PREVIEW
+===================================================== */
+
+document.getElementById(
+    "noticeImage"
+).addEventListener(
+    "change",
+    function(){
+
+        const file =
+            this.files[0];
+
+        const preview =
+            document.getElementById(
+                "noticePreview"
+            );
+
+        if(!file){
+            preview.style.display =
+                "none";
+            return;
+        }
+
+        preview.src =
+            URL.createObjectURL(file);
+
+        preview.style.display =
+            "block";
+
     }
 );
 
-</script>
 
+/* =====================================================
+   CREATE / UPDATE NOTICE
+===================================================== */
+
+document.getElementById(
+    "noticeForm"
+).addEventListener(
+    "submit",
+    async function(event){
+
+        event.preventDefault();
+
+        showLoading();
+
+        try{
+
+            const id =
+                document.getElementById(
+                    "noticeId"
+                ).value;
+
+            const title =
+                document.getElementById(
+                    "noticeTitle"
+                ).value.trim();
+
+            const category =
+                document.getElementById(
+                    "noticeCategory"
+                ).value;
+
+            const content =
+                document.getElementById(
+                    "noticeContent"
+                ).value.trim();
+
+            const status =
+                document.getElementById(
+                    "noticeStatus"
+                ).value;
+
+            const imageFile =
+                document.getElementById(
+                    "noticeImage"
+                ).files[0];
+
+            if(!title ||
+               !content){
+
+                throw new Error(
+                    "Title and content are required."
+                );
+
+            }
+
+
+            /* =========================
+               IMAGE UPLOAD
+            ========================= */
+
+            let imageUrl = null;
+
+            if(imageFile){
+
+                if(
+                    !imageFile.type
+                    .startsWith("image/")
+                ){
+
+                    throw new Error(
+                        "Please select a valid image."
+                    );
+
+                }
+
+                if(
+                    imageFile.size >
+                    5 * 1024 * 1024
+                ){
+
+                    throw new Error(
+                        "Image must be under 5MB."
+                    );
+
+                }
+
+                const fileExt =
+                    imageFile.name
+                    .split(".")
+                    .pop()
+                    .toLowerCase();
+
+                const fileName =
+                    `${crypto.randomUUID()}.${fileExt}`;
+
+                const path =
+                    `notices/${fileName}`;
+
+
+                const {
+                    error:
+                    uploadError
+                } =
+                    await db.storage
+                    .from(GALLERY_BUCKET)
+                    .upload(
+                        path,
+                        imageFile,
+                        {
+                            upsert:false,
+                            contentType:
+                                imageFile.type
+                        }
+                    );
+
+                if(uploadError){
+                    throw uploadError;
+                }
+
+
+                const {
+                    data:
+                    publicData
+                } =
+                    db.storage
+                    .from(GALLERY_BUCKET)
+                    .getPublicUrl(path);
+
+                imageUrl =
+                    publicData.publicUrl;
+
+            }
+
+
+            /* =========================
+               INSERT
+            ========================= */
+
+            if(!id){
+
+                const {
+                    data:userData
+                } =
+                    await db.auth.getUser();
+
+                const user =
+                    userData.user;
+
+                const {
+                    error
+                } =
+                    await db
+                    .from("notices")
+                    .insert({
+                        title,
+                        category,
+                        content,
+                        status,
+                        image_url:imageUrl,
+                        author_id:
+                            user
+                            ? user.id
+                            : null
+                    });
+
+                if(error){
+                    throw error;
+                }
+
+                showToast(
+                    "Notice saved successfully.",
+                    "success"
+                );
+
+            }
+
+
+            /* =========================
+               UPDATE
+            ========================= */
+
+            else{
+
+                const updateData = {
+                    title,
+                    category,
+                    content,
+                    status
+                };
+
+                if(imageUrl){
+                    updateData.image_url =
+                        imageUrl;
+                }
+
+                const {
+                    error
+                } =
+                    await db
+                    .from("notices")
+                    .update(updateData)
+                    .eq("id",id);
+
+                if(error){
+                    throw error;
+                }
+
+                showToast(
+                    "Notice updated successfully.",
+                    "success"
+                );
+
+            }
+
+
+            resetNoticeForm();
+
+            await loadNotices();
+
+            await loadDashboard();
+
+        }catch(error){
+
+            console.error(error);
+
+            showToast(
+                error.message ||
+                "Could not save notice.",
+                "error"
+            );
+
+        }finally{
+
+            hideLoading();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   LOAD NOTICES
+===================================================== */
+
+let allNotices = [];
+
+
+async function loadNotices(){
+
+    try{
+
+        const {
+            data,
+            error
+        } = await db
+            .from("notices")
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending:false
+                }
+            );
+
+        if(error){
+            throw error;
+        }
+
+        allNotices =
+            data || [];
+
+        renderNotices(
+            allNotices
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        showToast(
+            error.message ||
+            "Could not load notices.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   RENDER NOTICES
+===================================================== */
+
+function renderNotices(notices){
+
+    const table =
+        document.getElementById(
+            "noticeTable"
+        );
+
+    table.innerHTML = "";
+
+    if(!notices.length){
+
+        table.innerHTML =
+            `<tr>
+                <td colspan="5">
+                    No notices found.
+                </td>
+            </tr>`;
+
+        return;
+
+    }
+
+
+    notices.forEach(item=>{
+
+        table.innerHTML +=
+            `<tr>
+
+                <td>
+                    <strong>
+                        ${escapeHTML(item.title)}
+                    </strong>
+                </td>
+
+                <td>
+                    ${escapeHTML(item.category)}
+                </td>
+
+                <td>
+                    <span class="status ${
+                        item.status
+                    }">
+                        ${
+                            item.status ===
+                            "published"
+                            ? "Published"
+                            : "Draft"
+                        }
+                    </span>
+                </td>
+
+                <td>
+                    ${formatDate(item.created_at)}
+                </td>
+
+                <td>
+
+                    <div class="actions">
+
+                        <button
+                            class="btn btn-gray"
+                            onclick="editNotice('${item.id}')"
+                        >
+                            ✏️ Edit
+                        </button>
+
+                        <button
+                            class="btn btn-red"
+                            onclick="deleteNotice('${item.id}')"
+                        >
+                            🗑️ Delete
+                        </button>
+
+                    </div>
+
+                </td>
+
+            </tr>`;
+
+    });
+
+}
+
+
+/* =====================================================
+   SEARCH NOTICES
+===================================================== */
+
+document.getElementById(
+    "noticeSearch"
+).addEventListener(
+    "input",
+    function(){
+
+        const query =
+            this.value
+            .toLowerCase()
+            .trim();
+
+        const filtered =
+            allNotices.filter(item=>
+
+                String(item.title || "")
+                    .toLowerCase()
+                    .includes(query)
+
+                ||
+
+                String(item.category || "")
+                    .toLowerCase()
+                    .includes(query)
+
+                ||
+
+                String(item.content || "")
+                    .toLowerCase()
+                    .includes(query)
+
+            );
+
+        renderNotices(filtered);
+
+    }
+);
+
+
+/* =====================================================
+   EDIT NOTICE
+===================================================== */
+
+window.editNotice =
+async function(id){
+
+    const item =
+        allNotices.find(
+            notice =>
+            String(notice.id) ===
+            String(id)
+        );
+
+    if(!item){
+        return;
+    }
+
+    document.getElementById(
+        "noticeId"
+    ).value =
+        item.id;
+
+    document.getElementById(
+        "noticeTitle"
+    ).value =
+        item.title || "";
+
+    document.getElementById(
+        "noticeCategory"
+    ).value =
+        item.category || "Notice";
+
+    document.getElementById(
+        "noticeContent"
+    ).value =
+        item.content || "";
+
+    document.getElementById(
+        "noticeStatus"
+    ).value =
+        item.status || "draft";
+
+    document.getElementById(
+        "noticeFormTitle"
+    ).textContent =
+        "Edit Notice";
+
+    document.getElementById(
+        "cancelEdit"
+    ).style.display =
+        "inline-block";
+
+    document
+        .getElementById("notices")
+        .scrollIntoView({
+            behavior:"smooth"
+        });
+
+};
+
+
+/* =====================================================
+   DELETE NOTICE
+===================================================== */
+
+window.deleteNotice =
+async function(id){
+
+    if(
+        !confirm(
+            "Delete this notice permanently?"
+        )
+    ){
+        return;
+    }
+
+    showLoading();
+
+    try{
+
+        const {
+            error
+        } =
+            await db
+            .from("notices")
+            .delete()
+            .eq("id",id);
+
+        if(error){
+            throw error;
+        }
+
+        showToast(
+            "Notice deleted.",
+            "success"
+        );
+
+        await loadNotices();
+
+        await loadDashboard();
+
+    }catch(error){
+
+        console.error(error);
+
+        showToast(
+            error.message ||
+            "Could not delete notice.",
+            "error"
+        );
+
+    }finally{
+
+        hideLoading();
+
+    }
+
+};
+
+
+/* =====================================================
+   RESET NOTICE
+===================================================== */
+
+function resetNoticeForm(){
+
+    document
+        .getElementById(
+            "noticeForm"
+        )
+        .reset();
+
+    document.getElementById(
+        "noticeId"
+    ).value = "";
+
+    document.getElementById(
+        "noticeFormTitle"
+    ).textContent =
+        "Create New Notice";
+
+    document.getElementById(
+        "cancelEdit"
+    ).style.display =
+        "none";
+
+    document.getElementById(
+        "noticePreview"
+    ).style.display =
+        "none";
+
+}
+
+
+document.getElementById(
+    "cancelEdit"
+).addEventListener(
+    "click",
+    resetNoticeForm
+);
+
+
+/* =====================================================
+   GALLERY PREVIEW
+===================================================== */
+
+document.getElementById(
+    "galleryFile"
+).addEventListener(
+    "change",
+    function(){
+
+        const file =
+            this.files[0];
+
+        const preview =
+            document.getElementById(
+                "galleryPreview"
+            );
+
+        if(!file){
+
+            preview.style.display =
+                "none";
+
+            return;
+        }
+
+        preview.src =
+            URL.createObjectURL(file);
+
+        preview.style.display =
+            "block";
+
+    }
+);
+
+
+/* =====================================================
+   GALLERY UPLOAD
+===================================================== */
+
+document.getElementById(
+    "galleryForm"
+).addEventListener(
+    "submit",
+    async function(event){
+
+        event.preventDefault();
+
+        showLoading();
+
+        try{
+
+            const title =
+                document.getElementById(
+                    "galleryTitle"
+                ).value.trim();
+
+            const file =
+                document.getElementById(
+                    "galleryFile"
+                ).files[0];
+
+            if(!file){
+                throw new Error(
+                    "Please select an image."
+                );
+            }
+
+            if(
+                !file.type.startsWith("image/")
+            ){
+
+                throw new Error(
+                    "Only image files are allowed."
+                );
+
+            }
+
+            if(
+                file.size >
+                10 * 1024 * 1024
+            ){
+
+                throw new Error(
+                    "Image must be under 10MB."
+                );
+
+            }
+
+
+            const ext =
+                file.name
+                .split(".")
+                .pop()
+                .toLowerCase();
+
+            const fileName =
+                `${crypto.randomUUID()}.${ext}`;
+
+            const path =
+                `gallery/${fileName}`;
+
+
+            const {
+                error:
+                uploadError
+            } =
+                await db.storage
+                .from(GALLERY_BUCKET)
+                .upload(
+                    path,
+                    file,
+                    {
+                        upsert:false,
+                        contentType:
+                            file.type
+                    }
+                );
+
+            if(uploadError){
+                throw uploadError;
+            }
+
+
+            const {
+                data:
+                publicData
+            } =
+                db.storage
+                .from(GALLERY_BUCKET)
+                .getPublicUrl(path);
+
+
+            const {
+                error
+            } =
+                await db
+                .from("gallery")
+                .insert({
+                    title,
+                    image_url:
+                        publicData.publicUrl,
+                    storage_path:
+                        path
+                });
+
+            if(error){
+                throw error;
+            }
+
+
+            this.reset();
+
+            document.getElementById(
+                "galleryPreview"
+            ).style.display =
+                "none";
+
+
+            showToast(
+                "Image uploaded successfully.",
+                "success"
+            );
+
+
+            await loadGallery();
+
+            await loadGalleryCount();
+
+        }catch(error){
+
+            console.error(error);
+
+            showToast(
+                error.message ||
+                "Gallery upload failed.",
+                "error"
+            );
+
+        }finally{
+
+            hideLoading();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   GALLERY DATA
+===================================================== */
+
+let allGallery = [];
+
+
+async function loadGallery(){
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+            await db
+            .from("gallery")
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending:false
+                }
+            );
+
+        if(error){
+            throw error;
+        }
+
+        allGallery =
+            data || [];
+
+        renderGallery(
+            allGallery
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        showToast(
+            error.message ||
+            "Could not load gallery.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   RENDER GALLERY
+===================================================== */
+
+function renderGallery(items){
+
+    const grid =
+        document.getElementById(
+            "galleryGrid"
+        );
+
+    grid.innerHTML = "";
+
+    if(!items.length){
+
+        grid.innerHTML =
+            `<div class="card">
+                No gallery images found.
+            </div>`;
+
+        return;
+
+    }
+
+
+    items.forEach(item=>{
+
+        grid.innerHTML +=
+            `<div
+                style="
+                background:white;
+                border-radius:12px;
+                overflow:hidden;
+                box-shadow:0 5px 20px rgba(0,0,0,.08);
+                "
+            >
+
+                <img
+                    src="${escapeHTML(item.image_url)}"
+                    alt="${escapeHTML(item.title)}"
+                    style="
+                    width:100%;
+                    height:160px;
+                    object-fit:cover;
+                    display:block;
+                    "
+                >
+
+                <div style="padding:13px">
+
+                    <strong>
+                        ${escapeHTML(item.title)}
+                    </strong>
+
+                    <br><br>
+
+                    <button
+                        class="btn btn-red"
+                        onclick="deleteGallery('${item.id}')"
+                    >
+                        🗑️ Delete
+                    </button>
+
+                </div>
+
+            </div>`;
+
+    });
+
+}
+
+
+/* =====================================================
+   SEARCH GALLERY
+===================================================== */
+
+document.getElementById(
+    "gallerySearch"
+).addEventListener(
+    "input",
+    function(){
+
+        const query =
+            this.value
+            .toLowerCase()
+            .trim();
+
+        const filtered =
+            allGallery.filter(item=>
+
+                String(item.title || "")
+                    .toLowerCase()
+                    .includes(query)
+
+            );
+
+        renderGallery(filtered);
+
+    }
+);
+
+
+/* =====================================================
+   DELETE GALLERY
+===================================================== */
+
+window.deleteGallery =
+async function(id){
+
+    if(
+        !confirm(
+            "Delete this gallery image permanently?"
+        )
+    ){
+        return;
+    }
+
+    showLoading();
+
+    try{
+
+        const {
+            data:item,
+            error:findError
+        } =
+            await db
+            .from("gallery")
+            .select(
+                "storage_path"
+            )
+            .eq("id",id)
+            .single();
+
+        if(findError){
+            throw findError;
+        }
+
+
+        if(item &&
+           item.storage_path){
+
+            await db.storage
+                .from(GALLERY_BUCKET)
+                .remove([
+                    item.storage_path
+                ]);
+
+        }
+
+
+        const {
+            error
+        } =
+            await db
+            .from("gallery")
+            .delete()
+            .eq("id",id);
+
+        if(error){
+            throw error;
+        }
+
+
+        showToast(
+            "Gallery image deleted.",
+            "success"
+        );
+
+        await loadGallery();
+
+        await loadGalleryCount();
+
+    }catch(error){
+
+        console.error(error);
+
+        showToast(
+            error.message ||
+            "Could not delete image.",
+            "error"
+        );
+
+    }finally{
+
+        hideLoading();
+
+    }
+
+};
+
+
+/* =====================================================
+   PDF UPLOAD
+===================================================== */
+
+document.getElementById(
+    "pdfForm"
+).addEventListener(
+    "submit",
+    async function(event){
+
+        event.preventDefault();
+
+        showLoading();
+
+        try{
+
+            const title =
+                document.getElementById(
+                    "pdfTitle"
+                ).value.trim();
+
+            const status =
+                document.getElementById(
+                    "pdfStatus"
+                ).value;
+
+            const file =
+                document.getElementById(
+                    "pdfFile"
+                ).files[0];
+
+            if(!file){
+
+                throw new Error(
+                    "Please select a PDF."
+                );
+
+            }
+
+            if(
+                file.type !==
+                "application/pdf"
+            ){
+
+                throw new Error(
+                    "Only PDF files are allowed."
+                );
+
+            }
+
+            if(
+                file.size >
+                20 * 1024 * 1024
+            ){
+
+                throw new Error(
+                    "PDF must be under 20MB."
+                );
+
+            }
+
+
+            const fileName =
+                `${crypto.randomUUID()}.pdf`;
+
+            const path =
+                `documents/${fileName}`;
+
+
+            const {
+                error:
+                uploadError
+            } =
+                await db.storage
+                .from(PDF_BUCKET)
+                .upload(
+                    path,
+                    file,
+                    {
+                        upsert:false,
+                        contentType:
+                            "application/pdf"
+                    }
+                );
+
+            if(uploadError){
+                throw uploadError;
+            }
+
+
+            const {
+                data:
+                publicData
+            } =
+                db.storage
+                .from(PDF_BUCKET)
+                .getPublicUrl(path);
+
+
+            const {
+                error
+            } =
+                await db
+                .from("pdf_documents")
+                .insert({
+                    title,
+                    file_url:
+                        publicData.publicUrl,
+                    storage_path:
+                        path,
+                    status
+                });
+
+            if(error){
+                throw error;
+            }
+
+
+            this.reset();
+
+
+            showToast(
+                "PDF uploaded successfully.",
+                "success"
+            );
+
+
+            await loadPDFs();
+
+        }catch(error){
+
+            console.error(error);
+
+            showToast(
+                error.message ||
+                "PDF upload failed.",
+                "error"
+            );
+
+        }finally{
+
+            hideLoading();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   LOAD PDFs
+===================================================== */
+
+let allPDFs = [];
+
+
+async function loadPDFs(){
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+            await db
+            .from("pdf_documents")
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending:false
+                }
+            );
+
+        if(error){
+            throw error;
+        }
+
+        allPDFs =
+            data || [];
+
+        renderPDFs(
+            allPDFs
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        showToast(
+            error.message ||
+            "Could not load PDFs.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   RENDER PDFs
+===================================================== */
+
+function renderPDFs(items){
+
+    const table =
+        document.getElementById(
+            "pdfTable"
+        );
+
+    table.innerHTML = "";
+
+    if(!items.length){
+
+        table.innerHTML =
+            `<tr>
+                <td colspan="5">
+                    No PDF documents found.
+                </td>
+            </tr>`;
+
+        return;
+
+    }
+
+
+    items.forEach(item=>{
+
+        table.innerHTML +=
+            `<tr>
+
+                <td>
+                    <strong>
+                        ${escapeHTML(item.title)}
+                    </strong>
+                </td>
+
+                <td>
+
+                    <span class="status ${
+                        item.status
+                    }">
+
+                        ${
+                            item.status ===
+                            "published"
+                            ? "Published"
+                            : "Draft"
+                        }
+
+                    </span>
+
+                </td>
+
+                <td>
+                    ${formatDate(item.created_at)}
+                </td>
+
+                <td>
+
+                    <a
+                        href="${escapeHTML(item.file_url)}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn btn-gray"
+                        style="
+                        display:inline-block;
+                        text-decoration:none;
+                        "
+                    >
+                        📄 Open
+                    </a>
+
+                </td>
+
+                <td>
+
+                    <button
+                        class="btn btn-red"
+                        onclick="deletePDF('${item.id}')"
+                    >
+                        🗑️ Delete
+                    </button>
+
+                </td>
+
+            </tr>`;
+
+    });
+
+}
+
+
+/* =====================================================
+   SEARCH PDFs
+===================================================== */
+
+document.getElementById(
+    "pdfSearch"
+).addEventListener(
+    "input",
+    function(){
+
+        const query =
+            this.value
+            .toLowerCase()
+            .trim();
+
+        const filtered =
+            allPDFs.filter(item=>
+
+                String(item.title || "")
+                    .toLowerCase()
+                    .includes(query)
+
+            );
+
+        renderPDFs(filtered);
+
+    }
+);
+
+
+/* =====================================================
+   DELETE PDF
+===================================================== */
+
+window.deletePDF =
+async function(id){
+
+    if(
+        !confirm(
+            "Delete this PDF permanently?"
+        )
+    ){
+        return;
+    }
+
+    showLoading();
+
+    try{
+
+        const {
+            data:item,
+            error:findError
+        } =
+            await db
+            .from("pdf_documents")
+            .select(
+                "storage_path"
+            )
+            .eq("id",id)
+            .single();
+
+        if(findError){
+            throw findError;
+        }
+
+
+        if(item &&
+           item.storage_path){
+
+            await db.storage
+                .from(PDF_BUCKET)
+                .remove([
+                    item.storage_path
+                ]);
+
+        }
+
+
+        const {
+            error
+        } =
+            await db
+            .from("pdf_documents")
+            .delete()
+            .eq("id",id);
+
+        if(error){
+            throw error;
+        }
+
+
+        showToast(
+            "PDF deleted.",
+            "success"
+        );
+
+        await loadPDFs();
+
+    }catch(error){
+
+        console.error(error);
+
+        showToast(
+            error.message ||
+            "Could not delete PDF.",
+            "error"
+        );
+
+    }finally{
+
+        hideLoading();
+
+    }
+
+};
+
+
+/* =====================================================
+   START
+===================================================== */
+
+checkAuth();
+
+</script>
 
 </body>
 </html>
