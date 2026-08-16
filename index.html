@@ -10,6 +10,9 @@
         content="Shadat Fatih — National University, Chattogram Board এবং বাংলাদেশের শিক্ষা সংক্রান্ত সর্বশেষ নোটিশ, আপডেট ও তথ্য।">
 
     <link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+</script>
+
 </head>
 
 <body class="home-page">
@@ -427,96 +430,17 @@
 
     </div>
 
+<div id="dynamicPosts">
 
-    <article class="news-card">
-
-        <div class="news-top">
-
-            <span class="tag red">
-                NATIONAL UNIVERSITY
-            </span>
-
-            <span class="date">
-                16 Aug 2026
-            </span>
-
-        </div>
-
-        <h3>
-            জাতীয় বিশ্ববিদ্যালয়ের সর্বশেষ নোটিশ ও শিক্ষা আপডেট
-        </h3>
+    <div class="news-card">
 
         <p>
-            ভর্তি, পরীক্ষা, ফরম পূরণ, ফলাফল এবং
-            অন্যান্য গুরুত্বপূর্ণ তথ্য শিক্ষার্থীদের
-            জন্য সহজভাবে প্রকাশ করা হবে।
+            সর্বশেষ আপডেট লোড হচ্ছে...
         </p>
 
-        <a href="nu-admission.html" class="read-more">
-            বিস্তারিত পড়ুন →
-        </a>
+    </div>
 
-    </article>
-
-
-    <article class="news-card">
-
-        <div class="news-top">
-
-            <span class="tag">
-                CHATTOGRAM BOARD
-            </span>
-
-            <span class="date">
-                16 Aug 2026
-            </span>
-
-        </div>
-
-        <h3>
-            চট্টগ্রাম শিক্ষা বোর্ডের সর্বশেষ গুরুত্বপূর্ণ আপডেট
-        </h3>
-
-        <p>
-            SSC, HSC পরীক্ষা, ফলাফল, পুনঃনিরীক্ষণ,
-            রেজিস্ট্রেশন ও বোর্ড নোটিশ।
-        </p>
-
-        <a href="board-ssc.html" class="read-more">
-            বিস্তারিত পড়ুন →
-        </a>
-
-    </article>
-
-
-    <article class="news-card">
-
-        <div class="news-top">
-
-            <span class="tag">
-                EDUCATION UPDATE
-            </span>
-
-            <span class="date">
-                16 Aug 2026
-            </span>
-
-        </div>
-
-        <h3>
-            বাংলাদেশের শিক্ষা সংক্রান্ত সর্বশেষ খবর
-        </h3>
-
-        <p>
-            শিক্ষার্থীদের প্রয়োজনীয় জাতীয় শিক্ষা
-            আপডেট ও গুরুত্বপূর্ণ তথ্য।
-        </p>
-
-      <a href="education-update.html" class="read-more">
-    বিস্তারিত পড়ুন →
-</a>
-
-    </article>
+</div> 
 
 </section>
 
@@ -573,6 +497,154 @@
 
 </footer>
 
+<script>
+
+const SUPABASE_URL = "https://ymwhodckmbybccufzjot.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_u31olXCxIcSsMdUeyyt5UQ_YeCWKToH";
+
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+);
+
+
+async function loadLatestPosts() {
+
+    const container = document.getElementById("dynamicPosts");
+
+    if (!container) return;
+
+
+    const { data, error } = await supabaseClient
+        .from("public_posts")
+        .select("*")
+        .eq("status", "published")
+        .order("created_at", {
+            ascending: false
+        })
+        .limit(10);
+
+
+    if (error) {
+
+        console.error("Supabase Error:", error);
+
+        container.innerHTML = `
+            <div class="news-card">
+                <p>আপডেট লোড করা যাচ্ছে না।</p>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    if (!data || data.length === 0) {
+
+        container.innerHTML = `
+            <div class="news-card">
+                <p>এখনো কোনো নতুন আপডেট প্রকাশ করা হয়নি।</p>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML = "";
+
+
+    data.forEach(post => {
+
+        const article = document.createElement("article");
+
+        article.className = "news-card";
+
+
+        const categoryNames = {
+            NU: "NATIONAL UNIVERSITY",
+            CB: "CHATTOGRAM BOARD",
+            AD: "ADMISSION",
+            EX: "EXAM & ROUTINE",
+            RS: "RESULT",
+            NT: "NOTICE"
+        };
+
+
+        const category =
+            categoryNames[post.category] ||
+            "EDUCATION UPDATE";
+
+
+        const date = new Date(
+            post.created_at
+        ).toLocaleDateString(
+            "en-GB",
+            {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            }
+        );
+
+
+        article.innerHTML = `
+
+            <div class="news-top">
+
+                <span class="tag ${
+                    post.category === "NU"
+                    ? "red"
+                    : ""
+                }">
+
+                    ${category}
+
+                </span>
+
+
+                <span class="date">
+
+                    ${date}
+
+                </span>
+
+            </div>
+
+
+            <h3>
+
+                ${post.title || ""}
+
+            </h3>
+
+
+            <p>
+
+                ${post.content || ""}
+
+            </p>
+
+
+            <a href="#" class="read-more">
+
+                বিস্তারিত পড়ুন →
+
+            </a>
+
+        `;
+
+
+        container.appendChild(article);
+
+    });
+
+}
+
+
+loadLatestPosts();
+
+</script>
 
 <script src="script.js"></script>
 
