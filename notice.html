@@ -7,10 +7,10 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Notice | Shadat Fatih</title>
+    <title>শিক্ষা নোটিশ | Shadat Fatih</title>
 
     <meta name="description"
-          content="Education Notice — Shadat Fatih">
+          content="জাতীয় বিশ্ববিদ্যালয়, চট্টগ্রাম বোর্ড এবং বাংলাদেশের শিক্ষা সংক্রান্ত সর্বশেষ নোটিশ।">
 
     <link rel="stylesheet"
           href="style.css">
@@ -18,7 +18,7 @@
 </head>
 
 
-<body>
+<body class="notice-list-page">
 
 
 <header class="header">
@@ -35,17 +35,13 @@
 
         <button class="search-btn"
                 onclick="openSearch()">
-
             ⌕
-
         </button>
 
 
         <button class="menu-btn"
                 onclick="toggleMenu()">
-
             ⋮
-
         </button>
 
     </div>
@@ -53,6 +49,7 @@
 </header>
 
 
+<!-- MENU -->
 
 <nav id="menu"
      class="menu">
@@ -77,35 +74,37 @@
     </a>
 
 
-    <a href="#">
+    <a href="admission.html">
         Admission
     </a>
 
 
-    <a href="#">
+    <a href="exam-routine.html">
         Exam & Routine
     </a>
 
 
-    <a href="#">
+    <a href="results.html">
         Results
     </a>
 
 
-    <a href="#">
+    <a href="notice.html">
         Notices
     </a>
 
 </nav>
 
 
+<!-- SEARCH -->
 
 <div id="searchBox"
      class="search-box">
 
     <input
         type="search"
-        placeholder="শিক্ষা সংক্রান্ত তথ্য খুঁজুন..."
+        id="noticeSearch"
+        placeholder="নোটিশ খুঁজুন..."
     >
 
 
@@ -116,180 +115,340 @@
 </div>
 
 
+<!-- BREAKING -->
 
-<!-- NOTICE -->
+<div class="breaking">
 
-<main class="notice-page">
+    <div class="breaking-label">
+        সর্বশেষ
+    </div>
+
+    <div class="breaking-text">
+        শিক্ষা সংক্রান্ত সর্বশেষ গুরুত্বপূর্ণ নোটিশ এখানে প্রকাশ করা হবে।
+    </div>
+
+</div>
 
 
-    <div class="notice-category">
-        NATIONAL UNIVERSITY
+<!-- NOTICE HEADER -->
+
+<section class="notice-list-hero">
+
+    <div class="notice-list-label">
+        EDUCATION • NOTICE
     </div>
 
 
     <h1>
-        জাতীয় বিশ্ববিদ্যালয়ের
-        গুরুত্বপূর্ণ নোটিশ
+        গুরুত্বপূর্ণ
+        <span>নোটিশ</span>
+        এক জায়গায়।
     </h1>
 
 
-    <div class="notice-meta">
+    <p>
+        জাতীয় বিশ্ববিদ্যালয়, চট্টগ্রাম বোর্ড
+        এবং বিভিন্ন শিক্ষা সংক্রান্ত গুরুত্বপূর্ণ
+        নোটিশ সহজভাবে খুঁজে দেখুন।
+    </p>
 
-        <span>
-            📅 16 August 2026
-        </span>
+</section>
 
-        <span>
-            🎓 National University
-        </span>
+
+<!-- FILTER -->
+
+<section class="notice-filter-section">
+
+    <div class="notice-filter">
+
+        <button class="notice-filter-btn active"
+                data-filter="all">
+            সব
+        </button>
+
+
+        <button class="notice-filter-btn"
+                data-filter="nu">
+            National University
+        </button>
+
+
+        <button class="notice-filter-btn"
+                data-filter="board">
+            Chattogram Board
+        </button>
+
+
+        <button class="notice-filter-btn"
+                data-filter="admission">
+            Admission
+        </button>
+
+
+        <button class="notice-filter-btn"
+                data-filter="exam">
+            Exam
+        </button>
+
+
+        <button class="notice-filter-btn"
+                data-filter="result">
+            Result
+        </button>
 
     </div>
 
+</section>
 
 
-    <div class="notice-divider"></div>
+<!-- NOTICE LIST -->
+
+<main class="notice-list">
 
 
+    <!-- NOTICE 01 -->
 
-    <article class="notice-content">
+    <article class="notice-list-card"
+             data-category="nu">
 
-        <p>
-            এটি একটি ডেমো নোটিশ।
-            এখানে জাতীয় বিশ্ববিদ্যালয়ের
-            প্রকৃত নোটিশের সম্পূর্ণ তথ্য
-            প্রকাশ করা হবে।
-        </p>
+        <div class="notice-list-top">
 
+            <span class="notice-tag red">
+                NATIONAL UNIVERSITY
+            </span>
 
-        <h2>
-            গুরুত্বপূর্ণ তথ্য
-        </h2>
-
-
-        <p>
-            শিক্ষার্থীদের জন্য প্রয়োজনীয়
-            নির্দেশনা, আবেদনের সময়সীমা,
-            ফি, পরীক্ষার তারিখ এবং অন্যান্য
-            তথ্য এখানে বিস্তারিতভাবে
-            দেওয়া হবে।
-        </p>
-
-
-        <h2>
-            গুরুত্বপূর্ণ তারিখ
-        </h2>
-
-
-        <div class="important-box">
-
-            <div>
-                <strong>
-                    আবেদনের শুরু
-                </strong>
-
-                <span>
-                    প্রয়োজন অনুযায়ী
-                </span>
-            </div>
-
-
-            <div>
-                <strong>
-                    আবেদনের শেষ
-                </strong>
-
-                <span>
-                    প্রয়োজন অনুযায়ী
-                </span>
-            </div>
+            <span class="notice-date">
+                16 Aug 2026
+            </span>
 
         </div>
 
 
         <h2>
-            শিক্ষার্থীদের জন্য নির্দেশনা
+            জাতীয় বিশ্ববিদ্যালয়ের সর্বশেষ গুরুত্বপূর্ণ নোটিশ
         </h2>
 
 
         <p>
-            নোটিশের সম্পূর্ণ তথ্য ভালোভাবে
-            পড়ে প্রয়োজনীয় সময়ের মধ্যে
-            নির্ধারিত কার্যক্রম সম্পন্ন করুন।
+            ভর্তি, পরীক্ষা, ফরম পূরণ, ফলাফল
+            এবং অন্যান্য গুরুত্বপূর্ণ তথ্য
+            শিক্ষার্থীদের জন্য এখানে প্রকাশ করা হবে।
         </p>
 
+
+        <div class="notice-card-bottom">
+
+            <span>
+                🎓 National University
+            </span>
+
+
+            <a href="national-university.html">
+                বিস্তারিত পড়ুন →
+            </a>
+
+        </div>
 
     </article>
 
 
+    <!-- NOTICE 02 -->
 
-    <!-- OFFICIAL SOURCE -->
+    <article class="notice-list-card"
+             data-category="board">
 
-    <section class="official-source">
+        <div class="notice-list-top">
 
-        <div>
-
-            <span>
-                OFFICIAL SOURCE
+            <span class="notice-tag">
+                CHATTOGRAM BOARD
             </span>
 
-            <h3>
-                জাতীয় বিশ্ববিদ্যালয়
-            </h3>
+            <span class="notice-date">
+                16 Aug 2026
+            </span>
 
         </div>
 
 
-        <a href="#"
-           target="_blank"
-           class="source-btn">
-
-            Official Website →
-
-        </a>
-
-    </section>
+        <h2>
+            চট্টগ্রাম শিক্ষা বোর্ডের গুরুত্বপূর্ণ আপডেট
+        </h2>
 
 
+        <p>
+            SSC, HSC, পরীক্ষা, ফলাফল,
+            পুনঃনিরীক্ষণ ও বোর্ড সংক্রান্ত
+            গুরুত্বপূর্ণ তথ্য।
+        </p>
 
-    <!-- PDF -->
 
-    <section class="pdf-box">
-
-        <div>
+        <div class="notice-card-bottom">
 
             <span>
-                NOTICE DOCUMENT
+                🏫 Chattogram Board
             </span>
 
-            <h3>
-                মূল নোটিশ / PDF
-            </h3>
+
+            <a href="chattogram-board.html">
+                বিস্তারিত পড়ুন →
+            </a>
+
+        </div>
+
+    </article>
+
+
+    <!-- NOTICE 03 -->
+
+    <article class="notice-list-card"
+             data-category="admission">
+
+        <div class="notice-list-top">
+
+            <span class="notice-tag">
+                ADMISSION
+            </span>
+
+            <span class="notice-date">
+                16 Aug 2026
+            </span>
 
         </div>
 
 
-        <a href="#"
-           class="pdf-btn">
-
-            📄 PDF দেখুন
-
-        </a>
-
-    </section>
+        <h2>
+            ভর্তি সংক্রান্ত সর্বশেষ গুরুত্বপূর্ণ তথ্য
+        </h2>
 
 
+        <p>
+            বিভিন্ন বিশ্ববিদ্যালয় ও শিক্ষা
+            প্রতিষ্ঠানের ভর্তি বিজ্ঞপ্তি,
+            আবেদন ও সময়সীমা।
+        </p>
 
-    <a href="index.html"
-       class="back-btn">
 
-        ← সর্বশেষ আপডেটে ফিরে যান
+        <div class="notice-card-bottom">
 
-    </a>
+            <span>
+                📚 Admission
+            </span>
+
+
+            <a href="admission.html">
+                বিস্তারিত পড়ুন →
+            </a>
+
+        </div>
+
+    </article>
+
+
+    <!-- NOTICE 04 -->
+
+    <article class="notice-list-card"
+             data-category="exam">
+
+        <div class="notice-list-top">
+
+            <span class="notice-tag">
+                EXAM & ROUTINE
+            </span>
+
+            <span class="notice-date">
+                16 Aug 2026
+            </span>
+
+        </div>
+
+
+        <h2>
+            পরীক্ষা ও রুটিন সংক্রান্ত সর্বশেষ আপডেট
+        </h2>
+
+
+        <p>
+            পরীক্ষার তারিখ, রুটিন,
+            সময়সূচি ও গুরুত্বপূর্ণ নির্দেশনা।
+        </p>
+
+
+        <div class="notice-card-bottom">
+
+            <span>
+                📝 Exam & Routine
+            </span>
+
+
+            <a href="exam-routine.html">
+                বিস্তারিত পড়ুন →
+            </a>
+
+        </div>
+
+    </article>
+
+
+    <!-- NOTICE 05 -->
+
+    <article class="notice-list-card"
+             data-category="result">
+
+        <div class="notice-list-top">
+
+            <span class="notice-tag">
+                RESULTS
+            </span>
+
+            <span class="notice-date">
+                16 Aug 2026
+            </span>
+
+        </div>
+
+
+        <h2>
+            পরীক্ষার ফলাফল সংক্রান্ত সর্বশেষ তথ্য
+        </h2>
+
+
+        <p>
+            SSC, HSC, জাতীয় বিশ্ববিদ্যালয়
+            ও বিভিন্ন পরীক্ষার ফলাফল সংক্রান্ত
+            গুরুত্বপূর্ণ আপডেট।
+        </p>
+
+
+        <div class="notice-card-bottom">
+
+            <span>
+                📊 Results
+            </span>
+
+
+            <a href="results.html">
+                বিস্তারিত পড়ুন →
+            </a>
+
+        </div>
+
+    </article>
 
 
 </main>
 
 
+<!-- EMPTY MESSAGE -->
+
+<div id="noNotice"
+     class="no-notice">
+
+    কোনো নোটিশ পাওয়া যায়নি।
+
+</div>
+
+
+<!-- FOOTER -->
 
 <footer>
 
@@ -309,20 +468,24 @@
             Home
         </a>
 
-        <a href="#">
-            About
+
+        <a href="admission.html">
+            Admission
         </a>
 
-        <a href="#">
-            Contact
+
+        <a href="exam-routine.html">
+            Exam & Routine
         </a>
 
-        <a href="#">
-            Privacy
+
+        <a href="results.html">
+            Results
         </a>
 
-        <a href="#">
-            Disclaimer
+
+        <a href="notice.html">
+            Notices
         </a>
 
     </div>
@@ -338,8 +501,82 @@
 </footer>
 
 
-
 <script src="script.js"></script>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const buttons =
+        document.querySelectorAll(".notice-filter-btn");
+
+    const cards =
+        document.querySelectorAll(".notice-list-card");
+
+    const noNotice =
+        document.getElementById("noNotice");
+
+
+    buttons.forEach(function(button) {
+
+        button.addEventListener("click", function() {
+
+            buttons.forEach(function(btn) {
+                btn.classList.remove("active");
+            });
+
+            button.classList.add("active");
+
+
+            const filter =
+                button.getAttribute("data-filter");
+
+            let visible = 0;
+
+
+            cards.forEach(function(card) {
+
+                const category =
+                    card.getAttribute("data-category");
+
+
+                if (
+                    filter === "all" ||
+                    category === filter
+                ) {
+
+                    card.style.display = "block";
+
+                    visible++;
+
+                } else {
+
+                    card.style.display = "none";
+
+                }
+
+            });
+
+
+            if (visible === 0) {
+
+                noNotice.style.display = "block";
+
+            } else {
+
+                noNotice.style.display = "none";
+
+            }
+
+        });
+
+    });
+
+});
+
+</script>
+
 
 </body>
 </html>
