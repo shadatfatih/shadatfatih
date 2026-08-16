@@ -784,3 +784,159 @@ footer > p {
     }
 
 }
+
+/* =========================================
+   SHADAT FATIH — PREMIUM HOMEPAGE
+========================================= */
+
+.home-page {
+    background: #fff;
+}
+
+.home-page .breaking {
+    border-bottom: 1px solid #292929;
+}
+
+.home-page .breaking-text {
+    text-overflow: ellipsis;
+}
+
+.home-page .hero {
+    min-height: 560px;
+    display: flex;
+    align-items: center;
+}
+
+.home-page .hero-inner {
+    width: 100%;
+}
+
+.home-page .hero h1 {
+    max-width: 850px;
+}
+
+.home-page .hero-buttons a {
+    transition: .25s ease;
+}
+
+.home-page .primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(181,18,34,.25);
+}
+
+.home-page .secondary-btn:hover {
+    background: #fff;
+    color: var(--black);
+}
+
+
+/* PREMIUM CATEGORY CARDS */
+
+.home-page .category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.home-page .category-card {
+    min-height: 125px;
+    position: relative;
+    overflow: hidden;
+}
+
+.home-page .category-card::after {
+    content: "";
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    right: -35px;
+    bottom: -40px;
+    border: 1px solid rgba(181,18,34,.12);
+    border-radius: 50%;
+    transition: .3s ease;
+}
+
+.home-page .category-card:hover::after {
+    transform: scale(1.4);
+}
+
+.home-page .category-card.featured {
+    background: #fffafa;
+}
+
+.home-page .card-icon {
+    flex-shrink: 0;
+}
+
+
+/* PREMIUM NEWS */
+
+.home-page .latest-section {
+    position: relative;
+}
+
+.home-page .news-card {
+    position: relative;
+    overflow: hidden;
+    transition: .25s ease;
+}
+
+.home-page .news-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 35px rgba(0,0,0,.08);
+}
+
+.home-page .news-card:first-of-type {
+    border-left: 4px solid var(--red);
+}
+
+.home-page .read-more {
+    transition: .2s ease;
+}
+
+.home-page .read-more:hover {
+    padding-left: 5px;
+}
+
+
+/* PREMIUM ABOUT */
+
+.home-page .about {
+    max-width: 1000px;
+    position: relative;
+}
+
+.home-page .about::before {
+    content: "SF";
+    position: absolute;
+    right: 5%;
+    top: 55px;
+    font-size: 130px;
+    line-height: 1;
+    font-weight: 900;
+    color: rgba(181,18,34,.035);
+    pointer-events: none;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    .home-page .hero {
+        min-height: auto;
+    }
+
+    .home-page .category-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .home-page .category-card {
+        min-height: 110px;
+    }
+
+    .home-page .about::before {
+        font-size: 90px;
+        right: 4%;
+        top: 35px;
+    }
+
+}
