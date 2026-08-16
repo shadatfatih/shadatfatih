@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Panel | Shadat Fatih</title>
+
+    <meta name="robots"
+          content="noindex, nofollow">
+
+    <link rel="stylesheet"
+          href="style.css">
+
+</head>
+
+<body class="admin-page">
+
+
+<!-- =========================
+     ADMIN HEADER
+========================= -->
+
+<header class="admin-header">
+
+    <a href="index.html"
+       class="admin-brand">
+
+        <span>SHADAT</span> FATIH
+
+        <small>
+            ADMIN
+        </small>
+
+    </a>
+
+
+    <div class="admin-header-actions">
+
+        <a href="index.html"
+           class="admin-site-link">
+
+            View Website →
+
+        </a>
+
+        <button id="logoutBtn"
+                class="admin-logout"
+                hidden>
+
+            Logout
+
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================
+     LOGIN
+========================= -->
+
+<main class="admin-container">
+
+<section id="loginSection"
+         class="admin-login">
+
+    <div class="admin-label">
+        SHADAT FATIH • ADMIN
+    </div>
+
+    <h1>
+        Admin Login
+    </h1>
+
+    <p>
+        Manage your website content
+    </p>
+
+
+    <form id="loginForm">
+
+        <label for="loginEmail">
+            Email
+        </label>
+
+        <input
+            type="email"
+            id="loginEmail"
+            placeholder="Admin email"
+            autocomplete="username"
+            required
+        >
+
+
+        <label for="loginPassword">
+            Password
+        </label>
+
+        <input
+            type="password"
+            id="loginPassword"
+            placeholder="Password"
+            autocomplete="current-password"
+            required
+        >
+
+
+        <button type="submit"
+                class="admin-login-btn">
+
+            Login
+
+        </button>
+
+    </form>
+
+
+    <p id="loginMessage"
+       class="admin-message">
+    </p>
+
+
+    <a href="index.html"
+       class="admin-back">
+
+        ← Back to website
+
+    </a>
+
+</section>
+
+
+
+<!-- =========================
+     DASHBOARD
+========================= -->
+
+<section id="dashboard"
+         class="admin-dashboard"
+         hidden>
+
+
+    <div class="admin-dashboard-top">
+
+        <div>
+
+            <div class="admin-label">
+                DASHBOARD
+            </div>
+
+            <h1>
+                Website Manager
+            </h1>
+
+            <p>
+                Manage notices, updates, images and files.
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         STATS
+    ========================= -->
+
+    <div class="admin-stats">
+
+        <div class="admin-stat">
+
+            <span>
+                TOTAL POSTS
+            </span>
+
+            <strong id="totalPosts">
+                0
+            </strong>
+
+            <small>
+                All content
+            </small>
+
+        </div>
+
+
+        <div class="admin-stat">
+
+            <span>
+                PUBLISHED
+            </span>
+
+            <strong id="publishedPosts">
+                0
+            </strong>
+
+            <small>
+                Public
+            </small>
+
+        </div>
+
+
+        <div class="admin-stat">
+
+            <span>
+                DRAFTS
+            </span>
+
+            <strong id="draftPosts">
+                0
+            </strong>
+
+            <small>
+                Private
+            </small>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         ACTION BUTTONS
+    ========================= -->
+
+    <div class="admin-actions">
+
+        <button id="newPostBtn"
+                class="admin-action-btn">
+
+            + New Post
+
+        </button>
+
+
+        <button id="managePostsBtn"
+                class="admin-action-btn secondary">
+
+            Manage Posts
+
+        </button>
+
+    </div>
+
+
+
+    <!-- =========================
+         POST EDITOR
+    ========================= -->
+
+    <section id="postEditor"
+             class="admin-editor"
+             hidden>
+
+
+        <div class="admin-editor-heading">
+
+            <div>
+
+                <div class="admin-label">
+                    CREATE / EDIT
+                </div>
+
+                <h2>
+                    Publish New Update
+                </h2>
+
+            </div>
+
+        </div>
+
+
+
+        <form id="postForm">
+
+
+            <!-- TITLE -->
+
+            <label for="postTitle">
+                Title
+            </label>
+
+            <input
+                type="text"
+                id="postTitle"
+                placeholder="নোটিশ বা আপডেটের শিরোনাম"
+                required
+            >
+
+
+
+            <!-- CATEGORY -->
+
+            <label for="postCategory">
+                Category
+            </label>
+
+            <select id="postCategory"
+                    required>
+
+                <option value="">
+                    Select category
+                </option>
+
+                <option value="nu">
+                    National University
+                </option>
+
+                <option value="board">
+                    Chattogram Board
+                </option>
+
+                <option value="admission">
+                    Admission
+                </option>
+
+                <option value="exam">
+                    Exam & Routine
+                </option>
+
+                <option value="result">
+                    Result
+                </option>
+
+                <option value="education">
+                    Education Update
+                </option>
+
+            </select>
+
+
+
+            <!-- DATE -->
+
+            <label for="postDate">
+                Publication Date
+            </label>
+
+            <input
+                type="date"
+                id="postDate"
+                required
+            >
+
+
+
+            <!-- SHORT DESCRIPTION -->
+
+            <label for="postDescription">
+                Short Description
+            </label>
+
+            <textarea
+                id="postDescription"
+                rows="4"
+                placeholder="নোটিশের সংক্ষিপ্ত বিবরণ..."
+                required
+            ></textarea>
+
+
+
+            <!-- FULL CONTENT -->
+
+            <label for="postContent">
+                Full Content
+            </label>
+
+            <textarea
+                id="postContent"
+                rows="10"
+                placeholder="নোটিশের সম্পূর্ণ বিস্তারিত তথ্য..."
+            ></textarea>
+
+
+
+            <!-- IMAGE -->
+
+            <label for="postImage">
+                Cover Image
+            </label>
+
+            <div class="admin-upload-box">
+
+                <input
+                    type="file"
+                    id="postImage"
+                    accept="image/*"
+                >
+
+                <small>
+                    JPG, PNG, WEBP — Gallery থেকে ছবি নির্বাচন করুন
+                </small>
+
+            </div>
+
+
+            <!-- IMAGE PREVIEW -->
+
+            <div id="imagePreview"
+                 class="admin-image-preview"
+                 hidden>
+
+                <img id="previewImage"
+                     src=""
+                     alt="Preview">
+
+            </div>
+
+
+
+            <!-- PDF -->
+
+            <label for="postPdf">
+                Notice PDF
+            </label>
+
+            <div class="admin-upload-box">
+
+                <input
+                    type="file"
+                    id="postPdf"
+                    accept="application/pdf"
+                >
+
+                <small>
+                    PDF file নির্বাচন করুন
+                </small>
+
+            </div>
+
+
+
+            <!-- OFFICIAL URL -->
+
+            <label for="officialUrl">
+                Official Source URL
+            </label>
+
+            <input
+                type="url"
+                id="officialUrl"
+                placeholder="https://..."
+            >
+
+
+
+            <!-- PDF URL -->
+
+            <label for="pdfUrl">
+                External PDF URL
+            </label>
+
+            <input
+                type="url"
+                id="pdfUrl"
+                placeholder="https://..."
+            >
+
+
+
+            <!-- PUBLISH -->
+
+            <div class="admin-publish-row">
+
+                <label class="publish-toggle">
+
+                    <input
+                        type="checkbox"
+                        id="postPublished"
+                        checked
+                    >
+
+                    <span>
+                        Publish publicly
+                    </span>
+
+                </label>
+
+            </div>
+
+
+
+            <!-- ACTIONS -->
+
+            <div class="admin-form-actions">
+
+                <button
+                    type="submit"
+                    class="admin-save-btn">
+
+                    Save & Publish
+
+                </button>
+
+
+                <button
+                    type="button"
+                    id="saveDraftBtn"
+                    class="admin-draft-btn">
+
+                    Save Draft
+
+                </button>
+
+
+                <button
+                    type="button"
+                    id="cancelPostBtn"
+                    class="admin-cancel-btn">
+
+                    Cancel
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+
+    <!-- =========================
+         MANAGE POSTS
+    ========================= -->
+
+    <section id="postManager"
+             class="admin-manager"
+             hidden>
+
+
+        <div class="admin-editor-heading">
+
+            <div>
+
+                <div class="admin-label">
+                    CONTENT MANAGEMENT
+                </div>
+
+                <h2>
+                    Manage Posts
+                </h2>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- SEARCH -->
+
+        <input
+            type="search"
+            id="adminSearch"
+            class="admin-search"
+            placeholder="Post খুঁজুন..."
+        >
+
+
+
+        <!-- POSTS -->
+
+        <div id="postList"
+             class="admin-post-list">
+
+            <div class="admin-empty">
+                এখনো কোনো post নেই।
+            </div>
+
+        </div>
+
+    </section>
+
+
+</section>
+
+</main>
+
+
+
+<!-- =========================
+     IMAGE PREVIEW SCRIPT
+========================= -->
+
+<script>
+
+const loginForm =
+    document.getElementById("loginForm");
+
+const loginSection =
+    document.getElementById("loginSection");
+
+const dashboard =
+    document.getElementById("dashboard");
+
+const loginMessage =
+    document.getElementById("loginMessage");
+
+const logoutBtn =
+    document.getElementById("logoutBtn");
+
+
+/*
+    TEMPORARY DEMO LOGIN
+
+    Real secure authentication will be
+    connected with Supabase later.
+*/
+
+loginForm.addEventListener(
+    "submit",
+    function(event) {
+
+        event.preventDefault();
+
+        loginSection.hidden = true;
+
+        dashboard.hidden = false;
+
+        logoutBtn.hidden = false;
+
+        loginMessage.textContent = "";
+
+    }
+);
+
+
+/* LOGOUT */
+
+logoutBtn.addEventListener(
+    "click",
+    function() {
+
+        dashboard.hidden = true;
+
+        loginSection.hidden = false;
+
+        logoutBtn.hidden = true;
+
+        loginForm.reset();
+
+    }
+);
+
+
+
+/* =========================
+   DASHBOARD BUTTONS
+========================= */
+
+const newPostBtn =
+    document.getElementById("newPostBtn");
+
+const managePostsBtn =
+    document.getElementById("managePostsBtn");
+
+const postEditor =
+    document.getElementById("postEditor");
+
+const postManager =
+    document.getElementById("postManager");
+
+const cancelPostBtn =
+    document.getElementById("cancelPostBtn");
+
+
+newPostBtn.addEventListener(
+    "click",
+    function() {
+
+        postEditor.hidden = false;
+
+        postManager.hidden = true;
+
+        postEditor.scrollIntoView({
+            behavior: "smooth"
+        });
+
+    }
+);
+
+
+managePostsBtn.addEventListener(
+    "click",
+    function() {
+
+        postManager.hidden = false;
+
+        postEditor.hidden = true;
+
+        postManager.scrollIntoView({
+            behavior: "smooth"
+        });
+
+    }
+);
+
+
+cancelPostBtn.addEventListener(
+    "click",
+    function() {
+
+        postEditor.hidden = true;
+
+    }
+);
+
+
+
+/* =========================
+   IMAGE PREVIEW
+========================= */
+
+const imageInput =
+    document.getElementById("postImage");
+
+const imagePreview =
+    document.getElementById("imagePreview");
+
+const previewImage =
+    document.getElementById("previewImage");
+
+
+imageInput.addEventListener(
+    "change",
+    function() {
+
+        const file = this.files[0];
+
+        if (!file) {
+
+            imagePreview.hidden = true;
+
+            previewImage.src = "";
+
+            return;
+
+        }
+
+
+        if (!file.type.startsWith("image/")) {
+
+            alert("শুধু image file নির্বাচন করুন।");
+
+            this.value = "";
+
+            return;
+
+        }
+
+
+        const reader =
+            new FileReader();
+
+
+        reader.onload =
+            function(event) {
+
+                previewImage.src =
+                    event.target.result;
+
+                imagePreview.hidden = false;
+
+            };
+
+
+        reader.readAsDataURL(file);
+
+    }
+);
+
+
+
+/* =========================
+   SAVE / PUBLISH
+========================= */
+
+const postForm =
+    document.getElementById("postForm");
+
+const saveDraftBtn =
+    document.getElementById("saveDraftBtn");
+
+
+postForm.addEventListener(
+    "submit",
+    function(event) {
+
+        event.preventDefault();
+
+        alert(
+            "Post editor ready. Database connection will be added next."
+        );
+
+    }
+);
+
+
+saveDraftBtn.addEventListener(
+    "click",
+    function() {
+
+        alert(
+            "Draft system ready. Database connection will be added next."
+        );
+
+    }
+);
+
+
+
+/* =========================
+   SEARCH
+========================= */
+
+const adminSearch =
+    document.getElementById("adminSearch");
+
+
+adminSearch.addEventListener(
+    "input",
+    function() {
+
+        const search =
+            this.value.toLowerCase().trim();
+
+        const posts =
+            document.querySelectorAll(".admin-post-item");
+
+
+        posts.forEach(function(post) {
+
+            const text =
+                post.textContent.toLowerCase();
+
+            post.style.display =
+                text.includes(search)
+                    ? "block"
+                    : "none";
+
+        });
+
+    }
+);
+
+</script>
+
+
+</body>
+</html>
