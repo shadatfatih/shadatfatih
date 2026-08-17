@@ -708,49 +708,33 @@
 
 <script>
 
+<script>
 const SUPABASE_URL =
     "https://ymwhodckmbybccufzjot.supabase.co";
 
 const SUPABASE_ANON_KEY =
-    "sb_publishable_u31olXCxIcSsMdUeyyt5UQ_YeCWKToH";
+    "sb_publishable_u31olXCxIcSsMdUeyyt5U_QY_ECWKToH";
 
 const supabaseClient =
-    supabase.createClient(
+    window.supabase.createClient(
         SUPABASE_URL,
         SUPABASE_ANON_KEY
     );
 
-/* =====================================================
-   CATEGORY NAMES
-===================================================== */
 
 const categoryNames = {
-    "NU": "NATIONAL UNIVERSITY",
-    "nu": "NATIONAL UNIVERSITY",
 
-    "CB": "CHATTOGRAM BOARD",
-    "cb": "CHATTOGRAM BOARD",
+    NU: "NATIONAL UNIVERSITY",
+    CB: "CHATTOGRAM BOARD",
 
-    "AD": "ADMISSION",
-    "ad": "ADMISSION",
-    "admission": "ADMISSION",
+    AD: "ADMISSION",
+    EX: "EXAM & ROUTINE",
+    NT: "NOTICE",
 
-    "EX": "EXAM & ROUTINE",
-    "ex": "EXAM & ROUTINE",
+    RS: "RESULT"
 
-    "RS": "RESULT",
-    "rs": "RESULT",
-
-    "NT": "NOTICE",
-    "nt": "NOTICE",
-
-    "education": "EDUCATION UPDATE"
 };
 
-
-/* =====================================================
-   LOAD ALL PUBLISHED POSTS
-===================================================== */
 
 async function loadLatestPosts() {
 
@@ -759,6 +743,7 @@ async function loadLatestPosts() {
 
     if (!container) return;
 
+
     container.innerHTML = `
         <div class="news-card">
             <p>সর্বশেষ আপডেট লোড হচ্ছে...</p>
@@ -766,27 +751,27 @@ async function loadLatestPosts() {
     `;
 
 
-   const { data, error } = await supabaseClient
-    .from("posts")
-    .select("*")
-    .eq("published", true)
-    .order("created_at", {
-        ascending: false
-    })
-    .limit(100);
+    const { data, error } =
+        await supabaseClient
+            .from("posts")
+            .select("*")
+            .eq("published", true)
+            .order("created_at", {
+                ascending: false
+            })
+            .limit(100);
+
+
+    console.log("POSTS:", data);
+    console.log("ERROR:", error);
 
 
     if (error) {
 
-        console.error(
-            "Supabase Error:",
-            error
-        );
-
         container.innerHTML = `
             <div class="news-card">
                 <p>
-                    আপডেট লোড করা যাচ্ছে না।
+                    পোস্ট লোড করতে সমস্যা হয়েছে।
                 </p>
             </div>
         `;
@@ -812,7 +797,7 @@ async function loadLatestPosts() {
     container.innerHTML = "";
 
 
-    data.forEach(post => {
+    data.forEach(function(post) {
 
         const article =
             document.createElement("article");
@@ -822,36 +807,54 @@ async function loadLatestPosts() {
 
 
         const rawCategory =
-            String(post.category || "")
-                .trim();
+            String(
+                post.category || ""
+            )
+            .trim()
+            .toUpperCase();
 
 
         const category =
             categoryNames[rawCategory]
-            ||
-            categoryNames[rawCategory.toLowerCase()]
-            ||
-            "EDUCATION UPDATE";
+            || "EDUCATION UPDATE";
 
 
         const dateSource =
             post.published_at
-            ||
-            post.created_at;
+            || post.created_at;
 
 
-        const date =
-            dateSource
-            ? new Date(dateSource)
-                .toLocaleDateString(
+        let date = "";
+
+        if (dateSource) {
+
+            date =
+                new Date(
+                    dateSource
+                ).toLocaleDateString(
                     "en-GB",
                     {
                         day: "2-digit",
                         month: "short",
                         year: "numeric"
                     }
-                )
-            : "";
+                );
+
+        }
+
+
+        const title =
+            escapeHtml(
+                post.title || ""
+            );
+
+
+        const description =
+            escapeHtml(
+                post.description
+                || post.content
+                || ""
+            );
 
 
         article.innerHTML = `
@@ -859,7 +862,7 @@ async function loadLatestPosts() {
             <div class="news-top">
 
                 <span class="tag ${
-                    rawCategory.toLowerCase() === "nu"
+                    rawCategory === "NU"
                     ? "red"
                     : ""
                 }">
@@ -879,27 +882,19 @@ async function loadLatestPosts() {
 
 
             <h3>
-
-                ${escapeHtml(
-                    post.title || ""
-                )}
-
+                ${title}
             </h3>
 
 
             <p>
-
-                ${escapeHtml(
-                    post.description ||
-                    post.content ||
-                    ""
-                )}
-
+                ${description}
             </p>
 
 
             <a
-                href="post.html?id=${encodeURIComponent(post.id)}"
+                href="post.html?id=${encodeURIComponent(
+                    post.id
+                )}"
                 class="read-more">
 
                 বিস্তারিত পড়ুন →
@@ -916,36 +911,24 @@ async function loadLatestPosts() {
 }
 
 
-/* =====================================================
-   SAFE HTML
-===================================================== */
-
 function escapeHtml(value) {
 
     return String(value || "")
-
         .replace(/&/g, "&amp;")
-
         .replace(/</g, "&lt;")
-
         .replace(/>/g, "&gt;")
-
         .replace(/"/g, "&quot;")
-
         .replace(/'/g, "&#039;");
 
 }
 
-
-/* =====================================================
-   START
-===================================================== */
 
 loadLatestPosts();
 
 </script>
 
 <script src="script.js"></script>
+
 
 </body>
 </html>
