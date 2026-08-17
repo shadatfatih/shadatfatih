@@ -410,7 +410,7 @@
 
 
 <!-- =====================================================
-     SUPABASE
+     SUPABASE + ADMISSION POSTS
 ===================================================== -->
 
 <script>
@@ -418,31 +418,29 @@
 const SUPABASE_URL =
     "https://ymwhodckmbybccufzjot.supabase.co";
 
-
-const SUPABASE_KEY =
-    "sb_publishable_u31olXCxIcSsMdUeyyt5U_QY_ECWKToH";
-
+const SUPABASE_ANON_KEY =
+    "sb_publishable_u31olXCxIcSsMdUeyyt5UQ_YeCWKToH";
 
 const supabaseClient =
     window.supabase.createClient(
         SUPABASE_URL,
-        SUPABASE_KEY
+        SUPABASE_ANON_KEY
     );
 
 
 /* =====================================================
-   ADMISSION SUB CATEGORY NAMES
+   ADMISSION SUB CATEGORIES
 ===================================================== */
 
 const subCategoryNames = {
 
-    NU_ADMISSION:
+    "NU_ADMISSION":
         "National University Admission",
 
-    HSC_ADMISSION:
+    "HSC_ADMISSION":
         "HSC Admission",
 
-    OTHERS_ADMISSION:
+    "OTHERS_ADMISSION":
         "Others Admission"
 
 };
@@ -462,19 +460,13 @@ let currentCategory = null;
 async function loadPosts() {
 
     const loading =
-        document.getElementById(
-            "loadingPosts"
-        );
+        document.getElementById("loadingPosts");
 
     const container =
-        document.getElementById(
-            "postsContainer"
-        );
+        document.getElementById("postsContainer");
 
     const noPosts =
-        document.getElementById(
-            "noPosts"
-        );
+        document.getElementById("noPosts");
 
 
     loading.hidden = false;
@@ -484,86 +476,153 @@ async function loadPosts() {
     container.innerHTML = "";
 
 
-    let query = supabaseClient
-    .from("posts")
-    .select("*")
-    .eq("category", "AD")
-    .eq("published", true)
-    .order("created_at", {
-        ascending: false
-    });
+    try {
 
+        /*
+         * প্রথমে শুধু AD + published পোস্ট নেওয়া হচ্ছে।
+         * Sub-category filter পরে JavaScript দিয়ে করা হবে।
+         */
 
-    const {
-        data,
-        error
-    } = await query;
-
-
-    loading.hidden = true;
-
-
-    /* ERROR */
-
-    if (error) {
-
-        console.error(
-            "Supabase Error:",
+        const {
+            data,
             error
-        );
+        } = await supabaseClient
+            .from("posts")
+            .select("*")
+            .eq("category", "AD")
+            .eq("published", true)
+            .order("created_at", {
+                ascending: false
+            });
 
 
-        container.innerHTML = `
+        if (error) {
 
-            <div
-                style="
+            console.error(
+                "Supabase Error:",
+                error
+            );
+
+            loading.hidden = true;
+
+            container.innerHTML = `
+                <div style="
                     padding:30px;
                     text-align:center;
                     color:#b51222;
                 ">
+                    পোস্ট লোড করতে সমস্যা হয়েছে।
+                </div>
+            `;
 
+            return;
+        }
+
+
+        /*
+         * কোনো পোস্ট না থাকলে
+         */
+
+        if (!data || data.length === 0) {
+
+            loading.hidden = true;
+
+            noPosts.hidden = false;
+
+            return;
+        }
+
+
+        /*
+         * বর্তমান Sub-category অনুযায়ী
+         * JavaScript filter
+         */
+
+        let posts = data;
+
+
+        if (currentCategory) {
+
+            posts = data.filter(function(post) {
+
+                return String(
+                    post.sub_category || ""
+                ).trim().toUpperCase()
+                ===
+                currentCategory;
+
+            });
+
+        }
+
+
+        loading.hidden = true;
+
+
+        /*
+         * Filter করার পর কোনো পোস্ট না থাকলে
+         */
+
+        if (!posts || posts.length === 0) {
+
+            noPosts.hidden = false;
+
+            return;
+        }
+
+
+        /*
+         * পোস্ট দেখানো
+         */
+
+        container.innerHTML =
+            posts
+                .map(createPostHTML)
+                .join("");
+
+
+    } catch (err) {
+
+        console.error(
+            "Unexpected Error:",
+            err
+        );
+
+        loading.hidden = true;
+
+        container.innerHTML = `
+            <div style="
+                padding:30px;
+                text-align:center;
+                color:#b51222;
+            ">
                 পোস্ট লোড করতে সমস্যা হয়েছে।
-
             </div>
-
         `;
 
-        return;
-
     }
-
-
-    /* NO POSTS */
-
-    if (!data || data.length === 0) {
-
-        noPosts.hidden = false;
-
-        return;
-
-    }
-
-
-    /* POSTS */
-
-    container.innerHTML =
-        data
-            .map(createPostHTML)
-            .join("");
 
 }
 
 
 /* =====================================================
-   CREATE POST
+   CREATE POST HTML
 ===================================================== */
 
 function createPostHTML(post) {
 
 
+    const rawSubCategory =
+        String(
+            post.sub_category || ""
+        )
+        .trim()
+        .toUpperCase();
+
+
     const subCategory =
         subCategoryNames[
-            post.sub_category
+            rawSubCategory
         ]
         ||
         "Admission";
@@ -571,58 +630,59 @@ function createPostHTML(post) {
 
     const date =
         post.published_at
-            ? new Date(
-                post.published_at
-              ).toLocaleDateString(
-                "bn-BD",
+        ||
+        post.created_at;
+
+
+    const formattedDate =
+        date
+        ? new Date(date)
+            .toLocaleDateString(
+                "en-GB",
                 {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric"
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
                 }
-              )
-            : "";
+            )
+        : "";
 
 
     const image =
         post.image_url
-            ? `
+        ? `
+            <div class="post-image">
 
-                <div class="post-image">
+                <img
+                    src="${escapeHtml(
+                        post.image_url
+                    )}"
+                    alt="${escapeHtml(
+                        post.title
+                    )}"
+                >
 
-                    <img
-                        src="${escapeHtml(
-                            post.image_url
-                        )}"
-                        alt="${escapeHtml(
-                            post.title
-                        )}"
-                    >
-
-                </div>
-
-              `
-            : "";
+            </div>
+        `
+        : "";
 
 
     const pdf =
         post.pdf_url
-            ? `
+        ? `
+            <a
+                href="${escapeHtml(
+                    post.pdf_url
+                )}"
+                target="_blank"
+                rel="noopener"
+                class="read-more">
 
-                <a
-                    href="${escapeHtml(
-                        post.pdf_url
-                    )}"
-                    target="_blank"
-                    rel="noopener"
-                    class="read-more">
+                PDF দেখুন →
 
-                    PDF দেখুন →
-
-                </a>
-
-              `
-            : "";
+            </a>
+        `
+        : "";
 
 
     return `
@@ -646,7 +706,7 @@ function createPostHTML(post) {
                 <span class="date">
 
                     ${escapeHtml(
-                        date
+                        formattedDate
                     )}
 
                 </span>
@@ -657,7 +717,7 @@ function createPostHTML(post) {
             <h3>
 
                 ${escapeHtml(
-                    post.title
+                    post.title || ""
                 )}
 
             </h3>
@@ -687,7 +747,6 @@ function createPostHTML(post) {
 
             </a>
 
-
         </article>
 
     `;
@@ -696,57 +755,78 @@ function createPostHTML(post) {
 
 
 /* =====================================================
-   FILTER CATEGORY
+   FILTER SUB CATEGORY
 ===================================================== */
 
 function filterCategory(category) {
 
 
     currentCategory =
-        category;
+        String(category)
+            .trim()
+            .toUpperCase();
 
 
     const name =
         subCategoryNames[
-            category
+            currentCategory
         ]
         ||
         "Admission";
 
 
-    document
-        .getElementById(
+    const label =
+        document.getElementById(
             "postSectionLabel"
-        )
-        .textContent =
+        );
+
+
+    const title =
+        document.getElementById(
+            "postSectionTitle"
+        );
+
+
+    if (label) {
+
+        label.textContent =
             name.toUpperCase();
 
+    }
 
-    document
-        .getElementById(
-            "postSectionTitle"
-        )
-        .textContent =
+
+    if (title) {
+
+        title.textContent =
             name;
+
+    }
 
 
     loadPosts();
 
 
-    setTimeout(
-        function () {
+    setTimeout(function() {
 
-            document
-                .getElementById(
-                    "latestPostsSection"
-                )
-                .scrollIntoView({
-                    behavior: "smooth"
-                });
+        const section =
+            document.getElementById(
+                "latestPostsSection"
+            );
 
-        },
-        100
-    );
+
+        if (section) {
+
+            section.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        }
+
+    }, 150);
+
+
+    return false;
 
 }
 
@@ -765,30 +845,15 @@ function escapeHtml(value) {
         value || ""
     )
 
-    .replaceAll(
-        "&",
-        "&amp;"
-    )
+    .replace(/&/g, "&amp;")
 
-    .replaceAll(
-        "<",
-        "&lt;"
-    )
+    .replace(/</g, "&lt;")
 
-    .replaceAll(
-        ">",
-        "&gt;"
-    )
+    .replace(/>/g, "&gt;")
 
-    .replaceAll(
-        '"',
-        "&quot;"
-    )
+    .replace(/"/g, "&quot;")
 
-    .replaceAll(
-        "'",
-        "&#039;"
-    );
+    .replace(/'/g, "&#039;");
 
 }
 
@@ -801,9 +866,7 @@ loadPosts();
 
 </script>
 
-
 <script src="script.js"></script>
-
 
 </body>
 </html>
