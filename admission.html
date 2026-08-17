@@ -485,17 +485,11 @@ async function loadPosts() {
 
 
     let query =
-        supabaseClient
-            .from("posts")
-            .select("*")
-            .eq("category", "AD")
-            .eq("published", true)
-            .order(
-                "published_at",
-                {
-                    ascending: false
-                }
-            );
+    supabaseClient
+        .from("posts")
+        .select("*")
+        .eq("category", "AD")
+        .eq("published", true);
 
 
     /*
