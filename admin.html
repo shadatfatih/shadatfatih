@@ -1452,51 +1452,83 @@ button{
 
 
                                     <div class="field">
+    <label>
+        CATEGORY
+    </label>
 
-                                        <label>
-                                            CATEGORY
-                                        </label>
+    <select id="postCategory" required>
 
-                                        <select
-                                            id="postCategory"
-                                            required>
+        <option value="">
+            Select category
+        </option>
 
-                                            <option value="">
-                                                Select category
-                                            </option>
+        <option value="NU">
+            National University
+        </option>
 
-                                            <option value="NU">
-                                                National University
-                                            </option>
+        <option value="CB">
+            Chattogram Board
+        </option>
 
-                                            <option value="CB">
-                                                Chattogram Board
-                                            </option>
+        <option value="AD">
+            Admission
+        </option>
 
-                                            <option value="AD">
-                                                Admission
-                                            </option>
+        <option value="EX">
+            Exam & Routine
+        </option>
 
-                                            <option value="EX">
-                                                Exam & Routine
-                                            </option>
+        <option value="RS">
+            Result
+        </option>
 
-                                            <option value="RS">
-                                                Result
-                                            </option>
+        <option value="NT">
+            Notice
+        </option>
 
-                                            <option value="education">
-                                                Education Update
-                                            </option>
+    </select>
+</div>
 
-                                            <option value="NT">
-                                                Notice
-                                            </option>
 
-                                        </select>
+<div class="field">
 
-                                    </div>
+    <label>
+        SUB CATEGORY
+    </label>
 
+    <select id="postSubCategory">
+
+        <option value="">
+            Select sub category
+        </option>
+
+        <option value="ADMISSION">
+            Admission
+        </option>
+
+        <option value="EXAM">
+            Exam
+        </option>
+
+        <option value="ROUTINE">
+            Routine
+        </option>
+
+        <option value="RESULT">
+            Result
+        </option>
+
+        <option value="NOTICE">
+            Notice
+        </option>
+
+        <option value="GENERAL">
+            General
+        </option>
+
+    </select>
+
+</div>
 
                                     <div class="field">
 
@@ -2291,6 +2323,11 @@ async function savePost(published){
                 .getElementById("postCategory")
                 .value;
 
+const subCategory =
+    document
+        .getElementById("postSubCategory")
+        .value;
+
 
         const date =
             document
@@ -2368,10 +2405,9 @@ async function savePost(published){
 
 
         const post = {
-
-            title,
-
-            category,
+    title,
+    category,
+    sub_category: subCategory || null,
 
             description,
 
@@ -2833,6 +2869,10 @@ async function(id){
         .value =
             post.category || "";
 
+document
+    .getElementById("postSubCategory")
+    .value =
+        post.sub_category || "";
 
     document
         .getElementById("postDescription")
