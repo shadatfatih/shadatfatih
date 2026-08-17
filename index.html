@@ -520,20 +520,14 @@ async function loadLatestPosts() {
     if (!container) return;
 
 
-    const { data, error } =
-        await supabaseClient
-
-            .from("posts")
-
-            .select("*")
-
-            .eq("published", true)
-
-            .order("created_at", {
-                ascending: false
-            })
-
-            .limit(10);
+    const { data, error } = await supabaseClient
+    .from("posts")
+    .select("*")
+    .eq("published", true)
+    .order("created_at", {
+        ascending: false
+    })
+    .limit(10);
 
 
     if (error) {
