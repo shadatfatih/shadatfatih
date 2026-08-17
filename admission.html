@@ -7,18 +7,24 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>ভর্তি আপডেট | Shadat Fatih</title>
+    <title>Admission | Shadat Fatih</title>
 
     <meta name="description"
-          content="বাংলাদেশের বিভিন্ন শিক্ষা প্রতিষ্ঠানের ভর্তি সংক্রান্ত সর্বশেষ আপডেট, আবেদন, সময়সীমা ও গুরুত্বপূর্ণ তথ্য।">
+          content="National University Admission, HSC Admission এবং অন্যান্য ভর্তি সংক্রান্ত সর্বশেষ আপডেট।">
 
     <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 </head>
 
 
 <body>
 
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
 <header class="header">
 
@@ -28,13 +34,15 @@
 
     <div class="header-actions">
 
-        <button class="search-btn"
-                onclick="openSearch()">
+        <button
+            class="search-btn"
+            onclick="openSearch()">
             ⌕
         </button>
 
-        <button class="menu-btn"
-                onclick="toggleMenu()">
+        <button
+            class="menu-btn"
+            onclick="toggleMenu()">
             ⋮
         </button>
 
@@ -43,13 +51,19 @@
 </header>
 
 
+<!-- =====================================================
+     MENU
+===================================================== -->
+
 <nav id="menu" class="menu">
 
     <div class="menu-title">
         MENU
     </div>
 
-    <a href="index.html">Home</a>
+    <a href="index.html">
+        Home
+    </a>
 
     <a href="national-university.html">
         National University
@@ -63,11 +77,11 @@
         Admission
     </a>
 
-    <a href="#">
+    <a href="exam-routine.html">
         Exam & Routine
     </a>
 
-    <a href="#">
+    <a href="results.html">
         Results
     </a>
 
@@ -78,9 +92,14 @@
 </nav>
 
 
+<!-- =====================================================
+     SEARCH
+===================================================== -->
+
 <div id="searchBox" class="search-box">
 
     <input
+        id="searchInput"
         type="search"
         placeholder="ভর্তি সংক্রান্ত তথ্য খুঁজুন..."
     >
@@ -91,6 +110,10 @@
 
 </div>
 
+
+<!-- =====================================================
+     BREAKING
+===================================================== -->
 
 <div class="breaking">
 
@@ -105,165 +128,253 @@
 </div>
 
 
-<main class="notice-page">
+<!-- =====================================================
+     HERO
+===================================================== -->
 
+<section class="hero">
 
-    <div class="notice-category">
-        EDUCATION • ADMISSION
-    </div>
+    <div class="hero-inner">
 
-
-    <h1>
-        ভর্তি সংক্রান্ত সর্বশেষ আপডেট
-    </h1>
-
-
-    <div class="notice-meta">
-
-        <span>
-            🎓 Admission
-        </span>
-
-        <span>
-            📅 সর্বশেষ আপডেট
-        </span>
-
-    </div>
-
-
-    <div class="notice-divider"></div>
-
-
-    <article class="notice-content">
-
-        <p>
-            বাংলাদেশের বিভিন্ন বিশ্ববিদ্যালয়,
-            কলেজ ও শিক্ষা প্রতিষ্ঠানের ভর্তি
-            সংক্রান্ত গুরুত্বপূর্ণ তথ্য এখানে
-            প্রকাশ করা হবে।
-        </p>
-
-
-        <h2>
-            বিশ্ববিদ্যালয় ভর্তি
-        </h2>
-
-        <p>
-            ভর্তি বিজ্ঞপ্তি, আবেদন শুরুর তারিখ,
-            আবেদনের শেষ সময়, যোগ্যতা, আবেদন
-            ফি এবং প্রয়োজনীয় নির্দেশনা এখানে
-            সহজভাবে দেওয়া হবে।
-        </p>
-
-
-        <h2>
-            কলেজ ভর্তি
-        </h2>
-
-        <p>
-            একাদশ শ্রেণি ও অন্যান্য কলেজ
-            ভর্তি সংক্রান্ত গুরুত্বপূর্ণ তথ্য
-            প্রকাশিত হলে এখানে জানানো হবে।
-        </p>
-
-
-        <h2>
-            গুরুত্বপূর্ণ তারিখ
-        </h2>
-
-        <div class="important-box">
-
-            <div>
-
-                <strong>
-                    আবেদন শুরু
-                </strong>
-
-                <span>
-                    অফিসিয়াল বিজ্ঞপ্তি অনুযায়ী
-                </span>
-
-            </div>
-
-
-            <div>
-
-                <strong>
-                    আবেদনের শেষ সময়
-                </strong>
-
-                <span>
-                    অফিসিয়াল বিজ্ঞপ্তি অনুযায়ী
-                </span>
-
-            </div>
-
-
-            <div>
-
-                <strong>
-                    ভর্তি পরীক্ষা
-                </strong>
-
-                <span>
-                    প্রযোজ্য ক্ষেত্রে
-                </span>
-
-            </div>
-
+        <div class="hero-label">
+            EDUCATION • ADMISSION
         </div>
 
-
-        <h2>
-            শিক্ষার্থীদের জন্য নির্দেশনা
-        </h2>
+        <h1>
+            ভর্তি সংক্রান্ত
+            <span>সর্বশেষ আপডেট</span>
+        </h1>
 
         <p>
-            ভর্তি সংক্রান্ত যেকোনো তথ্যের
-            ক্ষেত্রে সংশ্লিষ্ট শিক্ষা প্রতিষ্ঠান
-            অথবা অফিসিয়াল কর্তৃপক্ষের প্রকাশিত
-            বিজ্ঞপ্তি অনুসরণ করা উচিত।
+            National University Admission,
+            HSC Admission এবং অন্যান্য
+            ভর্তি সংক্রান্ত গুরুত্বপূর্ণ তথ্য।
         </p>
 
-    </article>
+    </div>
+
+</section>
 
 
-    <section class="official-source">
+<!-- =====================================================
+     ADMISSION SUB CATEGORIES
+===================================================== -->
+
+<section class="section">
+
+    <div class="section-heading">
 
         <div>
 
             <span>
-                INFORMATION
+                EXPLORE ADMISSION
             </span>
 
-            <h3>
-                Admission Updates
-            </h3>
+            <h2>
+                ভর্তি বিভাগ
+            </h2>
 
         </div>
 
-        <a
-            href="index.html"
-            class="source-btn">
+    </div>
 
-            Latest Updates →
+
+    <div class="category-grid">
+
+
+        <!-- NATIONAL UNIVERSITY -->
+
+        <a
+            href="#NU_ADMISSION"
+            onclick="filterCategory('NU_ADMISSION')"
+            class="category-card featured">
+
+            <div class="card-icon">
+                NU
+            </div>
+
+            <div>
+
+                <h3>
+                    National University Admission
+                </h3>
+
+                <p>
+                    জাতীয় বিশ্ববিদ্যালয়ের
+                    ভর্তি সংক্রান্ত সকল আপডেট।
+                </p>
+
+            </div>
+
+            <strong>
+                →
+            </strong>
 
         </a>
 
-    </section>
+
+        <!-- HSC -->
+
+        <a
+            href="#HSC_ADMISSION"
+            onclick="filterCategory('HSC_ADMISSION')"
+            class="category-card">
+
+            <div class="card-icon">
+                HSC
+            </div>
+
+            <div>
+
+                <h3>
+                    HSC Admission
+                </h3>
+
+                <p>
+                    একাদশ শ্রেণির ভর্তি,
+                    আবেদন ও ফলাফল।
+                </p>
+
+            </div>
+
+            <strong>
+                →
+            </strong>
+
+        </a>
 
 
-    <a
-        href="index.html"
-        class="back-btn">
+        <!-- OTHER -->
 
-        ← Home-এ ফিরে যান
+        <a
+            href="#OTHER_ADMISSION"
+            onclick="filterCategory('OTHER_ADMISSION')"
+            class="category-card">
 
-    </a>
+            <div class="card-icon">
+                AD
+            </div>
+
+            <div>
+
+                <h3>
+                    Others Admission
+                </h3>
+
+                <p>
+                    অন্যান্য বিশ্ববিদ্যালয়,
+                    কলেজ ও প্রতিষ্ঠানের ভর্তি।
+                </p>
+
+            </div>
+
+            <strong>
+                →
+            </strong>
+
+        </a>
 
 
-</main>
+    </div>
 
+</section>
+
+
+<!-- =====================================================
+     POSTS
+===================================================== -->
+
+<section
+    id="latestPostsSection"
+    class="latest-section">
+
+
+    <div class="section-heading">
+
+        <div>
+
+            <span id="postSectionLabel">
+                ADMISSION UPDATES
+            </span>
+
+            <h2 id="postSectionTitle">
+                সর্বশেষ ভর্তি আপডেট
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <!-- LOADING -->
+
+    <div
+        id="loadingPosts"
+        style="
+            text-align:center;
+            padding:30px;
+            color:#888;
+            font-size:13px;
+        ">
+
+        পোস্ট লোড হচ্ছে...
+
+    </div>
+
+
+    <!-- POSTS -->
+
+    <div id="postsContainer"></div>
+
+
+    <!-- NO POSTS -->
+
+    <div
+        id="noPosts"
+        hidden
+        style="
+            text-align:center;
+            padding:35px;
+            color:#888;
+            font-size:13px;
+        ">
+
+        এই বিভাগে এখনো কোনো পোস্ট প্রকাশ করা হয়নি।
+
+    </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     ABOUT
+===================================================== -->
+
+<section class="about">
+
+    <div class="about-label">
+        ADMISSION
+    </div>
+
+    <h2>
+        ভর্তি সংক্রান্ত
+        <span>প্রয়োজনীয় তথ্য।</span>
+    </h2>
+
+    <p>
+        Shadat Fatih-এ জাতীয় বিশ্ববিদ্যালয়,
+        HSC এবং অন্যান্য ভর্তি সংক্রান্ত
+        বিজ্ঞপ্তি, আবেদন, সময়সীমা ও প্রয়োজনীয়
+        তথ্য সহজভাবে প্রকাশ করা হবে।
+    </p>
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
 
 <footer>
 
@@ -298,7 +409,421 @@
 </footer>
 
 
+<!-- =====================================================
+     SUPABASE
+===================================================== -->
+
+<script>
+
+const SUPABASE_URL =
+    "https://ymwhodckmbybccufzjot.supabase.co";
+
+
+const SUPABASE_KEY =
+    "sb_publishable_u31olXCxIcSsMdUeyyt5U_QY_ECWKToH";
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =====================================================
+   ADMISSION SUB CATEGORY NAMES
+===================================================== */
+
+const subCategoryNames = {
+
+    NU_ADMISSION:
+        "National University Admission",
+
+    HSC_ADMISSION:
+        "HSC Admission",
+
+    OTHER_ADMISSION:
+        "Others Admission"
+
+};
+
+
+/* =====================================================
+   CURRENT CATEGORY
+===================================================== */
+
+let currentCategory = null;
+
+
+/* =====================================================
+   LOAD POSTS
+===================================================== */
+
+async function loadPosts() {
+
+    const loading =
+        document.getElementById(
+            "loadingPosts"
+        );
+
+    const container =
+        document.getElementById(
+            "postsContainer"
+        );
+
+    const noPosts =
+        document.getElementById(
+            "noPosts"
+        );
+
+
+    loading.hidden = false;
+
+    noPosts.hidden = true;
+
+    container.innerHTML = "";
+
+
+    let query =
+        supabaseClient
+            .from("posts")
+            .select("*")
+            .eq("category", "AD")
+            .eq("published", true)
+            .order(
+                "published_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+    /*
+       যদি কোনো Sub Category select করা হয়
+       তাহলে শুধু সেই category-এর পোস্ট আসবে
+    */
+
+    if (currentCategory) {
+
+        query =
+            query.eq(
+                "sub_category",
+                currentCategory
+            );
+
+    }
+
+
+    const {
+        data,
+        error
+    } = await query;
+
+
+    loading.hidden = true;
+
+
+    /* ERROR */
+
+    if (error) {
+
+        console.error(
+            "Supabase Error:",
+            error
+        );
+
+
+        container.innerHTML = `
+
+            <div
+                style="
+                    padding:30px;
+                    text-align:center;
+                    color:#b51222;
+                ">
+
+                পোস্ট লোড করতে সমস্যা হয়েছে।
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    /* NO POSTS */
+
+    if (!data || data.length === 0) {
+
+        noPosts.hidden = false;
+
+        return;
+
+    }
+
+
+    /* POSTS */
+
+    container.innerHTML =
+        data
+            .map(createPostHTML)
+            .join("");
+
+}
+
+
+/* =====================================================
+   CREATE POST
+===================================================== */
+
+function createPostHTML(post) {
+
+
+    const subCategory =
+        subCategoryNames[
+            post.sub_category
+        ]
+        ||
+        "Admission";
+
+
+    const date =
+        post.published_at
+            ? new Date(
+                post.published_at
+              ).toLocaleDateString(
+                "bn-BD",
+                {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric"
+                }
+              )
+            : "";
+
+
+    const image =
+        post.image_url
+            ? `
+
+                <div class="post-image">
+
+                    <img
+                        src="${escapeHtml(
+                            post.image_url
+                        )}"
+                        alt="${escapeHtml(
+                            post.title
+                        )}"
+                    >
+
+                </div>
+
+              `
+            : "";
+
+
+    const pdf =
+        post.pdf_url
+            ? `
+
+                <a
+                    href="${escapeHtml(
+                        post.pdf_url
+                    )}"
+                    target="_blank"
+                    rel="noopener"
+                    class="read-more">
+
+                    PDF দেখুন →
+
+                </a>
+
+              `
+            : "";
+
+
+    return `
+
+        <article class="news-card">
+
+            ${image}
+
+
+            <div class="news-top">
+
+                <span class="tag red">
+
+                    ${escapeHtml(
+                        subCategory
+                    )}
+
+                </span>
+
+
+                <span class="date">
+
+                    ${escapeHtml(
+                        date
+                    )}
+
+                </span>
+
+            </div>
+
+
+            <h3>
+
+                ${escapeHtml(
+                    post.title
+                )}
+
+            </h3>
+
+
+            <p>
+
+                ${escapeHtml(
+                    post.description ||
+                    post.content ||
+                    ""
+                )}
+
+            </p>
+
+
+            ${pdf}
+
+
+            <a
+                href="post.html?id=${encodeURIComponent(
+                    post.id
+                )}"
+                class="read-more">
+
+                বিস্তারিত পড়ুন →
+
+            </a>
+
+
+        </article>
+
+    `;
+
+}
+
+
+/* =====================================================
+   FILTER CATEGORY
+===================================================== */
+
+function filterCategory(category) {
+
+
+    currentCategory =
+        category;
+
+
+    const name =
+        subCategoryNames[
+            category
+        ]
+        ||
+        "Admission";
+
+
+    document
+        .getElementById(
+            "postSectionLabel"
+        )
+        .textContent =
+            name.toUpperCase();
+
+
+    document
+        .getElementById(
+            "postSectionTitle"
+        )
+        .textContent =
+            name;
+
+
+    loadPosts();
+
+
+    setTimeout(
+        function () {
+
+            document
+                .getElementById(
+                    "latestPostsSection"
+                )
+                .scrollIntoView({
+                    behavior: "smooth"
+                });
+
+        },
+        100
+    );
+
+}
+
+
+window.filterCategory =
+    filterCategory;
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value) {
+
+    return String(
+        value || ""
+    )
+
+    .replaceAll(
+        "&",
+        "&amp;"
+    )
+
+    .replaceAll(
+        "<",
+        "&lt;"
+    )
+
+    .replaceAll(
+        ">",
+        "&gt;"
+    )
+
+    .replaceAll(
+        '"',
+        "&quot;"
+    )
+
+    .replaceAll(
+        "'",
+        "&#039;"
+    );
+
+}
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+loadPosts();
+
+</script>
+
+
 <script src="script.js"></script>
+
 
 </body>
 </html>
