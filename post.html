@@ -124,12 +124,13 @@ async function loadPost() {
 
     /* Supabase থেকে পোস্ট */
 
-    const { data, error } =
-        await supabaseClient
-            .from("public_posts")
-            .select("*")
-            .eq("id", postId)
-            .maybeSingle();
+  const { data, error } =
+    await supabaseClient
+        .from("posts")
+        .select("*")
+        .eq("id", postId)
+        .eq("published", true)
+        .maybeSingle();
 
 
     console.log("Post data:", data);
@@ -172,23 +173,6 @@ async function loadPost() {
         return;
     }
 
-
-    /* Draft হলে visitor দেখবে না */
-
-    if (data.status !== "published") {
-
-        container.innerHTML = `
-            <h2>
-                পোস্টটি প্রকাশিত নয়
-            </h2>
-
-            <p>
-                এই পোস্টটি বর্তমানে Draft অবস্থায় আছে।
-            </p>
-        `;
-
-        return;
-    }
 
 
     /* Category */
