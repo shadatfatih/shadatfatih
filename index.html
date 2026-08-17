@@ -498,19 +498,49 @@
 </footer>
 
 <script>
-
 const SUPABASE_URL =
     "https://ymwhodckmbybccufzjot.supabase.co";
 
 const SUPABASE_ANON_KEY =
     "sb_publishable_u31olXCxIcSsMdUeyyt5UQ_YeCWKToH";
 
-const supabaseClient =
-    supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY
-    );
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+);
 
+
+/* =====================================================
+   CATEGORY NAMES
+===================================================== */
+
+const categoryNames = {
+    "NU": "NATIONAL UNIVERSITY",
+    "nu": "NATIONAL UNIVERSITY",
+
+    "CB": "CHATTOGRAM BOARD",
+    "cb": "CHATTOGRAM BOARD",
+
+    "AD": "ADMISSION",
+    "ad": "ADMISSION",
+    "admission": "ADMISSION",
+
+    "EX": "EXAM & ROUTINE",
+    "ex": "EXAM & ROUTINE",
+
+    "RS": "RESULT",
+    "rs": "RESULT",
+
+    "NT": "NOTICE",
+    "nt": "NOTICE",
+
+    "education": "EDUCATION UPDATE"
+};
+
+
+/* =====================================================
+   LOAD ALL PUBLISHED POSTS
+===================================================== */
 
 async function loadLatestPosts() {
 
@@ -519,15 +549,20 @@ async function loadLatestPosts() {
 
     if (!container) return;
 
+    container.innerHTML = `
+        <div class="news-card">
+            <p>সর্বশেষ আপডেট লোড হচ্ছে...</p>
+        </div>
+    `;
 
-  const { data, error } = await supabaseClient
-    .from("public_posts")
-    .select("*")
-    .eq("status", "published")
-    .order("created_at", {
-        ascending: false
-    })
-    .limit(10);
+
+    const { data, error } = await supabaseClient
+        .from("public_posts")
+        .select("*")
+        .order("created_at", {
+            ascending: false
+        })
+        .limit(100);
 
 
     if (error) {
@@ -539,11 +574,9 @@ async function loadLatestPosts() {
 
         container.innerHTML = `
             <div class="news-card">
-
                 <p>
                     আপডেট লোড করা যাচ্ছে না।
                 </p>
-
             </div>
         `;
 
@@ -555,11 +588,9 @@ async function loadLatestPosts() {
 
         container.innerHTML = `
             <div class="news-card">
-
                 <p>
                     এখনো কোনো নতুন আপডেট প্রকাশ করা হয়নি।
                 </p>
-
             </div>
         `;
 
@@ -575,30 +606,19 @@ async function loadLatestPosts() {
         const article =
             document.createElement("article");
 
-
         article.className =
             "news-card";
 
 
-const categoryNames = {
-
-    nu: "NATIONAL UNIVERSITY",
-
-    cb: "CHATTOGRAM BOARD",
-
-    admission: "ADMISSION",
-
-    ex: "EXAM & ROUTINE",
-
-    rs: "RESULT",
-
-    nt: "NOTICE"
-
-};
+        const rawCategory =
+            String(post.category || "")
+                .trim();
 
 
         const category =
-            categoryNames[post.category]
+            categoryNames[rawCategory]
+            ||
+            categoryNames[rawCategory.toLowerCase()]
             ||
             "EDUCATION UPDATE";
 
@@ -628,7 +648,7 @@ const categoryNames = {
             <div class="news-top">
 
                 <span class="tag ${
-                    post.category === "nu"
+                    rawCategory.toLowerCase() === "nu"
                     ? "red"
                     : ""
                 }">
@@ -685,7 +705,9 @@ const categoryNames = {
 }
 
 
-/* নিরাপদভাবে text দেখানোর জন্য */
+/* =====================================================
+   SAFE HTML
+===================================================== */
 
 function escapeHtml(value) {
 
@@ -704,7 +726,9 @@ function escapeHtml(value) {
 }
 
 
-/* Load posts */
+/* =====================================================
+   START
+===================================================== */
 
 loadLatestPosts();
 
