@@ -1489,6 +1489,21 @@ button{
     </select>
 </div>
 
+<div class="field" id="subCategoryField" hidden>
+
+    <label>
+        SUBCATEGORY
+    </label>
+
+    <select id="postSubCategory">
+
+        <option value="">
+            Select subcategory
+        </option>
+
+    </select>
+
+</div>
 
 <div class="field">
 
@@ -1866,6 +1881,99 @@ const supabaseClient =
         SUPABASE_URL,
         SUPABASE_KEY
     );
+
+const subCategories = {
+
+    CB: [
+        {
+            value: "HSC",
+            name: "HSC"
+        },
+        {
+            value: "SSC",
+            name: "SSC"
+        },
+        {
+            value: "JSC",
+            name: "JSC"
+        },
+        {
+            value: "RESULT",
+            name: "Result"
+        },
+        {
+            value: "ADMISSION",
+            name: "Admission"
+        },
+        {
+            value: "EXAM",
+            name: "Exam & Routine"
+        },
+        {
+            value: "NOTICE",
+            name: "Notice"
+        }
+    ]
+
+};
+
+const categorySelect =
+    document.getElementById("postCategory");
+
+const subCategoryField =
+    document.getElementById("subCategoryField");
+
+const subCategorySelect =
+    document.getElementById("postSubCategory");
+
+
+categorySelect.addEventListener(
+    "change",
+    function(){
+
+        const category =
+            this.value;
+
+        subCategorySelect.innerHTML = `
+            <option value="">
+                Select subcategory
+            </option>
+        `;
+
+        if(
+            subCategories[category]
+        ){
+
+            subCategoryField.hidden = false;
+
+            subCategories[category]
+                .forEach(function(item){
+
+                    const option =
+                        document.createElement("option");
+
+                    option.value =
+                        item.value;
+
+                    option.textContent =
+                        item.name;
+
+                    subCategorySelect
+                        .appendChild(option);
+
+                });
+
+        }
+        else{
+
+            subCategoryField.hidden = true;
+
+            subCategorySelect.value = "";
+
+        }
+
+    }
+);
 
 
 /* =========================================================
@@ -2868,6 +2976,12 @@ async function(id){
         .getElementById("postCategory")
         .value =
             post.category || "";
+
+document
+    .getElementById("postCategory")
+    .dispatchEvent(
+        new Event("change")
+    );
 
 document
     .getElementById("postSubCategory")
