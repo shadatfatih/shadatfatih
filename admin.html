@@ -1,2617 +1,3111 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Admin — Shadat Fatih</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Dashboard | Shadat Fatih</title>
+
+<meta name="robots" content="noindex,nofollow">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+/* =========================================================
+   SHADAT FATIH — PREMIUM ADMIN DASHBOARD
+   Black / White / Deep Red
+========================================================= */
+
 :root{
-  --bg:#f5f6f8;
-  --card:#fff;
-  --text:#111827;
-  --muted:#6b7280;
-  --line:#e5e7eb;
-  --black:#111;
-  --red:#b91c1c;
-  --green:#15803d;
-  --blue:#2563eb;
-  --shadow:0 10px 35px rgba(0,0,0,.06);
+    --black:#0d0d0f;
+    --black2:#151518;
+    --black3:#1e1e22;
+    --white:#fff;
+    --paper:#f6f5f2;
+    --line:#e6e4df;
+    --muted:#777;
+    --red:#b51222;
+    --red2:#8d0c18;
+    --green:#16834b;
+    --shadow:0 18px 50px rgba(0,0,0,.08);
+    --radius:14px;
 }
 
-*{box-sizing:border-box}
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
 
 body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:var(--bg);
-  color:var(--text);
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--paper);
+    color:var(--black);
 }
 
-button,input,textarea,select{font:inherit}
-
-button{cursor:pointer}
-
-.hidden{display:none!important}
-
-/* LOGIN */
-
-#loginPage{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  background:
-    radial-gradient(circle at top right,#3b3b3b,transparent 35%),
-    #0d0d0d;
+button,
+input,
+textarea,
+select{
+    font:inherit;
 }
 
-.login-box{
-  width:100%;
-  max-width:410px;
-  background:white;
-  padding:34px;
-  border-radius:24px;
-  box-shadow:0 25px 70px rgba(0,0,0,.35);
+button{
+    cursor:pointer;
 }
 
-.login-logo{
-  width:68px;
-  height:68px;
-  border-radius:18px;
-  background:#111;
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:22px;
-  font-weight:800;
-  margin:0 auto 18px;
+[hidden]{
+    display:none!important;
 }
 
-.login-box h1{
-  text-align:center;
-  margin:0;
+/* =========================================================
+   LOGIN
+========================================================= */
+
+.login-screen{
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    padding:25px;
+    background:
+        radial-gradient(circle at 85% 15%,rgba(181,18,34,.18),transparent 28%),
+        radial-gradient(circle at 10% 90%,rgba(0,0,0,.08),transparent 30%),
+        var(--paper);
 }
 
-.login-sub{
-  text-align:center;
-  color:var(--muted);
-  margin:8px 0 25px;
+.login-card{
+    width:100%;
+    max-width:440px;
+    background:rgba(255,255,255,.96);
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:42px;
+    box-shadow:0 30px 90px rgba(0,0,0,.12);
 }
 
-.field{margin-bottom:17px}
+.logo{
+    width:54px;
+    height:54px;
+    display:grid;
+    place-items:center;
+    border-radius:15px;
+    background:var(--black);
+    color:#fff;
+    font-size:15px;
+    font-weight:900;
+    margin-bottom:25px;
+}
+
+.login-kicker,
+.kicker{
+    color:var(--red);
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:2px;
+}
+
+.login-card h1{
+    font-size:38px;
+    line-height:1.1;
+    margin:9px 0 10px;
+}
+
+.login-card > p{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.7;
+    margin-bottom:28px;
+}
+
+.field{
+    margin-bottom:17px;
+}
 
 .field label{
-  display:block;
-  font-size:13px;
-  font-weight:700;
-  margin-bottom:7px;
+    display:block;
+    font-size:11px;
+    font-weight:800;
+    margin-bottom:7px;
 }
 
-input,textarea,select{
-  width:100%;
-  border:1px solid var(--line);
-  background:#fff;
-  border-radius:11px;
-  padding:12px 13px;
-  outline:none;
-  transition:.2s;
+.field input,
+.field textarea,
+.field select,
+.search-input{
+    width:100%;
+    border:1px solid #dcdad5;
+    background:#fff;
+    border-radius:9px;
+    padding:13px 14px;
+    outline:none;
+    transition:.2s;
 }
 
-input:focus,textarea:focus,select:focus{
-  border-color:#111;
-  box-shadow:0 0 0 3px rgba(0,0,0,.06);
+.field textarea{
+    resize:vertical;
+    min-height:130px;
 }
 
-textarea{
-  min-height:150px;
-  resize:vertical;
+.field input:focus,
+.field textarea:focus,
+.field select:focus,
+.search-input:focus{
+    border-color:var(--red);
+    box-shadow:0 0 0 3px rgba(181,18,34,.08);
 }
 
-.login-btn{
-  width:100%;
-  padding:13px;
-  border:0;
-  border-radius:11px;
-  background:#111;
-  color:#fff;
-  font-weight:800;
+.primary-btn{
+    border:0;
+    background:var(--red);
+    color:#fff;
+    border-radius:9px;
+    padding:14px 18px;
+    font-size:12px;
+    font-weight:900;
+    transition:.2s;
 }
 
-.error{
-  background:#fee2e2;
-  color:#991b1b;
-  padding:11px;
-  border-radius:10px;
-  margin-bottom:15px;
-  font-size:13px;
+.primary-btn:hover{
+    background:var(--red2);
+    transform:translateY(-1px);
 }
 
-/* ADMIN */
+.full{
+    width:100%;
+}
 
-#adminPage{display:none}
+.message{
+    min-height:20px;
+    color:var(--red);
+    font-size:11px;
+    margin-top:12px;
+}
+
+/* =========================================================
+   APP
+========================================================= */
+
+.app{
+    min-height:100vh;
+    display:flex;
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
 
 .sidebar{
-  position:fixed;
-  left:0;
-  top:0;
-  bottom:0;
-  width:255px;
-  background:#111;
-  color:#fff;
-  padding:22px 15px;
-  z-index:100;
-  overflow-y:auto;
+    width:250px;
+    flex-shrink:0;
+    min-height:100vh;
+    background:var(--black);
+    color:#fff;
+    position:fixed;
+    inset:0 auto 0 0;
+    z-index:100;
+    display:flex;
+    flex-direction:column;
+    padding:25px 15px;
 }
 
-.brand{
-  padding:8px 12px 28px;
-  font-size:21px;
-  font-weight:900;
-  letter-spacing:-.5px;
+.sidebar-logo{
+    padding:5px 14px 28px;
+    border-bottom:1px solid #29292d;
 }
 
-.brand span{color:#dc2626}
+.sidebar-logo strong{
+    display:block;
+    font-size:19px;
+    letter-spacing:1.5px;
+}
+
+.sidebar-logo strong span{
+    color:#e21c32;
+}
+
+.sidebar-logo small{
+    color:#777;
+    font-size:8px;
+    letter-spacing:2px;
+    margin-top:5px;
+    display:block;
+}
 
 .nav-title{
-  color:#777;
-  font-size:10px;
-  font-weight:800;
-  letter-spacing:1px;
-  padding:10px 12px 7px;
+    color:#666;
+    font-size:8px;
+    letter-spacing:2px;
+    font-weight:900;
+    padding:25px 14px 10px;
 }
 
-.nav button{
-  width:100%;
-  display:flex;
-  align-items:center;
-  gap:11px;
-  border:0;
-  background:transparent;
-  color:#aaa;
-  padding:11px 12px;
-  margin:3px 0;
-  border-radius:10px;
-  text-align:left;
-  font-weight:700;
+.nav-item{
+    width:100%;
+    border:0;
+    background:transparent;
+    color:#aaa;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 14px;
+    border-radius:9px;
+    margin-bottom:4px;
+    text-align:left;
+    font-size:12px;
+    font-weight:700;
+    transition:.2s;
 }
 
-.nav button:hover,
-.nav button.active{
-  background:#252525;
-  color:white;
+.nav-item:hover,
+.nav-item.active{
+    color:#fff;
+    background:#202024;
+}
+
+.nav-item.active{
+    box-shadow:inset 3px 0 0 var(--red);
+}
+
+.nav-icon{
+    width:26px;
+    text-align:center;
+    font-size:14px;
+}
+
+.sidebar-bottom{
+    margin-top:auto;
+    border-top:1px solid #29292d;
+    padding-top:15px;
 }
 
 .logout{
-  width:100%;
-  border:0;
-  background:#641414;
-  color:#fff;
-  padding:12px;
-  border-radius:10px;
-  margin-top:22px;
-  font-weight:800;
+    width:100%;
+    border:0;
+    background:#202024;
+    color:#bbb;
+    border-radius:9px;
+    padding:12px;
+    font-size:11px;
+    font-weight:800;
 }
 
+.logout:hover{
+    color:#fff;
+    background:#2b2b30;
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+
 .main{
-  margin-left:255px;
-  min-height:100vh;
+    margin-left:250px;
+    width:calc(100% - 250px);
+    min-height:100vh;
 }
 
 .topbar{
-  height:70px;
-  background:#fff;
-  border-bottom:1px solid var(--line);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 28px;
-  position:sticky;
-  top:0;
-  z-index:50;
+    height:75px;
+    background:rgba(255,255,255,.94);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 35px;
+    position:sticky;
+    top:0;
+    z-index:80;
 }
 
-.top-left{
-  display:flex;
-  align-items:center;
-  gap:13px;
+.page-title{
+    font-size:17px;
+    font-weight:900;
 }
 
-.menu-mobile{
-  display:none;
-  border:0;
-  background:#111;
-  color:#fff;
-  padding:8px 11px;
-  border-radius:8px;
+.page-subtitle{
+    color:#999;
+    font-size:10px;
+    margin-top:3px;
 }
 
-.admin-user{
-  color:var(--muted);
-  font-size:12px;
+.top-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
 }
+
+.site-btn,
+.profile{
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:8px;
+    padding:9px 12px;
+    color:#111;
+    text-decoration:none;
+    font-size:10px;
+    font-weight:800;
+}
+
+.profile{
+    border-radius:50%;
+    width:38px;
+    height:38px;
+    display:grid;
+    place-items:center;
+    background:var(--black);
+    color:#fff;
+}
+
+/* =========================================================
+   CONTENT
+========================================================= */
 
 .content{
-  max-width:1450px;
-  margin:auto;
-  padding:28px;
+    padding:35px;
+    max-width:1450px;
+    margin:auto;
 }
 
-.page{display:none}
-.page.active{display:block}
-
-.page-heading{
-  margin-bottom:23px;
+.welcome{
+    margin-bottom:25px;
 }
 
-.page-heading h1{
-  margin:0 0 6px;
-  font-size:27px;
+.welcome .kicker{
+    margin-bottom:6px;
 }
 
-.page-heading p{
-  margin:0;
-  color:var(--muted);
+.welcome h1{
+    font-size:34px;
+    line-height:1.15;
 }
 
-/* STATS */
+.welcome p{
+    color:#888;
+    font-size:12px;
+    margin-top:7px;
+}
+
+/* =========================================================
+   STAT CARDS
+========================================================= */
 
 .stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:16px;
-  margin-bottom:22px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+    margin-bottom:25px;
 }
 
 .stat{
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:17px;
-  padding:21px;
-  box-shadow:var(--shadow);
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:22px;
+    box-shadow:0 5px 20px rgba(0,0,0,.025);
 }
 
 .stat-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.stat-label{
+    color:#888;
+    font-size:9px;
+    font-weight:900;
+    letter-spacing:1.5px;
 }
 
 .stat-icon{
-  width:40px;
-  height:40px;
-  border-radius:11px;
-  background:#f3f4f6;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.stat small{
-  color:var(--muted);
-  font-weight:700;
+    width:34px;
+    height:34px;
+    display:grid;
+    place-items:center;
+    background:var(--black);
+    color:#fff;
+    border-radius:8px;
+    font-size:12px;
 }
 
 .stat strong{
-  display:block;
-  font-size:30px;
-  margin-top:10px;
+    display:block;
+    font-size:30px;
+    margin-top:17px;
 }
 
-/* CARDS */
-
-.card{
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:17px;
-  padding:22px;
-  box-shadow:var(--shadow);
-  margin-bottom:20px;
+.stat small{
+    display:block;
+    color:#999;
+    font-size:10px;
+    margin-top:3px;
 }
 
-.card h2{
-  margin:0 0 18px;
-  font-size:18px;
+/* =========================================================
+   QUICK ACTIONS
+========================================================= */
+
+.quick-actions{
+    display:grid;
+    grid-template-columns:1.4fr 1fr 1fr;
+    gap:14px;
+    margin-bottom:25px;
 }
 
-/* CATEGORIES */
-
-.categories{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:15px;
+.quick{
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:var(--radius);
+    padding:20px;
+    text-align:left;
+    transition:.2s;
 }
 
-.category{
-  border:1px solid var(--line);
-  background:#fff;
-  padding:19px;
-  border-radius:15px;
-  transition:.2s;
-  cursor:pointer;
+.quick:hover{
+    transform:translateY(-2px);
+    box-shadow:var(--shadow);
 }
 
-.category:hover{
-  transform:translateY(-2px);
-  box-shadow:var(--shadow);
-  border-color:#bbb;
+.quick.primary{
+    background:var(--black);
+    color:#fff;
+    border-color:var(--black);
 }
 
-.cat-code{
-  font-size:23px;
-  font-weight:900;
+.quick .q-icon{
+    font-size:18px;
+    margin-bottom:15px;
 }
 
-.category h3{
-  margin:8px 0 5px;
-  font-size:17px;
+.quick strong{
+    display:block;
+    font-size:14px;
+    margin-bottom:5px;
 }
 
-.category p{
-  color:var(--muted);
-  margin:0;
-  font-size:13px;
-  line-height:1.5;
+.quick span{
+    color:#888;
+    font-size:10px;
 }
 
-/* FORM */
-
-.form-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:17px;
+.quick.primary span{
+    color:#aaa;
 }
 
-.full{grid-column:1/-1}
+/* =========================================================
+   PANELS
+========================================================= */
+
+.panel{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    margin-bottom:25px;
+    overflow:hidden;
+}
+
+.panel-head{
+    padding:21px 23px;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+}
+
+.panel-head h2{
+    font-size:17px;
+}
+
+.panel-head p{
+    color:#999;
+    font-size:10px;
+    margin-top:3px;
+}
+
+.panel-body{
+    padding:23px;
+}
+
+/* =========================================================
+   EDITOR
+========================================================= */
+
+.editor-grid{
+    display:grid;
+    grid-template-columns:1.4fr .8fr;
+    gap:25px;
+}
+
+.editor-left,
+.editor-right{
+    min-width:0;
+}
+
+.section-label{
+    color:#999;
+    font-size:9px;
+    letter-spacing:1.5px;
+    font-weight:900;
+    margin:25px 0 10px;
+}
+
+.section-label:first-child{
+    margin-top:0;
+}
+
+.upload-card{
+    border:1px dashed #cfcfcf;
+    border-radius:11px;
+    padding:18px;
+    background:#fafafa;
+}
+
+.upload-card strong{
+    display:block;
+    font-size:12px;
+    margin-bottom:4px;
+}
+
+.upload-card p{
+    color:#999;
+    font-size:10px;
+    line-height:1.6;
+    margin-bottom:12px;
+}
+
+.upload-card input{
+    width:100%;
+    font-size:11px;
+}
+
+.preview{
+    margin-top:12px;
+    border-radius:9px;
+    overflow:hidden;
+}
+
+.preview img{
+    display:block;
+    width:100%;
+    max-height:280px;
+    object-fit:cover;
+}
 
 .form-actions{
-  display:flex;
-  gap:9px;
-  flex-wrap:wrap;
+    display:flex;
+    gap:9px;
+    margin-top:25px;
 }
 
-.btn{
-  border:0;
-  border-radius:9px;
-  padding:10px 14px;
-  font-weight:800;
+.dark-btn,
+.light-btn,
+.danger-btn{
+    border:0;
+    border-radius:8px;
+    padding:12px 16px;
+    font-size:11px;
+    font-weight:900;
 }
 
-.btn-black{background:#111;color:#fff}
-.btn-green{background:#15803d;color:#fff}
-.btn-red{background:#b91c1c;color:#fff}
-.btn-gray{background:#f0f0f0;color:#111}
-.btn-blue{background:#2563eb;color:#fff}
-
-.toolbar{
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  margin-bottom:15px;
+.dark-btn{
+    background:var(--black);
+    color:#fff;
 }
 
-.toolbar input{max-width:450px}
-
-/* TABLE */
-
-.table-wrap{
-  overflow-x:auto;
+.light-btn{
+    background:#eee;
+    color:#111;
 }
 
-table{
-  width:100%;
-  border-collapse:collapse;
-  min-width:780px;
+.danger-btn{
+    background:#fff0f1;
+    color:var(--red);
 }
 
-th,td{
-  padding:13px 11px;
-  text-align:left;
-  border-bottom:1px solid var(--line);
-  vertical-align:middle;
+/* =========================================================
+   POSTS
+========================================================= */
+
+.post-toolbar{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    margin-bottom:18px;
 }
 
-th{
-  color:#6b7280;
-  font-size:12px;
-  text-transform:uppercase;
+.search-input{
+    flex:1;
 }
 
-td{
-  font-size:14px;
+.filter{
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:8px;
+    padding:11px;
+    font-size:11px;
+}
+
+.posts{
+    display:grid;
+    gap:10px;
+}
+
+.post{
+    display:grid;
+    grid-template-columns:58px 1fr auto;
+    align-items:center;
+    gap:15px;
+    padding:14px;
+    border:1px solid #e9e7e3;
+    border-radius:10px;
+}
+
+.post-thumb{
+    width:58px;
+    height:58px;
+    border-radius:8px;
+    overflow:hidden;
+    background:var(--black);
+    display:grid;
+    place-items:center;
+    color:#fff;
+    font-size:10px;
+    font-weight:900;
+}
+
+.post-thumb img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.post-info h3{
+    font-size:13px;
+    margin-bottom:5px;
+}
+
+.post-info p{
+    color:#999;
+    font-size:10px;
 }
 
 .badge{
-  display:inline-block;
-  padding:5px 9px;
-  border-radius:20px;
-  font-size:11px;
-  font-weight:800;
+    display:inline-block;
+    margin-left:6px;
+    padding:3px 7px;
+    border-radius:20px;
+    font-size:8px;
+    font-weight:900;
 }
 
-.badge-published{
-  background:#dcfce7;
-  color:#166534;
+.badge.published{
+    background:#eaf7f0;
+    color:var(--green);
 }
 
-.badge-draft{
-  background:#f3f4f6;
-  color:#4b5563;
+.badge.draft{
+    background:#f2f2f2;
+    color:#777;
 }
 
-.badge-cat{
-  background:#111;
-  color:#fff;
+.post-actions{
+    display:flex;
+    gap:6px;
 }
 
-.actions{
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
+.post-actions button{
+    border:1px solid #ddd;
+    background:#fff;
+    border-radius:6px;
+    padding:7px 9px;
+    font-size:9px;
+    font-weight:800;
 }
 
-/* GALLERY */
-
-.gallery-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
-  gap:17px;
+.post-actions .delete{
+    color:var(--red);
 }
 
-.gallery-item{
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:15px;
-  overflow:hidden;
+/* =========================================================
+   MOBILE
+========================================================= */
+
+.mobile-menu{
+    display:none;
 }
-
-.gallery-item img{
-  width:100%;
-  height:170px;
-  object-fit:cover;
-  display:block;
-}
-
-.gallery-info{
-  padding:13px;
-}
-
-.gallery-info h3{
-  margin:0 0 10px;
-  font-size:14px;
-}
-
-/* LOADER */
-
-#loader{
-  position:fixed;
-  inset:0;
-  background:rgba(255,255,255,.75);
-  backdrop-filter:blur(4px);
-  z-index:9999;
-  display:none;
-  align-items:center;
-  justify-content:center;
-}
-
-.spinner{
-  width:42px;
-  height:42px;
-  border:4px solid #ddd;
-  border-top-color:#111;
-  border-radius:50%;
-  animation:spin .7s linear infinite;
-}
-
-@keyframes spin{
-  to{transform:rotate(360deg)}
-}
-
-/* TOAST */
-
-#toast{
-  position:fixed;
-  right:22px;
-  bottom:22px;
-  background:#111;
-  color:#fff;
-  padding:13px 17px;
-  border-radius:10px;
-  z-index:10000;
-  display:none;
-  box-shadow:0 10px 30px rgba(0,0,0,.25);
-}
-
-/* RESPONSIVE */
 
 @media(max-width:1000px){
 
-  .stats{
-    grid-template-columns:repeat(2,1fr);
-  }
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
 
-  .categories{
-    grid-template-columns:repeat(2,1fr);
-  }
+    .quick-actions{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .editor-grid{
+        grid-template-columns:1fr;
+    }
+
 }
 
-@media(max-width:750px){
+@media(max-width:700px){
 
-  .sidebar{
-    transform:translateX(-100%);
+    .sidebar{
+        transform:translateX(-100%);
+        transition:.25s;
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+        width:100%;
+    }
+
+    .topbar{
+        padding:0 17px;
+    }
+
+    .mobile-menu{
+        display:block;
+        border:0;
+        background:transparent;
+        font-size:22px;
+        margin-right:10px;
+    }
+
+    .topbar-left{
+        display:flex;
+        align-items:center;
+    }
+
+    .site-btn{
+        display:none;
+    }
+
+    .content{
+        padding:24px 16px;
+    }
+
+    .welcome h1{
+        font-size:28px;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+        gap:9px;
+    }
+
+    .stat{
+        padding:16px;
+    }
+
+    .stat strong{
+        font-size:25px;
+    }
+
+    .quick-actions{
+        grid-template-columns:1fr;
+    }
+
+    .panel-head{
+        padding:17px;
+    }
+
+    .panel-body{
+        padding:17px;
+    }
+
+    .post{
+        grid-template-columns:45px 1fr;
+    }
+
+    .post-thumb{
+        width:45px;
+        height:45px;
+    }
+
+    .post-actions{
+        grid-column:2;
+    }
+
+    .post-toolbar{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .form-actions{
+        flex-direction:column;
+    }
+
+    .login-card{
+        padding:28px 22px;
+    }
+
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    z-index:9999;
+    background:var(--black);
+    color:#fff;
+    padding:13px 17px;
+    border-radius:8px;
+    font-size:11px;
+    box-shadow:var(--shadow);
+    transform:translateY(20px);
+    opacity:0;
+    pointer-events:none;
     transition:.25s;
-  }
-
-  .sidebar.open{
-    transform:translateX(0);
-  }
-
-  .main{
-    margin-left:0;
-  }
-
-  .menu-mobile{
-    display:block;
-  }
-
-  .admin-user{
-    display:none;
-  }
-
-  .content{
-    padding:17px;
-  }
-
-  .topbar{
-    padding:0 17px;
-  }
-
-  .form-grid{
-    grid-template-columns:1fr;
-  }
-
-  .full{
-    grid-column:auto;
-  }
 }
 
-@media(max-width:500px){
-
-  .stats{
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-  }
-
-  .stat{
-    padding:15px;
-  }
-
-  .stat strong{
-    font-size:24px;
-  }
-
-  .categories{
-    grid-template-columns:1fr;
-  }
-
-  .page-heading h1{
-    font-size:23px;
-  }
+.toast.show{
+    transform:translateY(0);
+    opacity:1;
 }
 </style>
 </head>
 
+
 <body>
 
-<!-- LOADER -->
-<div id="loader">
-  <div class="spinner"></div>
-</div>
 
-<div id="toast"></div>
+<!-- ======================================================
+     LOGIN
+======================================================= -->
 
+<section id="loginScreen" class="login-screen">
 
-<!-- ================= LOGIN ================= -->
+    <div class="login-card">
 
-<section id="loginPage">
+        <div class="logo">
+            SF
+        </div>
 
-  <div class="login-box">
+        <div class="login-kicker">
+            SHADAT FATIH / ADMIN
+        </div>
 
-    <div class="login-logo">SF</div>
+        <h1>
+            Welcome back.
+        </h1>
 
-    <h1>SHADAT FATIH</h1>
+        <p>
+            Sign in to manage notices, education updates,
+            images, PDFs and published content.
+        </p>
 
-    <div class="login-sub">
-      Secure Administration
+        <form id="loginForm">
+
+            <div class="field">
+
+                <label>
+                    ADMIN EMAIL
+                </label>
+
+                <input
+                    id="loginEmail"
+                    type="email"
+                    placeholder="admin@example.com"
+                    autocomplete="username"
+                    required
+                >
+
+            </div>
+
+            <div class="field">
+
+                <label>
+                    PASSWORD
+                </label>
+
+                <input
+                    id="loginPassword"
+                    type="password"
+                    placeholder="••••••••"
+                    autocomplete="current-password"
+                    required
+                >
+
+            </div>
+
+            <button
+                class="primary-btn full"
+                type="submit">
+
+                SIGN IN →
+
+            </button>
+
+            <div
+                id="loginMessage"
+                class="message">
+            </div>
+
+        </form>
+
     </div>
-
-    <div id="loginError" class="error hidden"></div>
-
-    <form id="loginForm">
-
-      <div class="field">
-        <label>Email</label>
-        <input id="loginEmail"
-               type="email"
-               placeholder="Admin email"
-               required>
-      </div>
-
-      <div class="field">
-        <label>Password</label>
-        <input id="loginPassword"
-               type="password"
-               placeholder="Password"
-               required>
-      </div>
-
-      <button class="login-btn">
-        🔐 Login to Admin
-      </button>
-
-    </form>
-
-  </div>
 
 </section>
 
 
-<!-- ================= ADMIN ================= -->
 
-<div id="adminPage">
+<!-- ======================================================
+     ADMIN APP
+======================================================= -->
 
-<!-- SIDEBAR -->
+<section id="adminApp"
+         class="app"
+         hidden>
 
-<aside class="sidebar" id="sidebar">
 
-  <div class="brand">
-    SHADAT <span>FATIH</span>
-  </div>
+    <!-- SIDEBAR -->
 
-  <div class="nav">
+    <aside id="sidebar"
+           class="sidebar">
 
-    <div class="nav-title">MAIN</div>
+        <div class="sidebar-logo">
 
-    <button class="active" data-page="dashboard">
-      📊 Dashboard
-    </button>
+            <strong>
+                <span>SHADAT</span> FATIH
+            </strong>
 
-    <button data-page="posts">
-      📝 Posts & Notices
-    </button>
-
-    <button data-page="categories">
-      📚 Categories
-    </button>
-
-    <div class="nav-title">MEDIA</div>
-
-    <button data-page="gallery">
-      🖼️ Gallery
-    </button>
-
-    <button data-page="pdf">
-      📄 PDF Documents
-    </button>
-
-  </div>
-
-  <button class="logout" id="logoutBtn">
-    🚪 Secure Logout
-  </button>
-
-</aside>
-
-
-<!-- MAIN -->
-
-<main class="main">
-
-<header class="topbar">
-
-  <div class="top-left">
-
-    <button class="menu-mobile" id="menuMobile">
-      ☰
-    </button>
-
-    <strong id="pageTitle">Dashboard</strong>
-
-  </div>
-
-  <div class="admin-user" id="adminEmail"></div>
-
-</header>
-
-
-<div class="content">
-
-
-<!-- ================= DASHBOARD ================= -->
-
-<section class="page active" id="dashboard">
-
-  <div class="page-heading">
-
-    <h1>Dashboard</h1>
-
-    <p>
-      Manage your education website from one place.
-    </p>
-
-  </div>
-
-
-  <div class="stats">
-
-    <div class="stat">
-
-      <div class="stat-top">
-        <small>Total Posts</small>
-        <div class="stat-icon">📝</div>
-      </div>
-
-      <strong id="totalPosts">0</strong>
-
-    </div>
-
-
-    <div class="stat">
-
-      <div class="stat-top">
-        <small>Published</small>
-        <div class="stat-icon">🌐</div>
-      </div>
-
-      <strong id="publishedPosts">0</strong>
-
-    </div>
-
-
-    <div class="stat">
-
-      <div class="stat-top">
-        <small>Drafts</small>
-        <div class="stat-icon">📝</div>
-      </div>
-
-      <strong id="draftPosts">0</strong>
-
-    </div>
-
-
-    <div class="stat">
-
-      <div class="stat-top">
-        <small>Gallery</small>
-        <div class="stat-icon">🖼️</div>
-      </div>
-
-      <strong id="galleryCount">0</strong>
-
-    </div>
-
-  </div>
-
-
-  <div class="card">
-
-    <h2>📚 Main Categories</h2>
-
-    <div class="categories">
-
-      <div class="category" onclick="selectCategory('NU')">
-        <div class="cat-code">NU</div>
-        <h3>National University</h3>
-        <p>ভর্তি, পরীক্ষা, ফরম পূরণ, ফলাফল ও নোটিশ।</p>
-      </div>
-
-      <div class="category" onclick="selectCategory('CB')">
-        <div class="cat-code">CB</div>
-        <h3>Chittagong Education Board</h3>
-        <p>SSC, HSC ও বোর্ডের গুরুত্বপূর্ণ আপডেট।</p>
-      </div>
-
-      <div class="category" onclick="selectCategory('AD')">
-        <div class="cat-code">AD</div>
-        <h3>Admissions</h3>
-        <p>Admission ও আবেদন সংক্রান্ত তথ্য।</p>
-      </div>
-
-      <div class="category" onclick="selectCategory('EX')">
-        <div class="cat-code">EX</div>
-        <h3>Exam & Routine</h3>
-        <p>পরীক্ষা, সময়সূচি ও রুটিন।</p>
-      </div>
-
-      <div class="category" onclick="selectCategory('RS')">
-        <div class="cat-code">RS</div>
-        <h3>Results</h3>
-        <p>SSC, HSC ও বিশ্ববিদ্যালয়ের ফলাফল।</p>
-      </div>
-
-      <div class="category" onclick="selectCategory('NT')">
-        <div class="cat-code">NT</div>
-        <h3>Notice</h3>
-        <p>গুরুত্বপূর্ণ শিক্ষা নোটিশ।</p>
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- ================= POSTS ================= -->
-
-<section class="page" id="posts">
-
-  <div class="page-heading">
-
-    <h1>📝 Posts & Notices</h1>
-
-    <p>
-      Create, edit, publish, draft and delete website posts.
-    </p>
-
-  </div>
-
-
-  <div class="card">
-
-    <h2 id="postFormTitle">
-      ➕ Create New Post
-    </h2>
-
-    <form id="postForm">
-
-      <input type="hidden" id="editId">
-
-      <div class="form-grid">
-
-        <div class="field">
-
-          <label>Category</label>
-
-          <select id="postCategory" required>
-
-            <option value="NU">
-              NU — National University
-            </option>
-
-            <option value="CB">
-              CB — Chittagong Education Board
-            </option>
-
-            <option value="AD">
-              AD — Admissions
-            </option>
-
-            <option value="EX">
-              EX — Exam & Routine
-            </option>
-
-            <option value="RS">
-              RS — Results
-            </option>
-
-            <option value="NT">
-              NT — Notice
-            </option>
-
-          </select>
+            <small>
+                ADMINISTRATOR
+            </small>
 
         </div>
 
 
-        <div class="field">
-
-          <label>Status</label>
-
-          <select id="postStatus">
-
-            <option value="published">
-              🌐 Published
-            </option>
-
-            <option value="draft">
-              📝 Draft
-            </option>
-
-          </select>
-
+        <div class="nav-title">
+            WORKSPACE
         </div>
 
 
-        <div class="field full">
+        <button
+            class="nav-item active"
+            data-section="dashboardSection">
 
-          <label>Title</label>
+            <span class="nav-icon">⌂</span>
 
-          <input id="postTitle"
-                 placeholder="Write post title..."
-                 required>
+            Dashboard
 
-        </div>
-
-
-        <div class="field full">
-
-          <label>Content</label>
-
-          <textarea id="postContent"
-                    placeholder="Write your notice or update..."
-                    required></textarea>
-
-        </div>
-
-
-        <div class="field">
-
-          <label>🖼️ Image</label>
-
-          <input id="postImage"
-                 type="file"
-                 accept="image/*">
-
-        </div>
-
-
-        <div class="field">
-
-          <label>📄 PDF</label>
-
-          <input id="postPdf"
-                 type="file"
-                 accept="application/pdf">
-
-        </div>
-
-      </div>
-
-
-      <div class="form-actions">
-
-        <button class="btn btn-black">
-          💾 Save Post
         </button>
 
-        <button type="button"
-                class="btn btn-gray hidden"
-                id="cancelEdit">
-          Cancel Edit
+
+        <button
+            class="nav-item"
+            data-section="editorSection">
+
+            <span class="nav-icon">＋</span>
+
+            New Post
+
         </button>
 
-      </div>
 
-    </form>
+        <button
+            class="nav-item"
+            data-section="postsSection">
 
-  </div>
+            <span class="nav-icon">▤</span>
+
+            All Posts
+
+        </button>
 
 
-  <div class="card">
+        <div class="nav-title">
+            WEBSITE
+        </div>
 
-    <div class="toolbar">
 
-      <input id="searchPosts"
-             placeholder="🔍 Search title, category or content...">
+        <a
+            href="index.html"
+            class="nav-item"
+            style="text-decoration:none">
 
-      <select id="filterCategory"
-              style="max-width:220px">
+            <span class="nav-icon">↗</span>
 
-        <option value="">All Categories</option>
-        <option value="NU">NU</option>
-        <option value="CB">CB</option>
-        <option value="AD">AD</option>
-        <option value="EX">EX</option>
-        <option value="RS">RS</option>
-        <option value="NT">NT</option>
+            View Website
 
-      </select>
+        </a>
+
+
+        <div class="sidebar-bottom">
+
+            <button
+                id="logoutBtn"
+                class="logout">
+
+                Logout
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button
+                    id="mobileMenu"
+                    class="mobile-menu">
+
+                    ☰
+
+                </button>
+
+                <div>
+
+                    <div
+                        id="pageTitle"
+                        class="page-title">
+
+                        Dashboard
+
+                    </div>
+
+                    <div class="page-subtitle">
+
+                        Shadat Fatih / Content Management
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="top-actions">
+
+                <a
+                    href="index.html"
+                    class="site-btn">
+
+                    View Website →
+
+                </a>
+
+                <div
+                    id="profile"
+                    class="profile">
+
+                    SF
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- CONTENT -->
+
+        <main class="content">
+
+
+            <!-- DASHBOARD -->
+
+            <section
+                id="dashboardSection"
+                class="admin-section">
+
+
+                <div class="welcome">
+
+                    <div class="kicker">
+                        ADMIN DASHBOARD
+                    </div>
+
+                    <h1>
+                        Manage everything.
+                    </h1>
+
+                    <p>
+                        Publish and manage your education content
+                        from one premium workspace.
+                    </p>
+
+                </div>
+
+
+                <!-- STATS -->
+
+                <div class="stats">
+
+                    <div class="stat">
+
+                        <div class="stat-top">
+
+                            <span class="stat-label">
+                                TOTAL POSTS
+                            </span>
+
+                            <span class="stat-icon">
+                                ◉
+                            </span>
+
+                        </div>
+
+                        <strong id="totalPosts">
+                            0
+                        </strong>
+
+                        <small>
+                            All content
+                        </small>
+
+                    </div>
+
+
+                    <div class="stat">
+
+                        <div class="stat-top">
+
+                            <span class="stat-label">
+                                PUBLISHED
+                            </span>
+
+                            <span class="stat-icon">
+                                ✓
+                            </span>
+
+                        </div>
+
+                        <strong id="publishedPosts">
+                            0
+                        </strong>
+
+                        <small>
+                            Live on website
+                        </small>
+
+                    </div>
+
+
+                    <div class="stat">
+
+                        <div class="stat-top">
+
+                            <span class="stat-label">
+                                DRAFTS
+                            </span>
+
+                            <span class="stat-icon">
+                                ◌
+                            </span>
+
+                        </div>
+
+                        <strong id="draftPosts">
+                            0
+                        </strong>
+
+                        <small>
+                            Private content
+                        </small>
+
+                    </div>
+
+
+                    <div class="stat">
+
+                        <div class="stat-top">
+
+                            <span class="stat-label">
+                                MEDIA
+                            </span>
+
+                            <span class="stat-icon">
+                                ▧
+                            </span>
+
+                        </div>
+
+                        <strong id="mediaCount">
+                            0
+                        </strong>
+
+                        <small>
+                            Images + PDFs
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- QUICK ACTIONS -->
+
+                <div class="quick-actions">
+
+                    <button
+                        class="quick primary"
+                        onclick="openEditor()">
+
+                        <div class="q-icon">
+                            ＋
+                        </div>
+
+                        <strong>
+                            Create New Post
+                        </strong>
+
+                        <span>
+                            Publish a notice or education update
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="quick"
+                        onclick="showSection('postsSection')">
+
+                        <div class="q-icon">
+                            ▤
+                        </div>
+
+                        <strong>
+                            Manage Posts
+                        </strong>
+
+                        <span>
+                            Edit, publish or delete content
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="quick"
+                        onclick="openEditor()">
+
+                        <div class="q-icon">
+                            ▧
+                        </div>
+
+                        <strong>
+                            Upload Media
+                        </strong>
+
+                        <span>
+                            Add image or PDF with a post
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+                <!-- RECENT -->
+
+                <div class="panel">
+
+                    <div class="panel-head">
+
+                        <div>
+
+                            <h2>
+                                Recent Posts
+                            </h2>
+
+                            <p>
+                                Your latest content
+                            </p>
+
+                        </div>
+
+                        <button
+                            class="light-btn"
+                            onclick="showSection('postsSection')">
+
+                            View all
+
+                        </button>
+
+                    </div>
+
+                    <div
+                        id="recentPosts"
+                        class="panel-body posts">
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- EDITOR -->
+
+            <section
+                id="editorSection"
+                class="admin-section"
+                hidden>
+
+
+                <div class="welcome">
+
+                    <div class="kicker">
+                        CONTENT STUDIO
+                    </div>
+
+                    <h1>
+                        Create a post.
+                    </h1>
+
+                    <p>
+                        Publish notices, updates, images and PDFs.
+                    </p>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-head">
+
+                        <div>
+
+                            <h2 id="editorHeading">
+                                New Post
+                            </h2>
+
+                            <p>
+                                Complete the information below
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel-body">
+
+                        <form id="postForm">
+
+                            <input
+                                type="hidden"
+                                id="editingPostId"
+                            >
+
+
+                            <div class="editor-grid">
+
+
+                                <!-- LEFT -->
+
+                                <div class="editor-left">
+
+                                    <div class="section-label">
+                                        BASIC INFORMATION
+                                    </div>
+
+
+                                    <div class="field">
+
+                                        <label>
+                                            TITLE
+                                        </label>
+
+                                        <input
+                                            id="postTitle"
+                                            type="text"
+                                            placeholder="নোটিশ বা আপডেটের শিরোনাম"
+                                            required
+                                        >
+
+                                    </div>
+
+
+                                    <div class="field">
+
+                                        <label>
+                                            CATEGORY
+                                        </label>
+
+                                        <select
+                                            id="postCategory"
+                                            required>
+
+                                            <option value="">
+                                                Select category
+                                            </option>
+
+                                            <option value="nu">
+                                                National University
+                                            </option>
+
+                                            <option value="board">
+                                                Chattogram Board
+                                            </option>
+
+                                            <option value="admission">
+                                                Admission
+                                            </option>
+
+                                            <option value="exam">
+                                                Exam & Routine
+                                            </option>
+
+                                            <option value="result">
+                                                Result
+                                            </option>
+
+                                            <option value="education">
+                                                Education Update
+                                            </option>
+
+                                            <option value="notice">
+                                                Notice
+                                            </option>
+
+                                        </select>
+
+                                    </div>
+
+
+                                    <div class="field">
+
+                                        <label>
+                                            DATE
+                                        </label>
+
+                                        <input
+                                            id="postDate"
+                                            type="date"
+                                            required
+                                        >
+
+                                    </div>
+
+
+                                    <div class="field">
+
+                                        <label>
+                                            SHORT DESCRIPTION
+                                        </label>
+
+                                        <textarea
+                                            id="postDescription"
+                                            placeholder="কার্ডে দেখানো সংক্ষিপ্ত বিবরণ..."
+                                            required>
+                                        </textarea>
+
+                                    </div>
+
+
+                                    <div class="field">
+
+                                        <label>
+                                            FULL CONTENT
+                                        </label>
+
+                                        <textarea
+                                            id="postContent"
+                                            placeholder="নোটিশের সম্পূর্ণ বিস্তারিত তথ্য এখানে লিখুন...">
+                                        </textarea>
+
+                                    </div>
+
+
+                                    <div class="field">
+
+                                        <label>
+                                            OFFICIAL SOURCE URL
+                                        </label>
+
+                                        <input
+                                            id="officialUrl"
+                                            type="url"
+                                            placeholder="https://..."
+                                        >
+
+                                    </div>
+
+                                </div>
+
+
+
+                                <!-- RIGHT -->
+
+                                <div class="editor-right">
+
+                                    <div class="section-label">
+                                        MEDIA
+                                    </div>
+
+
+                                    <div class="upload-card">
+
+                                        <strong>
+                                            Cover Image
+                                        </strong>
+
+                                        <p>
+                                            ফোনের Gallery থেকে JPG,
+                                            PNG অথবা WEBP নির্বাচন করুন।
+                                        </p>
+
+                                        <input
+                                            id="postImage"
+                                            type="file"
+                                            accept="image/*"
+                                        >
+
+                                        <div
+                                            id="imagePreview"
+                                            class="preview"
+                                            hidden>
+
+                                            <img
+                                                id="previewImage"
+                                                alt="Preview">
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <br>
+
+
+                                    <div class="upload-card">
+
+                                        <strong>
+                                            Notice PDF
+                                        </strong>
+
+                                        <p>
+                                            প্রয়োজন হলে মূল notice PDF
+                                            upload করুন।
+                                        </p>
+
+                                        <input
+                                            id="postPdf"
+                                            type="file"
+                                            accept="application/pdf"
+                                        >
+
+                                    </div>
+
+
+                                    <div class="section-label">
+                                        PUBLISHING
+                                    </div>
+
+
+                                    <div class="upload-card">
+
+                                        <label
+                                            style="display:flex;gap:9px;align-items:center;font-size:12px;font-weight:800">
+
+                                            <input
+                                                id="postPublished"
+                                                type="checkbox"
+                                                checked
+                                            >
+
+                                            Publish immediately
+
+                                        </label>
+
+                                        <p style="margin-top:8px;margin-bottom:0">
+
+                                            Uncheck করলে post Draft হিসেবে
+                                            থাকবে।
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="form-actions">
+
+                                <button
+                                    class="primary-btn"
+                                    type="submit">
+
+                                    SAVE & PUBLISH →
+
+                                </button>
+
+
+                                <button
+                                    id="draftBtn"
+                                    class="dark-btn"
+                                    type="button">
+
+                                    SAVE DRAFT
+
+                                </button>
+
+
+                                <button
+                                    id="cancelBtn"
+                                    class="light-btn"
+                                    type="button">
+
+                                    CANCEL
+
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- POSTS -->
+
+            <section
+                id="postsSection"
+                class="admin-section"
+                hidden>
+
+
+                <div class="welcome">
+
+                    <div class="kicker">
+                        CONTENT MANAGEMENT
+                    </div>
+
+                    <h1>
+                        All posts.
+                    </h1>
+
+                    <p>
+                        Search, edit, publish or remove your content.
+                    </p>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-head">
+
+                        <div>
+
+                            <h2>
+                                Post Library
+                            </h2>
+
+                            <p>
+                                All website content
+                            </p>
+
+                        </div>
+
+                        <button
+                            class="primary-btn"
+                            onclick="openEditor()">
+
+                            + New Post
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="panel-body">
+
+                        <div class="post-toolbar">
+
+                            <input
+                                id="searchPosts"
+                                class="search-input"
+                                type="search"
+                                placeholder="নোটিশ খুঁজুন..."
+                            >
+
+
+                            <select
+                                id="filterPosts"
+                                class="filter">
+
+                                <option value="all">
+                                    All
+                                </option>
+
+                                <option value="published">
+                                    Published
+                                </option>
+
+                                <option value="draft">
+                                    Drafts
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div
+                            id="allPosts"
+                            class="posts">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+        </main>
 
     </div>
-
-
-    <div class="table-wrap">
-
-      <table>
-
-        <thead>
-
-          <tr>
-            <th>Category</th>
-            <th>Title</th>
-            <th>Status</th>
-            <th>Date</th>
-            <th>Action</th>
-          </tr>
-
-        </thead>
-
-        <tbody id="postsTable"></tbody>
-
-      </table>
-
-    </div>
-
-  </div>
 
 </section>
 
 
-<!-- ================= CATEGORIES ================= -->
 
-<section class="page" id="categories">
-
-  <div class="page-heading">
-
-    <h1>📚 Main Categories</h1>
-
-    <p>
-      Manage posts under each education category.
-    </p>
-
-  </div>
-
-
-  <div class="categories">
-
-    <div class="category" onclick="selectCategory('NU')">
-      <div class="cat-code">NU</div>
-      <h3>National University</h3>
-      <p>ভর্তি, পরীক্ষা, ফরম পূরণ, ফলাফল ও নোটিশ।</p>
-    </div>
-
-    <div class="category" onclick="selectCategory('CB')">
-      <div class="cat-code">CB</div>
-      <h3>Chittagong Education Board</h3>
-      <p>SSC, HSC ও বোর্ডের গুরুত্বপূর্ণ আপডেট।</p>
-    </div>
-
-    <div class="category" onclick="selectCategory('AD')">
-      <div class="cat-code">AD</div>
-      <h3>Admissions</h3>
-      <p>Admission ও আবেদন সংক্রান্ত তথ্য।</p>
-    </div>
-
-    <div class="category" onclick="selectCategory('EX')">
-      <div class="cat-code">EX</div>
-      <h3>Exam & Routine</h3>
-      <p>পরীক্ষা, সময়সূচি ও রুটিন।</p>
-    </div>
-
-    <div class="category" onclick="selectCategory('RS')">
-      <div class="cat-code">RS</div>
-      <h3>Results</h3>
-      <p>SSC, HSC ও বিশ্ববিদ্যালয়ের ফলাফল।</p>
-    </div>
-
-    <div class="category" onclick="selectCategory('NT')">
-      <div class="cat-code">NT</div>
-      <h3>Notice</h3>
-      <p>গুরুত্বপূর্ণ শিক্ষা নোটিশ।</p>
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- ================= GALLERY ================= -->
-
-<section class="page" id="gallery">
-
-  <div class="page-heading">
-
-    <h1>🖼️ Gallery</h1>
-
-    <p>
-      Upload and manage website images.
-    </p>
-
-  </div>
-
-
-  <div class="card">
-
-    <form id="galleryForm">
-
-      <div class="field">
-
-        <label>Image Title</label>
-
-        <input id="galleryTitle"
-               placeholder="Image title..."
-               required>
-
-      </div>
-
-
-      <div class="field">
-
-        <label>Select Image</label>
-
-        <input id="galleryFile"
-               type="file"
-               accept="image/*"
-               required>
-
-      </div>
-
-
-      <button class="btn btn-black">
-        🖼️ Upload Image
-      </button>
-
-    </form>
-
-  </div>
-
-
-  <div class="card">
-
-    <h2>Gallery Images</h2>
-
-    <div class="gallery-grid"
-         id="galleryGrid"></div>
-
-  </div>
-
-</section>
-
-
-<!-- ================= PDF ================= -->
-
-<section class="page" id="pdf">
-
-  <div class="page-heading">
-
-    <h1>📄 PDF Documents</h1>
-
-    <p>
-      Upload and manage education documents.
-    </p>
-
-  </div>
-
-
-  <div class="card">
-
-    <form id="pdfForm">
-
-      <div class="field">
-
-        <label>PDF Title</label>
-
-        <input id="pdfTitle"
-               placeholder="Document title..."
-               required>
-
-      </div>
-
-
-      <div class="field">
-
-        <label>PDF File</label>
-
-        <input id="pdfFile"
-               type="file"
-               accept="application/pdf"
-               required>
-
-      </div>
-
-
-      <div class="field">
-
-        <label>Status</label>
-
-        <select id="pdfStatus">
-
-          <option value="published">
-            🌐 Published
-          </option>
-
-          <option value="draft">
-            📝 Draft
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <button class="btn btn-black">
-        📄 Upload PDF
-      </button>
-
-    </form>
-
-  </div>
-
-
-  <div class="card">
-
-    <h2>Documents</h2>
-
-    <div class="table-wrap">
-
-      <table>
-
-        <thead>
-
-          <tr>
-            <th>Title</th>
-            <th>Status</th>
-            <th>Date</th>
-            <th>Open</th>
-            <th>Delete</th>
-          </tr>
-
-        </thead>
-
-        <tbody id="pdfTable"></tbody>
-
-      </table>
-
-    </div>
-
-  </div>
-
-</section>
-
-
+<div
+    id="toast"
+    class="toast">
 </div>
-</main>
 
-</div>
 
 
 <script>
 
-/* =====================================================
+/* =========================================================
    SUPABASE CONFIG
-===================================================== */
+   নিজের Project URL + Publishable/anon key বসাও
+========================================================= */
 
 const SUPABASE_URL =
-"https://ymwhodckmbybccufzjot.supabase.co";
+    "YOUR_SUPABASE_URL";
 
-const SUPABASE_ANON_KEY =
-"sb_publishable_u31olXCxIcSsMdUeyyt5UQ_YeCWKToH";
+const SUPABASE_KEY =
+    "YOUR_SUPABASE_PUBLISHABLE_KEY";
 
-const GALLERY_BUCKET = "post-images";
-const PDF_BUCKET = "post-pdfs";
 
-const db = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY,
-  {
-    auth:{
-      persistSession:true,
-      autoRefreshToken:true
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+let allPosts = [];
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const loginScreen =
+    document.getElementById("loginScreen");
+
+const adminApp =
+    document.getElementById("adminApp");
+
+const loginForm =
+    document.getElementById("loginForm");
+
+const loginMessage =
+    document.getElementById("loginMessage");
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+loginForm.addEventListener(
+    "submit",
+    async function(e){
+
+        e.preventDefault();
+
+        loginMessage.textContent =
+            "Signing in...";
+
+
+        const email =
+            document
+                .getElementById("loginEmail")
+                .value
+                .trim();
+
+
+        const password =
+            document
+                .getElementById("loginPassword")
+                .value;
+
+
+        const {
+            error
+        } =
+            await supabaseClient.auth
+                .signInWithPassword({
+                    email,
+                    password
+                });
+
+
+        if(error){
+
+            loginMessage.textContent =
+                error.message;
+
+            return;
+
+        }
+
+        loginMessage.textContent = "";
+
+        showApp();
+
     }
-  }
 );
 
 
-/* =====================================================
-   HELPERS
-===================================================== */
-
-const $ = id => document.getElementById(id);
-
-function showLoader(){
-  $("loader").style.display="flex";
-}
-
-function hideLoader(){
-  $("loader").style.display="none";
-}
-
-function toast(message){
-  $("toast").textContent=message;
-  $("toast").style.display="block";
-
-  setTimeout(()=>{
-    $("toast").style.display="none";
-  },3000);
-}
-
-function escapeHTML(value){
-
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
-function formatDate(value){
-
-  if(!value)return "";
-
-  return new Date(value).toLocaleDateString(
-    "en-BD",
-    {
-      year:"numeric",
-      month:"short",
-      day:"numeric"
-    }
-  );
-
-}
-
-
-/* =====================================================
-   AUTH
-===================================================== */
+/* =========================================================
+   SESSION
+========================================================= */
 
 async function checkSession(){
 
-  const {data} =
-    await db.auth.getSession();
-
-  if(data.session){
-
-    openAdmin(data.session);
-
-  }else{
-
-    $("loginPage").style.display="flex";
-
-  }
-
-}
+    const {
+        data
+    } =
+        await supabaseClient.auth
+            .getSession();
 
 
-$("loginForm").addEventListener(
-  "submit",
-  async event => {
+    if(data.session){
 
-    event.preventDefault();
-
-    showLoader();
-
-    $("loginError").classList.add("hidden");
-
-    try{
-
-      const email =
-        $("loginEmail").value.trim();
-
-      const password =
-        $("loginPassword").value;
-
-      const {data,error} =
-        await db.auth.signInWithPassword({
-          email,
-          password
-        });
-
-      if(error)throw error;
-
-      openAdmin(data.session);
-
-      toast("Login successful");
-
-    }catch(error){
-
-      $("loginError").textContent =
-        error.message;
-
-      $("loginError")
-        .classList.remove("hidden");
-
-    }finally{
-
-      hideLoader();
+        showApp();
 
     }
 
-  }
-);
+}
 
 
-async function openAdmin(session){
+checkSession();
 
-  $("loginPage").style.display="none";
-  $("adminPage").style.display="block";
 
-  $("adminEmail").textContent =
-    session.user.email;
+/* =========================================================
+   SHOW APP
+========================================================= */
 
-  await loadEverything();
+async function showApp(){
+
+    loginScreen.hidden = true;
+
+    adminApp.hidden = false;
+
+    await loadPosts();
 
 }
 
 
-$("logoutBtn").onclick =
-  async()=>{
-
-    if(!confirm("Logout from Admin Panel?"))
-      return;
-
-    showLoader();
-
-    await db.auth.signOut({
-      scope:"local"
-    });
-
-    location.reload();
-
-  };
-
-
-/* =====================================================
-   NAVIGATION
-===================================================== */
-
-const pageNames = {
-
-  dashboard:"Dashboard",
-  posts:"Posts & Notices",
-  categories:"Categories",
-  gallery:"Gallery",
-  pdf:"PDF Documents"
-
-};
-
+/* =========================================================
+   LOGOUT
+========================================================= */
 
 document
-.querySelectorAll(".nav button[data-page]")
-.forEach(button=>{
+    .getElementById("logoutBtn")
+    .addEventListener(
+        "click",
+        async function(){
 
-  button.addEventListener("click",()=>{
+            await supabaseClient.auth.signOut();
 
-    const page =
-      button.dataset.page;
+            adminApp.hidden = true;
 
-    document
-      .querySelectorAll(".nav button")
-      .forEach(x=>
-        x.classList.remove("active")
-      );
+            loginScreen.hidden = false;
 
-    button.classList.add("active");
-
-    document
-      .querySelectorAll(".page")
-      .forEach(x=>
-        x.classList.remove("active")
-      );
-
-    $(page).classList.add("active");
-
-    $("pageTitle").textContent =
-      pageNames[page];
-
-    $("sidebar").classList.remove("open");
-
-  });
-
-});
+        }
+    );
 
 
-$("menuMobile").onclick=()=>{
-  $("sidebar").classList.toggle("open");
-};
+/* =========================================================
+   NAVIGATION
+========================================================= */
 
+document
+    .querySelectorAll(".nav-item[data-section]")
+    .forEach(function(button){
 
-/* =====================================================
-   POSTS
-===================================================== */
+        button.addEventListener(
+            "click",
+            function(){
 
-let allPosts=[];
+                showSection(
+                    this.dataset.section
+                );
 
-
-async function loadPosts(){
-
-  const {data,error} =
-    await db
-      .from("public_posts")
-      .select("*")
-      .order("created_at",{ascending:false});
-
-  if(error){
-
-    console.error(error);
-
-    toast(error.message);
-
-    return;
-
-  }
-
-  allPosts=data || [];
-
-  renderPosts(allPosts);
-
-}
-
-
-function renderPosts(posts){
-
-  const table =
-    $("postsTable");
-
-  table.innerHTML="";
-
-  if(!posts.length){
-
-    table.innerHTML=`
-      <tr>
-        <td colspan="5"
-            style="text-align:center;color:#777;padding:30px">
-          No posts found.
-        </td>
-      </tr>
-    `;
-
-    return;
-
-  }
-
-
-  posts.forEach(post=>{
-
-    table.innerHTML += `
-
-      <tr>
-
-        <td>
-          <span class="badge badge-cat">
-            ${escapeHTML(post.category)}
-          </span>
-        </td>
-
-        <td>
-          <strong>
-            ${escapeHTML(post.title)}
-          </strong>
-        </td>
-
-        <td>
-
-          <span class="badge ${
-            post.status==="published"
-              ? "badge-published"
-              : "badge-draft"
-          }">
-
-            ${
-              post.status==="published"
-                ? "Published"
-                : "Draft"
             }
-
-          </span>
-
-        </td>
-
-        <td>
-          ${formatDate(post.created_at)}
-        </td>
-
-        <td>
-
-          <div class="actions">
-
-            <button
-              class="btn btn-gray"
-              onclick="editPost('${post.id}')">
-
-              ✏️ Edit
-
-            </button>
-
-            <button
-              class="btn btn-red"
-              onclick="deletePost('${post.id}')">
-
-              🗑️ Delete
-
-            </button>
-
-          </div>
-
-        </td>
-
-      </tr>
-
-    `;
-
-  });
-
-}
-
-
-function filterPosts(){
-
-  const search =
-    $("searchPosts").value
-      .toLowerCase()
-      .trim();
-
-  const category =
-    $("filterCategory").value;
-
-  const filtered =
-    allPosts.filter(post=>{
-
-      const matchesSearch =
-        !search ||
-        String(post.title||"")
-          .toLowerCase()
-          .includes(search) ||
-        String(post.content||"")
-          .toLowerCase()
-          .includes(search) ||
-        String(post.category||"")
-          .toLowerCase()
-          .includes(search);
-
-      const matchesCategory =
-        !category ||
-        post.category===category;
-
-      return matchesSearch &&
-             matchesCategory;
+        );
 
     });
 
-  renderPosts(filtered);
+
+function showSection(sectionId){
+
+    document
+        .querySelectorAll(".admin-section")
+        .forEach(
+            section =>
+                section.hidden = true
+        );
+
+
+    const target =
+        document.getElementById(sectionId);
+
+
+    if(target){
+
+        target.hidden = false;
+
+    }
+
+
+    document
+        .querySelectorAll(".nav-item[data-section]")
+        .forEach(function(item){
+
+            item.classList.toggle(
+                "active",
+                item.dataset.section === sectionId
+            );
+
+        });
+
+
+    const titles = {
+
+        dashboardSection:
+            "Dashboard",
+
+        editorSection:
+            "Content Studio",
+
+        postsSection:
+            "Post Library"
+
+    };
+
+
+    document
+        .getElementById("pageTitle")
+        .textContent =
+            titles[sectionId] || "Admin";
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
 
 }
 
 
-$("searchPosts").oninput =
-  filterPosts;
+/* =========================================================
+   OPEN EDITOR
+========================================================= */
 
-$("filterCategory").onchange =
-  filterPosts;
+function openEditor(){
+
+    resetEditor();
+
+    showSection("editorSection");
+
+}
 
 
-/* =====================================================
-   SELECT CATEGORY
-===================================================== */
+window.openEditor = openEditor;
 
-window.selectCategory =
-function(category){
 
-  document
-    .querySelectorAll(".page")
-    .forEach(x=>
-      x.classList.remove("active")
+/* =========================================================
+   MOBILE MENU
+========================================================= */
+
+document
+    .getElementById("mobileMenu")
+    .addEventListener(
+        "click",
+        function(){
+
+            document
+                .getElementById("sidebar")
+                .classList.toggle("open");
+
+        }
     );
 
-  $("posts").classList.add("active");
 
-  document
-    .querySelectorAll(".nav button")
-    .forEach(x=>
-      x.classList.remove("active")
+/* =========================================================
+   IMAGE PREVIEW
+========================================================= */
+
+document
+    .getElementById("postImage")
+    .addEventListener(
+        "change",
+        function(){
+
+            const file =
+                this.files[0];
+
+            const preview =
+                document
+                    .getElementById("imagePreview");
+
+            const image =
+                document
+                    .getElementById("previewImage");
+
+
+            if(!file){
+
+                preview.hidden = true;
+
+                return;
+
+            }
+
+
+            if(!file.type.startsWith("image/")){
+
+                toast(
+                    "Please select an image file."
+                );
+
+                this.value = "";
+
+                return;
+
+            }
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function(e){
+
+                    image.src =
+                        e.target.result;
+
+                    preview.hidden = false;
+
+                };
+
+
+            reader.readAsDataURL(file);
+
+        }
     );
 
-  document
-    .querySelector(
-      '.nav button[data-page="posts"]'
-    )
-    .classList.add("active");
 
-  $("pageTitle").textContent =
-    category+" Posts";
+/* =========================================================
+   UPLOAD
+========================================================= */
 
-  $("filterCategory").value =
-    category;
+async function uploadFile(
+    file,
+    bucket
+){
 
-  filterPosts();
+    if(!file){
 
-};
+        return null;
 
-
-/* =====================================================
-   CREATE / UPDATE POST
-===================================================== */
-
-$("postForm").addEventListener(
-  "submit",
-  async event=>{
-
-    event.preventDefault();
-
-    showLoader();
-
-    try{
-
-      const id =
-        $("editId").value;
-
-      const title =
-        $("postTitle").value.trim();
-
-      const content =
-        $("postContent").value.trim();
-
-      const category =
-        $("postCategory").value;
-
-      const status =
-        $("postStatus").value;
-
-      const imageFile =
-        $("postImage").files[0];
-
-      const pdfFile =
-        $("postPdf").files[0];
+    }
 
 
-      let image_url=null;
-      let pdf_url=null;
-
-
-      /* IMAGE */
-
-      if(imageFile){
-
-        const extension =
-          imageFile.name
+    const extension =
+        file.name
             .split(".")
             .pop()
             .toLowerCase();
 
-        const path =
-          `posts/${crypto.randomUUID()}.${extension}`;
 
-        const {error} =
-          await db.storage
-            .from(GALLERY_BUCKET)
+    const fileName =
+        Date.now()
+        + "-"
+        + crypto.randomUUID()
+        + "."
+        + extension;
+
+
+    const {
+        error
+    } =
+        await supabaseClient.storage
+            .from(bucket)
             .upload(
-              path,
-              imageFile,
-              {
-                contentType:imageFile.type,
-                upsert:false
-              }
+                fileName,
+                file,
+                {
+                    cacheControl:"3600",
+                    upsert:false
+                }
             );
 
-        if(error)throw error;
 
-        const {data} =
-          db.storage
-            .from(GALLERY_BUCKET)
-            .getPublicUrl(path);
+    if(error){
 
-        image_url =
-          data.publicUrl;
-
-      }
-
-
-      /* PDF */
-
-      if(pdfFile){
-
-        if(
-          pdfFile.type !==
-          "application/pdf"
-        ){
-
-          throw new Error(
-            "Only PDF files are allowed."
-          );
-
-        }
-
-        const path =
-          `posts/${crypto.randomUUID()}.pdf`;
-
-        const {error} =
-          await db.storage
-            .from(PDF_BUCKET)
-            .upload(
-              path,
-              pdfFile,
-              {
-                contentType:"application/pdf",
-                upsert:false
-              }
-            );
-
-        if(error)throw error;
-
-        const {data} =
-          db.storage
-            .from(PDF_BUCKET)
-            .getPublicUrl(path);
-
-        pdf_url =
-          data.publicUrl;
-
-      }
-
-
-      const row = {
-
-        category,
-        title,
-        content,
-        status
-
-      };
-
-
-      if(image_url)
-        row.image_url=image_url;
-
-      if(pdf_url)
-        row.pdf_url=pdf_url;
-
-
-      /* INSERT */
-
-      if(!id){
-
-        const {error} =
-          await db
-            .from("public_posts")
-            .insert(row);
-
-        if(error)throw error;
-
-        toast(
-          status==="published"
-            ? "Post published successfully."
-            : "Post saved as draft."
-        );
-
-      }
-
-
-      /* UPDATE */
-
-      else{
-
-        const {error} =
-          await db
-            .from("public_posts")
-            .update(row)
-            .eq("id",id);
-
-        if(error)throw error;
-
-        toast("Post updated successfully.");
-
-      }
-
-
-      resetPost();
-
-      await loadPosts();
-      await loadDashboard();
-
-    }catch(error){
-
-      console.error(error);
-
-      toast(error.message);
-
-    }finally{
-
-      hideLoader();
+        throw error;
 
     }
 
-  }
-);
+
+    const {
+        data
+    } =
+        supabaseClient.storage
+            .from(bucket)
+            .getPublicUrl(
+                fileName
+            );
 
 
-/* =====================================================
-   EDIT POST
-===================================================== */
+    return data.publicUrl;
 
-window.editPost =
-function(id){
+}
 
-  const post =
-    allPosts.find(
-      x=>String(x.id)===String(id)
+
+/* =========================================================
+   SAVE
+========================================================= */
+
+document
+    .getElementById("postForm")
+    .addEventListener(
+        "submit",
+        async function(e){
+
+            e.preventDefault();
+
+            await savePost(
+                document
+                    .getElementById("postPublished")
+                    .checked
+            );
+
+        }
     );
 
-  if(!post)return;
+
+document
+    .getElementById("draftBtn")
+    .addEventListener(
+        "click",
+        function(){
+
+            savePost(false);
+
+        }
+    );
 
 
-  $("editId").value =
-    post.id;
+async function savePost(published){
 
-  $("postCategory").value =
-    post.category || "NT";
-
-  $("postStatus").value =
-    post.status || "draft";
-
-  $("postTitle").value =
-    post.title || "";
-
-  $("postContent").value =
-    post.content || "";
+    const submitButton =
+        document
+            .querySelector("#postForm .primary-btn");
 
 
-  $("postFormTitle").textContent =
-    "✏️ Edit Post";
+    submitButton.disabled = true;
 
-  $("cancelEdit")
-    .classList.remove("hidden");
+    submitButton.textContent =
+        "SAVING...";
 
 
-  document
-    .querySelector(
-      "#posts .card"
-    )
-    .scrollIntoView({
-      behavior:"smooth"
-    });
+    try{
+
+        const editingId =
+            document
+                .getElementById("editingPostId")
+                .value;
+
+
+        const title =
+            document
+                .getElementById("postTitle")
+                .value
+                .trim();
+
+
+        const category =
+            document
+                .getElementById("postCategory")
+                .value;
+
+
+        const date =
+            document
+                .getElementById("postDate")
+                .value;
+
+
+        const description =
+            document
+                .getElementById("postDescription")
+                .value
+                .trim();
+
+
+        const content =
+            document
+                .getElementById("postContent")
+                .value
+                .trim();
+
+
+        const officialUrl =
+            document
+                .getElementById("officialUrl")
+                .value
+                .trim();
+
+
+        let imageUrl = null;
+
+        let pdfUrl = null;
+
+
+        const image =
+            document
+                .getElementById("postImage")
+                .files[0];
+
+
+        const pdf =
+            document
+                .getElementById("postPdf")
+                .files[0];
+
+
+        if(image){
+
+            imageUrl =
+                await uploadFile(
+                    image,
+                    "post-images"
+                );
+
+        }
+
+
+        if(pdf){
+
+            if(pdf.type !== "application/pdf"){
+
+                throw new Error(
+                    "Only PDF files are allowed."
+                );
+
+            }
+
+
+            pdfUrl =
+                await uploadFile(
+                    pdf,
+                    "post-pdfs"
+                );
+
+        }
+
+
+        const post = {
+
+            title,
+
+            category,
+
+            description,
+
+            content,
+
+            official_url:
+                officialUrl || null,
+
+            published,
+
+            published_at:
+                published
+                    ? (
+                        date
+                            ? new Date(
+                                date + "T12:00:00"
+                            ).toISOString()
+                            : new Date().toISOString()
+                      )
+                    : null,
+
+            updated_at:
+                new Date().toISOString()
+
+        };
+
+
+        if(imageUrl){
+
+            post.image_url =
+                imageUrl;
+
+        }
+
+
+        if(pdfUrl){
+
+            post.pdf_url =
+                pdfUrl;
+
+        }
+
+
+        let error;
+
+
+        if(editingId){
+
+            const result =
+                await supabaseClient
+                    .from("posts")
+                    .update(post)
+                    .eq("id",editingId);
+
+            error =
+                result.error;
+
+        }
+        else{
+
+            post.created_at =
+                new Date().toISOString();
+
+
+            const result =
+                await supabaseClient
+                    .from("posts")
+                    .insert(post);
+
+            error =
+                result.error;
+
+        }
+
+
+        if(error){
+
+            throw error;
+
+        }
+
+
+        toast(
+            published
+                ? "Post published successfully."
+                : "Draft saved successfully."
+        );
+
+
+        resetEditor();
+
+        showSection("postsSection");
+
+        await loadPosts();
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        toast(
+            "Error: " + error.message
+        );
+
+    }
+    finally{
+
+        submitButton.disabled = false;
+
+        submitButton.textContent =
+            "SAVE & PUBLISH →";
+
+    }
+
+}
+
+
+/* =========================================================
+   LOAD POSTS
+========================================================= */
+
+async function loadPosts(){
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("posts")
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending:false
+                }
+            );
+
+
+    if(error){
+
+        toast(
+            "Could not load posts: "
+            + error.message
+        );
+
+        return;
+
+    }
+
+
+    allPosts =
+        data || [];
+
+
+    updateStats();
+
+    renderRecent();
+
+    renderAllPosts();
+
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function updateStats(){
+
+    const total =
+        allPosts.length;
+
+
+    const published =
+        allPosts.filter(
+            post => post.published
+        ).length;
+
+
+    const drafts =
+        total - published;
+
+
+    const media =
+        allPosts.filter(
+            post =>
+                post.image_url ||
+                post.pdf_url
+        ).length;
+
+
+    document
+        .getElementById("totalPosts")
+        .textContent =
+            total;
+
+
+    document
+        .getElementById("publishedPosts")
+        .textContent =
+            published;
+
+
+    document
+        .getElementById("draftPosts")
+        .textContent =
+            drafts;
+
+
+    document
+        .getElementById("mediaCount")
+        .textContent =
+            media;
+
+}
+
+
+/* =========================================================
+   RECENT
+========================================================= */
+
+function renderRecent(){
+
+    const container =
+        document
+            .getElementById("recentPosts");
+
+
+    const recent =
+        allPosts.slice(0,5);
+
+
+    if(!recent.length){
+
+        container.innerHTML =
+            `<div style="color:#999;font-size:11px;padding:20px 0">
+                No posts yet.
+            </div>`;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        recent
+            .map(postHTML)
+            .join("");
+
+}
+
+
+/* =========================================================
+   ALL POSTS
+========================================================= */
+
+function renderAllPosts(){
+
+    const container =
+        document
+            .getElementById("allPosts");
+
+
+    if(!allPosts.length){
+
+        container.innerHTML =
+            `<div style="color:#999;font-size:11px;padding:20px 0">
+                No posts found.
+            </div>`;
+
+        return;
+
+    }
+
+
+    const search =
+        document
+            .getElementById("searchPosts")
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    const filter =
+        document
+            .getElementById("filterPosts")
+            .value;
+
+
+    const posts =
+        allPosts.filter(
+            post => {
+
+                const matchesSearch =
+                    !search ||
+                    (
+                        (post.title || "")
+                        .toLowerCase()
+                        .includes(search)
+                    ) ||
+                    (
+                        (post.description || "")
+                        .toLowerCase()
+                        .includes(search)
+                    );
+
+
+                const matchesFilter =
+                    filter === "all"
+                    ||
+                    (
+                        filter === "published"
+                        &&
+                        post.published
+                    )
+                    ||
+                    (
+                        filter === "draft"
+                        &&
+                        !post.published
+                    );
+
+
+                return matchesSearch &&
+                       matchesFilter;
+
+            }
+        );
+
+
+    if(!posts.length){
+
+        container.innerHTML =
+            `<div style="color:#999;font-size:11px;padding:20px 0">
+                No matching posts.
+            </div>`;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        posts
+            .map(postHTML)
+            .join("");
+
+}
+
+
+/* =========================================================
+   POST HTML
+========================================================= */
+
+function postHTML(post){
+
+    const thumb =
+        post.image_url
+            ? `<img src="${escapeAttr(post.image_url)}" alt="">`
+            : "SF";
+
+
+    const status =
+        post.published
+            ? `<span class="badge published">PUBLISHED</span>`
+            : `<span class="badge draft">DRAFT</span>`;
+
+
+    return `
+        <div class="post">
+
+            <div class="post-thumb">
+                ${thumb}
+            </div>
+
+            <div class="post-info">
+
+                <h3>
+                    ${escapeHtml(post.title)}
+                    ${status}
+                </h3>
+
+                <p>
+                    ${escapeHtml(post.category || "General")}
+                    ${post.pdf_url ? " • PDF" : ""}
+                    ${post.image_url ? " • Image" : ""}
+                </p>
+
+            </div>
+
+            <div class="post-actions">
+
+                <button
+                    onclick="editPost('${post.id}')">
+
+                    Edit
+
+                </button>
+
+                <button
+                    onclick="togglePost('${post.id}',${post.published})">
+
+                    ${post.published
+                        ? "Unpublish"
+                        : "Publish"}
+
+                </button>
+
+                <button
+                    class="delete"
+                    onclick="deletePost('${post.id}')">
+
+                    Delete
+
+                </button>
+
+            </div>
+
+        </div>
+    `;
+
+}
+
+
+/* =========================================================
+   EDIT
+========================================================= */
+
+window.editPost =
+async function(id){
+
+    const post =
+        allPosts.find(
+            item => item.id === id
+        );
+
+
+    if(!post){
+
+        return;
+
+    }
+
+
+    document
+        .getElementById("editingPostId")
+        .value =
+            post.id;
+
+
+    document
+        .getElementById("postTitle")
+        .value =
+            post.title || "";
+
+
+    document
+        .getElementById("postCategory")
+        .value =
+            post.category || "";
+
+
+    document
+        .getElementById("postDescription")
+        .value =
+            post.description || "";
+
+
+    document
+        .getElementById("postContent")
+        .value =
+            post.content || "";
+
+
+    document
+        .getElementById("officialUrl")
+        .value =
+            post.official_url || "";
+
+
+    document
+        .getElementById("postPublished")
+        .checked =
+            !!post.published;
+
+
+    document
+        .getElementById("editorHeading")
+        .textContent =
+            "Edit Post";
+
+
+    if(post.published_at){
+
+        document
+            .getElementById("postDate")
+            .value =
+                post.published_at
+                    .substring(0,10);
+
+    }
+
+
+    showSection("editorSection");
 
 };
 
 
-/* =====================================================
-   DELETE POST
-===================================================== */
+/* =========================================================
+   PUBLISH / UNPUBLISH
+========================================================= */
+
+window.togglePost =
+async function(
+    id,
+    current
+){
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("posts")
+            .update({
+
+                published:
+                    !current,
+
+                published_at:
+                    !current
+                        ? new Date().toISOString()
+                        : null,
+
+                updated_at:
+                    new Date().toISOString()
+
+            })
+            .eq("id",id);
+
+
+    if(error){
+
+        toast(error.message);
+
+        return;
+
+    }
+
+
+    toast(
+        !current
+            ? "Post published."
+            : "Post unpublished."
+    );
+
+
+    await loadPosts();
+
+};
+
+
+/* =========================================================
+   DELETE
+========================================================= */
 
 window.deletePost =
 async function(id){
 
-  if(
-    !confirm(
-      "Delete this post permanently?"
-    )
-  )return;
+    if(
+        !confirm(
+            "এই post permanently delete করতে চান?"
+        )
+    ){
 
-  showLoader();
+        return;
 
-  try{
+    }
 
-    const {error} =
-      await db
-        .from("public_posts")
-        .delete()
-        .eq("id",id);
 
-    if(error)throw error;
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("posts")
+            .delete()
+            .eq("id",id);
+
+
+    if(error){
+
+        toast(error.message);
+
+        return;
+
+    }
+
 
     toast("Post deleted.");
 
     await loadPosts();
-    await loadDashboard();
-
-  }catch(error){
-
-    toast(error.message);
-
-  }finally{
-
-    hideLoader();
-
-  }
 
 };
 
 
-/* =====================================================
-   RESET POST
-===================================================== */
+/* =========================================================
+   SEARCH
+========================================================= */
 
-function resetPost(){
-
-  $("postForm").reset();
-
-  $("editId").value="";
-
-  $("postFormTitle").textContent =
-    "➕ Create New Post";
-
-  $("cancelEdit")
-    .classList.add("hidden");
-
-}
+document
+    .getElementById("searchPosts")
+    .addEventListener(
+        "input",
+        renderAllPosts
+    );
 
 
-$("cancelEdit").onclick =
-  resetPost;
+document
+    .getElementById("filterPosts")
+    .addEventListener(
+        "change",
+        renderAllPosts
+    );
 
 
-/* =====================================================
-   DASHBOARD
-===================================================== */
+/* =========================================================
+   CANCEL
+========================================================= */
 
-async function loadDashboard(){
+document
+    .getElementById("cancelBtn")
+    .addEventListener(
+        "click",
+        function(){
 
-  $("totalPosts").textContent =
-    allPosts.length;
+            resetEditor();
 
-  $("publishedPosts").textContent =
-    allPosts.filter(
-      x=>x.status==="published"
-    ).length;
+            showSection("dashboardSection");
 
-  $("draftPosts").textContent =
-    allPosts.filter(
-      x=>x.status==="draft"
-    ).length;
+        }
+    );
 
 
-  const {count,error} =
-    await db
-      .from("gallery")
-      .select("id",{
-        count:"exact",
-        head:true
-      });
+/* =========================================================
+   RESET
+========================================================= */
 
-  if(!error){
+function resetEditor(){
 
-    $("galleryCount").textContent =
-      count || 0;
-
-  }
-
-}
+    document
+        .getElementById("postForm")
+        .reset();
 
 
-/* =====================================================
-   GALLERY
-===================================================== */
-
-async function loadGallery(){
-
-  const {data,error} =
-    await db
-      .from("gallery")
-      .select("*")
-      .order(
-        "created_at",
-        {ascending:false}
-      );
-
-  if(error){
-
-    console.error(error);
-
-    toast(error.message);
-
-    return;
-
-  }
+    document
+        .getElementById("editingPostId")
+        .value =
+            "";
 
 
-  const grid =
-    $("galleryGrid");
-
-  grid.innerHTML="";
-
-
-  if(!data || !data.length){
-
-    grid.innerHTML=`
-      <p style="color:#777">
-        No images uploaded yet.
-      </p>
-    `;
-
-    return;
-
-  }
+    document
+        .getElementById("editorHeading")
+        .textContent =
+            "New Post";
 
 
-  data.forEach(item=>{
+    document
+        .getElementById("imagePreview")
+        .hidden =
+            true;
 
-    grid.innerHTML += `
 
-      <div class="gallery-item">
+    document
+        .getElementById("previewImage")
+        .src =
+            "";
 
-        <img
-          src="${escapeHTML(item.image_url)}"
-          alt="${escapeHTML(item.title)}">
 
-        <div class="gallery-info">
-
-          <h3>
-            ${escapeHTML(item.title)}
-          </h3>
-
-          <button
-            class="btn btn-red"
-            onclick="deleteGallery('${item.id}')">
-
-            🗑️ Delete
-
-          </button>
-
-        </div>
-
-      </div>
-
-    `;
-
-  });
+    document
+        .getElementById("postDate")
+        .value =
+            new Date()
+                .toISOString()
+                .substring(0,10);
 
 }
 
 
-$("galleryForm").addEventListener(
-  "submit",
-  async event=>{
-
-    event.preventDefault();
-
-    showLoader();
-
-    try{
-
-      const title =
-        $("galleryTitle")
-          .value
-          .trim();
-
-      const file =
-        $("galleryFile")
-          .files[0];
-
-      if(!file)
-        throw new Error(
-          "Please select an image."
-        );
-
-
-      const extension =
-        file.name
-          .split(".")
-          .pop()
-          .toLowerCase();
-
-      const path =
-        `gallery/${crypto.randomUUID()}.${extension}`;
-
-
-      const {error} =
-        await db.storage
-          .from(GALLERY_BUCKET)
-          .upload(
-            path,
-            file,
-            {
-              contentType:file.type,
-              upsert:false
-            }
-          );
-
-      if(error)throw error;
-
-
-      const {data} =
-        db.storage
-          .from(GALLERY_BUCKET)
-          .getPublicUrl(path);
-
-
-      const {error:insertError} =
-        await db
-          .from("gallery")
-          .insert({
-            title,
-            image_url:data.publicUrl,
-            storage_path:path
-          });
-
-      if(insertError)
-        throw insertError;
-
-
-      event.target.reset();
-
-      toast(
-        "Image uploaded successfully."
-      );
-
-      await loadGallery();
-      await loadDashboard();
-
-    }catch(error){
-
-      toast(error.message);
-
-    }finally{
-
-      hideLoader();
-
-    }
-
-  }
-);
-
-
-/* =====================================================
-   DELETE GALLERY
-===================================================== */
-
-window.deleteGallery =
-async function(id){
-
-  if(
-    !confirm(
-      "Delete this image permanently?"
-    )
-  )return;
-
-  showLoader();
-
-  try{
-
-    const {data,error} =
-      await db
-        .from("gallery")
-        .select("storage_path")
-        .eq("id",id)
-        .single();
-
-    if(error)throw error;
-
-
-    if(data.storage_path){
-
-      await db.storage
-        .from(GALLERY_BUCKET)
-        .remove([
-          data.storage_path
-        ]);
-
-    }
-
-
-    const {error:deleteError} =
-      await db
-        .from("gallery")
-        .delete()
-        .eq("id",id);
-
-    if(deleteError)
-      throw deleteError;
-
-
-    toast("Image deleted.");
-
-    await loadGallery();
-    await loadDashboard();
-
-  }catch(error){
-
-    toast(error.message);
-
-  }finally{
-
-    hideLoader();
-
-  }
-
-};
-
-
-/* =====================================================
-   PDF
-===================================================== */
-
-async function loadPDFs(){
-
-  const {data,error} =
-    await db
-      .from("pdf_documents")
-      .select("*")
-      .order(
-        "created_at",
-        {ascending:false}
-      );
-
-  if(error){
-
-    console.error(error);
-
-    toast(error.message);
-
-    return;
-
-  }
-
-
-  const table =
-    $("pdfTable");
-
-  table.innerHTML="";
-
-
-  if(!data || !data.length){
-
-    table.innerHTML=`
-      <tr>
-        <td colspan="5"
-            style="text-align:center;color:#777;padding:30px">
-          No PDF documents yet.
-        </td>
-      </tr>
-    `;
-
-    return;
-
-  }
-
-
-  data.forEach(pdf=>{
-
-    table.innerHTML += `
-
-      <tr>
-
-        <td>
-          <strong>
-            ${escapeHTML(pdf.title)}
-          </strong>
-        </td>
-
-        <td>
-
-          <span class="badge ${
-            pdf.status==="published"
-              ? "badge-published"
-              : "badge-draft"
-          }">
-
-            ${escapeHTML(pdf.status)}
-
-          </span>
-
-        </td>
-
-        <td>
-          ${formatDate(pdf.created_at)}
-        </td>
-
-        <td>
-
-          <a
-            class="btn btn-gray"
-            href="${escapeHTML(pdf.file_url)}"
-            target="_blank">
-
-            📄 Open
-
-          </a>
-
-        </td>
-
-        <td>
-
-          <button
-            class="btn btn-red"
-            onclick="deletePDF('${pdf.id}')">
-
-            🗑️ Delete
-
-          </button>
-
-        </td>
-
-      </tr>
-
-    `;
-
-  });
+/* =========================================================
+   ESCAPE
+========================================================= */
+
+function escapeHtml(value){
+
+    return String(value || "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
 
 }
 
 
-$("pdfForm").addEventListener(
-  "submit",
-  async event=>{
+function escapeAttr(value){
 
-    event.preventDefault();
-
-    showLoader();
-
-    try{
-
-      const title =
-        $("pdfTitle")
-          .value
-          .trim();
-
-      const status =
-        $("pdfStatus").value;
-
-      const file =
-        $("pdfFile")
-          .files[0];
-
-      if(!file)
-        throw new Error(
-          "Please select a PDF."
-        );
-
-
-      if(
-        file.type !==
-        "application/pdf"
-      ){
-
-        throw new Error(
-          "Only PDF files are allowed."
-        );
-
-      }
-
-
-      const path =
-        `documents/${crypto.randomUUID()}.pdf`;
-
-
-      const {error} =
-        await db.storage
-          .from(PDF_BUCKET)
-          .upload(
-            path,
-            file,
-            {
-              contentType:"application/pdf",
-              upsert:false
-            }
-          );
-
-      if(error)throw error;
-
-
-      const {data} =
-        db.storage
-          .from(PDF_BUCKET)
-          .getPublicUrl(path);
-
-
-      const {error:insertError} =
-        await db
-          .from("pdf_documents")
-          .insert({
-            title,
-            file_url:data.publicUrl,
-            storage_path:path,
-            status
-          });
-
-      if(insertError)
-        throw insertError;
-
-
-      event.target.reset();
-
-      toast(
-        "PDF uploaded successfully."
-      );
-
-      await loadPDFs();
-
-    }catch(error){
-
-      toast(error.message);
-
-    }finally{
-
-      hideLoader();
-
-    }
-
-  }
-);
-
-
-/* =====================================================
-   DELETE PDF
-===================================================== */
-
-window.deletePDF =
-async function(id){
-
-  if(
-    !confirm(
-      "Delete this PDF permanently?"
-    )
-  )return;
-
-  showLoader();
-
-  try{
-
-    const {data,error} =
-      await db
-        .from("pdf_documents")
-        .select("storage_path")
-        .eq("id",id)
-        .single();
-
-    if(error)throw error;
-
-
-    if(data.storage_path){
-
-      await db.storage
-        .from(PDF_BUCKET)
-        .remove([
-          data.storage_path
-        ]);
-
-    }
-
-
-    const {error:deleteError} =
-      await db
-        .from("pdf_documents")
-        .delete()
-        .eq("id",id);
-
-    if(deleteError)
-      throw deleteError;
-
-
-    toast("PDF deleted.");
-
-    await loadPDFs();
-
-  }catch(error){
-
-    toast(error.message);
-
-  }finally{
-
-    hideLoader();
-
-  }
-
-};
-
-
-/* =====================================================
-   LOAD EVERYTHING
-===================================================== */
-
-async function loadEverything(){
-
-  showLoader();
-
-  try{
-
-    await loadPosts();
-
-    await loadDashboard();
-
-    await loadGallery();
-
-    await loadPDFs();
-
-  }finally{
-
-    hideLoader();
-
-  }
+    return escapeHtml(value);
 
 }
 
 
-/* =====================================================
-   START
-===================================================== */
+/* =========================================================
+   TOAST
+========================================================= */
 
-checkSession();
+function toast(message){
+
+    const element =
+        document
+            .getElementById("toast");
+
+
+    element.textContent =
+        message;
+
+
+    element.classList.add("show");
+
+
+    setTimeout(
+        () => element.classList.remove("show"),
+        3000
+    );
+
+}
 
 </script>
 
