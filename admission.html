@@ -484,28 +484,14 @@ async function loadPosts() {
     container.innerHTML = "";
 
 
-    let query =
-    supabaseClient
-        .from("posts")
-        .select("*")
-        .eq("category", "AD")
-        .eq("published", true);
-
-
-    /*
-       যদি কোনো Sub Category select করা হয়
-       তাহলে শুধু সেই category-এর পোস্ট আসবে
-    */
-
-    if (currentCategory) {
-
-        query =
-            query.eq(
-                "sub_category",
-                currentCategory
-            );
-
-    }
+    let query = supabaseClient
+    .from("posts")
+    .select("*")
+    .eq("category", "AD")
+    .eq("published", true)
+    .order("created_at", {
+        ascending: false
+    });
 
 
     const {
