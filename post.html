@@ -77,66 +77,87 @@
 const SUPABASE_URL =
 "https://ymwhodckmbybccufzjot.supabase.co";
 
-
 const SUPABASE_ANON_KEY =
 "sb_publishable_u31olXCxIcSsMdUeyyt5UQ_YeCWKToH";
 
 
 const supabaseClient =
-supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-);
-
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
 
 
 async function loadPost() {
 
     const container =
-        document.getElementById(
-            "postContainer"
-        );
+        document.getElementById("postContainer");
 
+
+    /* URL থেকে post ID নেওয়া */
 
     const params =
         new URLSearchParams(
             window.location.search
         );
 
-
     const postId =
         params.get("id");
+
+
+    console.log("Post ID:", postId);
 
 
     if (!postId) {
 
         container.innerHTML = `
             <h2>পোস্ট পাওয়া যায়নি</h2>
+
+            <p>
+                পোস্টের ID পাওয়া যায়নি।
+            </p>
         `;
 
         return;
-
     }
 
 
+    /* Supabase থেকে পোস্ট */
+
     const { data, error } =
         await supabaseClient
-
-        .from("public_posts")
-
-        .select("*")
-
-        .eq("id", postId)
-
-        .eq("status", "published")
-
-        .single();
+            .from("public_posts")
+            .select("*")
+            .eq("id", postId)
+            .maybeSingle();
 
 
-    if (error || !data) {
+    console.log("Post data:", data);
+    console.log("Post error:", error);
 
-        console.error(error);
 
+    if (error) {
+
+        console.error(
+            "Supabase Error:",
+            error
+        );
+
+        container.innerHTML = `
+            <h2>
+                পোস্ট লোড করা যাচ্ছে না
+            </h2>
+
+            <p>
+                ${escapeHTML(error.message)}
+            </p>
+        `;
+
+        return;
+    }
+
+
+    if (!data) {
 
         container.innerHTML = `
             <h2>
@@ -144,16 +165,33 @@ async function loadPost() {
             </h2>
 
             <p>
-                পোস্টটি মুছে ফেলা হয়েছে
-                অথবা প্রকাশিত নয়।
+                এই ID-এর কোনো পোস্ট পাওয়া যায়নি।
             </p>
         `;
 
         return;
-
     }
 
 
+    /* Draft হলে visitor দেখবে না */
+
+    if (data.status !== "published") {
+
+        container.innerHTML = `
+            <h2>
+                পোস্টটি প্রকাশিত নয়
+            </h2>
+
+            <p>
+                এই পোস্টটি বর্তমানে Draft অবস্থায় আছে।
+            </p>
+        `;
+
+        return;
+    }
+
+
+    /* Category */
 
     const categoryNames = {
 
@@ -177,9 +215,11 @@ async function loadPost() {
         || "EDUCATION UPDATE";
 
 
+    /* Date */
 
     const date =
-        new Date(
+        data.created_at
+        ? new Date(
             data.created_at
         ).toLocaleDateString(
             "en-GB",
@@ -188,37 +228,86 @@ async function loadPost() {
                 month: "long",
                 year: "numeric"
             }
-        );
+        )
+        : "";
 
 
+    /* Image */
+
+    const imageHTML =
+        data.image_url
+        ? `
+            <img
+                src="${escapeAttribute(data.image_url)}"
+                alt="${escapeAttribute(data.title || "Post image")}"
+                style="
+                    width:100%;
+                    max-height:600px;
+                    object-fit:cover;
+                    border-radius:16px;
+                    margin:25px 0;
+                    display:block;
+                "
+            >
+        `
+        : "";
+
+
+    /* PDF */
+
+    const pdfHTML =
+        data.pdf_url
+        ? `
+            <div
+                style="
+                    margin-top:30px;
+                    padding:20px;
+                    border:1px solid #ddd;
+                    border-radius:14px;
+                "
+            >
+
+                <h3>
+                    📄 PDF Document
+                </h3>
+
+                <a
+                    href="${escapeAttribute(data.pdf_url)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="read-more"
+                >
+                    PDF দেখুন / খুলুন →
+                </a>
+
+            </div>
+        `
+        : "";
+
+
+    /* Full Post */
 
     container.innerHTML = `
 
         <div class="news-top">
 
             <span class="tag red">
-
-                ${category}
-
+                ${escapeHTML(category)}
             </span>
 
-
             <span class="date">
-
-                ${date}
-
+                ${escapeHTML(date)}
             </span>
 
         </div>
 
 
         <h1>
-
-            ${escapeHTML(
-                data.title
-            )}
-
+            ${escapeHTML(data.title)}
         </h1>
+
+
+        ${imageHTML}
 
 
         <div
@@ -226,52 +315,44 @@ async function loadPost() {
                 margin-top:25px;
                 line-height:1.9;
                 white-space:pre-line;
+                font-size:17px;
             "
         >
-
-            ${escapeHTML(
-                data.content
-            )}
-
+            ${escapeHTML(data.content)}
         </div>
+
+
+        ${pdfHTML}
 
     `;
 
 }
 
 
+/* HTML Security */
 
 function escapeHTML(value) {
 
-    return String(value || "")
+    return String(value ?? "")
 
-        .replace(
-            /&/g,
-            "&amp;"
-        )
+        .replace(/&/g, "&amp;")
 
-        .replace(
-            /</g,
-            "&lt;"
-        )
+        .replace(/</g, "&lt;")
 
-        .replace(
-            />/g,
-            "&gt;"
-        )
+        .replace(/>/g, "&gt;")
 
-        .replace(
-            /"/g,
-            "&quot;"
-        )
+        .replace(/"/g, "&quot;")
 
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+        .replace(/'/g, "&#039;");
 
 }
 
+
+function escapeAttribute(value) {
+
+    return escapeHTML(value);
+
+}
 
 
 loadPost();
