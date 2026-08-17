@@ -520,10 +520,10 @@ async function loadLatestPosts() {
     if (!container) return;
 
 
-    const { data, error } = await supabaseClient
-    .from("posts")
+  const { data, error } = await supabaseClient
+    .from("public_posts")
     .select("*")
-    .eq("published", true)
+    .eq("status", "published")
     .order("created_at", {
         ascending: false
     })
@@ -582,26 +582,17 @@ async function loadLatestPosts() {
 
 const categoryNames = {
 
-    nu:
-        "NATIONAL UNIVERSITY",
+    NU: "NATIONAL UNIVERSITY",
 
-    board:
-        "CHATTOGRAM BOARD",
+    CB: "CHATTOGRAM BOARD",
 
-    admission:
-        "ADMISSION",
+    AD: "ADMISSION",
 
-    exam:
-        "EXAM & ROUTINE",
+    EX: "EXAM & ROUTINE",
 
-    result:
-        "RESULT",
+    RS: "RESULT",
 
-    education:
-        "EDUCATION UPDATE",
-
-    notice:
-        "NOTICE"
+    NT: "NOTICE"
 
 };
 
