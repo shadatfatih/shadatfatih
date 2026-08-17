@@ -1,26 +1,20 @@
 <!DOCTYPE html>
 <html lang="bn">
-
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<title>Chattogram Board | Shadat Fatih</title>
 
-    <title>Chattogram Board | Shadat Fatih</title>
+<meta name="description"
+content="চট্টগ্রাম শিক্ষা বোর্ডের SSC, HSC, পরীক্ষা, ফলাফল, ভর্তি ও সর্বশেষ নোটিশ।">
 
-    <meta name="description"
-          content="চট্টগ্রাম শিক্ষা বোর্ডের SSC, HSC, পরীক্ষা, ফলাফল ও সর্বশেষ নোটিশ।">
+<link rel="stylesheet" href="style.css">
 
-    <link rel="stylesheet"
-          href="style.css">
-
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 </head>
-
 
 <body>
 
@@ -31,13 +25,9 @@
 
 <header class="header">
 
-    <a href="index.html"
-       class="brand">
-
+    <a href="index.html" class="brand">
         <span>SHADAT</span> FATIH
-
     </a>
-
 
     <div class="header-actions">
 
@@ -48,7 +38,6 @@
             ⌕
 
         </button>
-
 
         <button
             class="menu-btn"
@@ -63,84 +52,66 @@
 </header>
 
 
-
 <!-- =====================================================
      MENU
 ===================================================== -->
 
-<nav id="menu"
-     class="menu">
+<nav id="menu" class="menu">
 
     <div class="menu-title">
         MENU
     </div>
 
-
     <a href="index.html">
         Home
     </a>
-
 
     <a href="national-university.html">
         National University
     </a>
 
-
     <a href="chattogram-board.html">
         Chattogram Board
     </a>
-
 
     <a href="#">
         Admission
     </a>
 
-
     <a href="#">
         Exam & Routine
     </a>
-
 
     <a href="#">
         Results
     </a>
 
-
     <a href="#">
         Notices
     </a>
 
-
-    <a href="#">
-        Student Resources
-    </a>
-
 </nav>
-
 
 
 <!-- =====================================================
      SEARCH
 ===================================================== -->
 
-<div id="searchBox"
-     class="search-box">
+<div
+    id="searchBox"
+    class="search-box">
 
     <input
+        id="searchInput"
         type="search"
         placeholder="চট্টগ্রাম বোর্ডের তথ্য খুঁজুন..."
     >
 
-
-    <button
-        onclick="closeSearch()">
-
+    <button onclick="closeSearch()">
         ×
-
     </button>
 
 </div>
-
 
 
 <!-- =====================================================
@@ -155,24 +126,15 @@
             CHATTOGRAM EDUCATION BOARD
         </div>
 
-
         <h1>
-
             চট্টগ্রাম বোর্ডের
-
-            <span>
-                সর্বশেষ আপডেট
-            </span>
-
+            <span>সর্বশেষ আপডেট</span>
         </h1>
 
-
         <p>
-
             SSC, HSC, পরীক্ষা, ফলাফল,
-            পুনঃনিরীক্ষণ এবং গুরুত্বপূর্ণ
-            বোর্ড নোটিশ এক জায়গায়।
-
+            ভর্তি এবং গুরুত্বপূর্ণ বোর্ড
+            নোটিশ এক জায়গায়।
         </p>
 
     </div>
@@ -180,9 +142,8 @@
 </section>
 
 
-
 <!-- =====================================================
-     CATEGORIES
+     SUBCATEGORIES
 ===================================================== -->
 
 <section class="section">
@@ -195,7 +156,6 @@
                 EXPLORE BOARD
             </span>
 
-
             <h2>
                 চট্টগ্রাম বোর্ড
             </h2>
@@ -205,20 +165,19 @@
     </div>
 
 
-
     <div class="category-grid">
 
 
         <!-- SSC -->
 
         <a
-            href="chattogram-board.html?subcategory=SSC"
-            class="category-card featured">
+            href="#SSC"
+            class="category-card featured"
+            onclick="filterCategory('SSC')">
 
             <div class="card-icon">
                 SSC
             </div>
-
 
             <div>
 
@@ -226,16 +185,12 @@
                     SSC
                 </h3>
 
-
                 <p>
-
                     SSC পরীক্ষা, ফলাফল,
                     রুটিন ও নোটিশ।
-
                 </p>
 
             </div>
-
 
             <strong>
                 →
@@ -244,17 +199,16 @@
         </a>
 
 
-
         <!-- HSC -->
 
         <a
-            href="chattogram-board.html?subcategory=HSC"
-            class="category-card">
+            href="#HSC"
+            class="category-card"
+            onclick="filterCategory('HSC')">
 
             <div class="card-icon">
                 HSC
             </div>
-
 
             <div>
 
@@ -262,52 +216,43 @@
                     HSC
                 </h3>
 
-
                 <p>
-
                     HSC পরীক্ষা, ফলাফল,
                     রুটিন ও নোটিশ।
-
                 </p>
 
             </div>
-
 
             <strong>
                 →
             </strong>
 
         </a>
-
 
 
         <!-- EXAM -->
 
         <a
-            href="chattogram-board.html?subcategory=EXAM"
-            class="category-card">
+            href="#EXAM"
+            class="category-card"
+            onclick="filterCategory('EXAM')">
 
             <div class="card-icon">
                 EX
             </div>
 
-
             <div>
 
                 <h3>
-                    পরীক্ষা ও রুটিন
+                    Exam & Routine
                 </h3>
 
-
                 <p>
-
                     SSC ও HSC পরীক্ষার
                     সময়সূচি ও রুটিন।
-
                 </p>
 
             </div>
-
 
             <strong>
                 →
@@ -316,64 +261,121 @@
         </a>
 
 
-
-        <!-- RESULT -->
+        <!-- RESULTS -->
 
         <a
-            href="chattogram-board.html?subcategory=RESULT"
-            class="category-card">
+            href="#RESULT"
+            class="category-card"
+            onclick="filterCategory('RESULT')">
 
             <div class="card-icon">
                 RS
             </div>
 
-
             <div>
 
                 <h3>
-                    ফলাফল
+                    Results
                 </h3>
 
-
                 <p>
-
                     SSC ও HSC ফলাফল এবং
                     পুনঃনিরীক্ষণ তথ্য।
-
                 </p>
 
             </div>
-
 
             <strong>
                 →
             </strong>
 
         </a>
+
+
+        <!-- ADMISSION -->
+
+        <a
+            href="#ADMISSION"
+            class="category-card"
+            onclick="filterCategory('ADMISSION')">
+
+            <div class="card-icon">
+                AD
+            </div>
+
+            <div>
+
+                <h3>
+                    Admission
+                </h3>
+
+                <p>
+                    ভর্তি, আবেদন ও
+                    প্রয়োজনীয় নির্দেশনা।
+                </p>
+
+            </div>
+
+            <strong>
+                →
+            </strong>
+
+        </a>
+
+
+        <!-- NOTICE -->
+
+        <a
+            href="#NOTICE"
+            class="category-card"
+            onclick="filterCategory('NOTICE')">
+
+            <div class="card-icon">
+                NT
+            </div>
+
+            <div>
+
+                <h3>
+                    Notice
+                </h3>
+
+                <p>
+                    চট্টগ্রাম বোর্ডের
+                    গুরুত্বপূর্ণ নোটিশ।
+                </p>
+
+            </div>
+
+            <strong>
+                →
+            </strong>
+
+        </a>
+
 
     </div>
 
 </section>
 
 
-
 <!-- =====================================================
      LATEST POSTS
 ===================================================== -->
 
-<section class="latest-section">
-
+<section
+    id="latestPostsSection"
+    class="latest-section">
 
     <div class="section-heading">
 
         <div>
 
-            <span id="latestLabel">
+            <span id="postSectionLabel">
                 LATEST BOARD UPDATES
             </span>
 
-
-            <h2 id="latestTitle">
+            <h2 id="postSectionTitle">
                 সর্বশেষ নোটিশ
             </h2>
 
@@ -382,25 +384,45 @@
     </div>
 
 
+    <!-- Loading -->
 
-    <!-- POSTS WILL LOAD HERE -->
-
-    <div id="boardPosts">
-
-        <p style="
-            color:#999;
-            font-size:12px;
+    <div
+        id="loadingPosts"
+        style="
+            text-align:center;
+            padding:30px;
+            color:#888;
+            font-size:13px;
         ">
 
-            পোস্ট লোড হচ্ছে...
+        পোস্ট লোড হচ্ছে...
 
-        </p>
+    </div>
+
+
+    <!-- Posts -->
+
+    <div id="postsContainer"></div>
+
+
+    <!-- No posts -->
+
+    <div
+        id="noPosts"
+        hidden
+        style="
+            text-align:center;
+            padding:35px;
+            color:#888;
+            font-size:13px;
+        ">
+
+        এই বিভাগে এখনো কোনো পোস্ট প্রকাশ করা হয়নি।
 
     </div>
 
 
 </section>
-
 
 
 <!-- =====================================================
@@ -410,34 +432,22 @@
 <section class="about">
 
     <div class="about-label">
-
         CHATTOGRAM BOARD
-
     </div>
 
-
     <h2>
-
         চট্টগ্রাম বোর্ডের
-
-        <span>
-            প্রয়োজনীয় তথ্য।
-        </span>
-
+        <span>প্রয়োজনীয় তথ্য।</span>
     </h2>
 
-
     <p>
-
         Shadat Fatih-এ চট্টগ্রাম শিক্ষা বোর্ডের
         SSC ও HSC পরীক্ষা, ফলাফল, রুটিন,
-        পুনঃনিরীক্ষণ এবং গুরুত্বপূর্ণ নোটিশ
+        ভর্তি এবং গুরুত্বপূর্ণ নোটিশ
         শিক্ষার্থীদের জন্য সহজভাবে প্রকাশ করা হবে।
-
     </p>
 
 </section>
-
 
 
 <!-- =====================================================
@@ -447,18 +457,12 @@
 <footer>
 
     <div class="footer-brand">
-
         SHADAT FATIH
-
     </div>
 
-
     <p>
-
         Education • Notice • Update • Information
-
     </p>
-
 
     <div class="footer-links">
 
@@ -466,21 +470,17 @@
             Home
         </a>
 
-
         <a href="#">
             About
         </a>
-
 
         <a href="#">
             Contact
         </a>
 
-
         <a href="#">
             Privacy
         </a>
-
 
         <a href="#">
             Disclaimer
@@ -488,16 +488,11 @@
 
     </div>
 
-
     <div class="copyright">
-
-        © 2026 Shadat Fatih.
-        All rights reserved.
-
+        © 2026 Shadat Fatih. All rights reserved.
     </div>
 
 </footer>
-
 
 
 <!-- =====================================================
@@ -506,16 +501,11 @@
 
 <script>
 
-/* =====================================================
-   SUPABASE CONFIG
-===================================================== */
-
 const SUPABASE_URL =
     "https://ymwhodckmbybccufzjot.supabase.co";
 
-
 const SUPABASE_KEY =
-    "sb_publishable_u31olXCxIcSsMdUeyyt5UQ_YeCWKToH";
+    "sb_publishable_u31olXCxIcSsMdUeyyt5U_QY_ECWKToH";
 
 
 const supabaseClient =
@@ -525,30 +515,26 @@ const supabaseClient =
     );
 
 
-
 /* =====================================================
-   CATEGORY NAME
+   CATEGORY NAMES
 ===================================================== */
 
 const subCategoryNames = {
 
-    HSC:
-        "HSC",
-
     SSC:
         "SSC",
 
-    JSC:
-        "JSC",
-
-    RESULT:
-        "Result",
-
-    ADMISSION:
-        "Admission",
+    HSC:
+        "HSC",
 
     EXAM:
         "Exam & Routine",
+
+    RESULT:
+        "Results",
+
+    ADMISSION:
+        "Admission",
 
     NOTICE:
         "Notice"
@@ -556,140 +542,44 @@ const subCategoryNames = {
 };
 
 
-
-/* =====================================================
-   GET SUBCATEGORY FROM URL
-===================================================== */
-
-const urlParams =
-    new URLSearchParams(
-        window.location.search
-    );
-
-
-const selectedSubCategory =
-    (
-        urlParams.get("subcategory")
-        || ""
-    ).toUpperCase();
-
-
-
-/* =====================================================
-   UPDATE PAGE TITLE
-===================================================== */
-
-function updatePageTitle(){
-
-    const title =
-        document.getElementById(
-            "latestTitle"
-        );
-
-
-    const label =
-        document.getElementById(
-            "latestLabel"
-        );
-
-
-    if(
-        selectedSubCategory &&
-        subCategoryNames[
-            selectedSubCategory
-        ]
-    ){
-
-        title.textContent =
-            subCategoryNames[
-                selectedSubCategory
-            ] + " এর সর্বশেষ পোস্ট";
-
-
-        label.textContent =
-            "CHATTOGRAM BOARD / "
-            +
-            selectedSubCategory;
-
-    }
-
-}
-
-
-
-/* =====================================================
-   ESCAPE HTML
-===================================================== */
-
-function escapeHtml(value){
-
-    return String(
-        value || ""
-    )
-
-    .replaceAll(
-        "&",
-        "&amp;"
-    )
-
-    .replaceAll(
-        "<",
-        "&lt;"
-    )
-
-    .replaceAll(
-        ">",
-        "&gt;"
-    )
-
-    .replaceAll(
-        '"',
-        "&quot;"
-    )
-
-    .replaceAll(
-        "'",
-        "&#039;"
-    );
-
-}
-
-
-
 /* =====================================================
    LOAD POSTS
 ===================================================== */
 
-async function loadBoardPosts(){
+let currentCategory = null;
+
+
+async function loadPosts(){
+
+    const loading =
+        document.getElementById(
+            "loadingPosts"
+        );
 
     const container =
         document.getElementById(
-            "boardPosts"
+            "postsContainer"
+        );
+
+    const noPosts =
+        document.getElementById(
+            "noPosts"
         );
 
 
-    container.innerHTML = `
-        <p style="
-            color:#999;
-            font-size:12px;
-        ">
-            পোস্ট লোড হচ্ছে...
-        </p>
-    `;
+    loading.hidden = false;
+
+    noPosts.hidden = true;
+
+    container.innerHTML = "";
 
 
     let query =
         supabaseClient
             .from("posts")
             .select("*")
-            .eq(
-                "category",
-                "CB"
-            )
-            .eq(
-                "published",
-                true
-            )
+            .eq("category","CB")
+            .eq("published",true)
             .order(
                 "published_at",
                 {
@@ -698,20 +588,12 @@ async function loadBoardPosts(){
             );
 
 
-    /*
-       যদি subcategory থাকে,
-       তাহলে শুধু সেই subcategory
-       এর পোস্ট আসবে।
-    */
-
-    if(
-        selectedSubCategory
-    ){
+    if(currentCategory){
 
         query =
             query.eq(
                 "sub_category",
-                selectedSubCategory
+                currentCategory
             );
 
     }
@@ -724,42 +606,31 @@ async function loadBoardPosts(){
         await query;
 
 
+    loading.hidden = true;
+
+
     if(error){
 
         console.error(error);
 
-
         container.innerHTML = `
-            <p style="
+            <div style="
+                padding:30px;
+                text-align:center;
                 color:#b51222;
-                font-size:12px;
             ">
-                পোস্ট লোড করা যাচ্ছে না।
-            </p>
+                পোস্ট লোড করতে সমস্যা হয়েছে।
+            </div>
         `;
-
 
         return;
 
     }
 
 
-    const posts =
-        data || [];
+    if(!data || !data.length){
 
-
-    if(!posts.length){
-
-        container.innerHTML = `
-            <p style="
-                color:#999;
-                font-size:12px;
-                padding:20px 0;
-            ">
-                এই বিভাগে এখনো কোনো পোস্ট প্রকাশিত হয়নি।
-            </p>
-        `;
-
+        noPosts.hidden = false;
 
         return;
 
@@ -767,173 +638,111 @@ async function loadBoardPosts(){
 
 
     container.innerHTML =
-        posts
-            .map(
-                createPostCard
-            )
+        data
+            .map(createPostHTML)
             .join("");
 
 }
 
 
-
 /* =====================================================
-   CREATE POST CARD
+   POST CARD
 ===================================================== */
 
-function createPostCard(post){
+function createPostHTML(post){
 
-    const category =
+    const subCategory =
         subCategoryNames[
             post.sub_category
         ]
         ||
-        post.sub_category
-        ||
-        "CHATTOGRAM BOARD";
+        "Chattogram Board";
 
 
     const date =
         post.published_at
             ? new Date(
                 post.published_at
-            ).toLocaleDateString(
+              ).toLocaleDateString(
                 "bn-BD",
                 {
                     year:"numeric",
                     month:"long",
                     day:"numeric"
                 }
-            )
-            : "সর্বশেষ";
+              )
+            : "";
 
 
-    return `
-
-        <article class="news-card">
-
-
-            <div class="news-top">
-
-
-                <span class="tag red">
-
-                    ${escapeHtml(
-                        category
-                    )}
-
-                </span>
-
-
-                <span class="date">
-
-                    ${escapeHtml(
-                        date
-                    )}
-
-                </span>
-
-
-            </div>
-
-
-
-            <h3>
-
-                ${escapeHtml(
-                    post.title
-                )}
-
-            </h3>
-
-
-
-            <p>
-
-                ${escapeHtml(
-                    post.description
-                )}
-
-            </p>
-
-
-
-            ${
-                post.image_url
-                ?
-                `
-                <div style="
-                    margin-top:15px;
-                    border-radius:10px;
-                    overflow:hidden;
-                ">
-
+    const image =
+        post.image_url
+            ? `
+                <div class="post-image">
                     <img
                         src="${escapeHtml(
                             post.image_url
                         )}"
                         alt="${escapeHtml(
                             post.title
-                        )}"
-                        style="
-                            width:100%;
-                            display:block;
-                            max-height:350px;
-                            object-fit:cover;
-                        "
-                    >
-
+                        )}">
                 </div>
-                `
-                :
-                ""
-            }
+              `
+            : "";
 
 
-
-            ${
-                post.pdf_url
-                ?
-                `
-                <div style="
-                    margin-top:15px;
-                ">
-
-                    <a
-                        href="${escapeHtml(
-                            post.pdf_url
-                        )}"
-                        target="_blank"
-                        rel="noopener"
-                        class="read-more">
-
-                        Notice PDF →
-
-                    </a>
-
-                </div>
-                `
-                :
-                ""
-            }
-
-
-
-            <div style="
-                margin-top:15px;
-            ">
-
+    const pdf =
+        post.pdf_url
+            ? `
                 <a
-                    href="post.html?id=${encodeURIComponent(
-                        post.id
+                    href="${escapeHtml(
+                        post.pdf_url
                     )}"
+                    target="_blank"
                     class="read-more">
 
-                    বিস্তারিত পড়ুন →
+                    PDF দেখুন →
 
                 </a>
+              `
+            : "";
+
+
+    return `
+
+        <article class="news-card">
+
+            ${image}
+
+            <div class="news-top">
+
+                <span class="tag red">
+                    ${escapeHtml(
+                        subCategory
+                    )}
+                </span>
+
+                <span class="date">
+                    ${escapeHtml(date)}
+                </span>
 
             </div>
+
+
+            <h3>
+                ${escapeHtml(
+                    post.title
+                )}
+            </h3>
+
+
+            <p>
+                ${escapeHtml(
+                    post.description
+                )}
+            </p>
+
+
+            ${pdf}
 
 
         </article>
@@ -943,26 +752,108 @@ function createPostCard(post){
 }
 
 
-
 /* =====================================================
-   START
+   FILTER CATEGORY
 ===================================================== */
 
-updatePageTitle();
+function filterCategory(category){
 
-loadBoardPosts();
+    currentCategory =
+        category;
+
+
+    const name =
+        subCategoryNames[
+            category
+        ]
+        ||
+        "Chattogram Board";
+
+
+    document
+        .getElementById(
+            "postSectionLabel"
+        )
+        .textContent =
+            name.toUpperCase();
+
+
+    document
+        .getElementById(
+            "postSectionTitle"
+        )
+        .textContent =
+            name + " আপডেট";
+
+
+    loadPosts();
+
+
+    setTimeout(
+        function(){
+
+            document
+                .getElementById(
+                    "latestPostsSection"
+                )
+                .scrollIntoView({
+                    behavior:"smooth"
+                });
+
+        },
+        100
+    );
+
+}
+
+
+window.filterCategory =
+    filterCategory;
+
+
+/* =====================================================
+   HTML ESCAPE
+===================================================== */
+
+function escapeHtml(value){
+
+    return String(
+        value || ""
+    )
+    .replaceAll(
+        "&",
+        "&amp;"
+    )
+    .replaceAll(
+        "<",
+        "&lt;"
+    )
+    .replaceAll(
+        ">",
+        "&gt;"
+    )
+    .replaceAll(
+        '"',
+        "&quot;"
+    )
+    .replaceAll(
+        "'",
+        "&#039;"
+    );
+
+}
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+loadPosts();
 
 </script>
 
 
-
-<!-- =====================================================
-     YOUR COMMON SCRIPT
-===================================================== -->
-
 <script src="script.js"></script>
 
-
 </body>
-
 </html>
