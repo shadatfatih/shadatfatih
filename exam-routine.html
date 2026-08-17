@@ -10,13 +10,20 @@
     <title>পরীক্ষা ও রুটিন | Shadat Fatih</title>
 
     <meta name="description"
-          content="বাংলাদেশের বিভিন্ন শিক্ষা প্রতিষ্ঠানের পরীক্ষা, রুটিন, সময়সূচি ও পরীক্ষার নির্দেশনা।">
+          content="SSC, HSC, National University ও অন্যান্য পরীক্ষার রুটিন, সময়সূচি ও গুরুত্বপূর্ণ নির্দেশনা।">
 
     <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 </head>
 
 <body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
 <header class="header">
 
@@ -41,13 +48,19 @@
 </header>
 
 
+<!-- =====================================================
+     MENU
+===================================================== -->
+
 <nav id="menu" class="menu">
 
     <div class="menu-title">
         MENU
     </div>
 
-    <a href="index.html">Home</a>
+    <a href="index.html">
+        Home
+    </a>
 
     <a href="national-university.html">
         National University
@@ -65,7 +78,7 @@
         Exam & Routine
     </a>
 
-    <a href="#">
+    <a href="results.html">
         Results
     </a>
 
@@ -76,9 +89,14 @@
 </nav>
 
 
+<!-- =====================================================
+     SEARCH
+===================================================== -->
+
 <div id="searchBox" class="search-box">
 
     <input
+        id="searchInput"
         type="search"
         placeholder="পরীক্ষা ও রুটিন খুঁজুন..."
     >
@@ -89,6 +107,10 @@
 
 </div>
 
+
+<!-- =====================================================
+     BREAKING
+===================================================== -->
 
 <div class="breaking">
 
@@ -103,164 +125,282 @@
 </div>
 
 
-<main class="notice-page">
+<!-- =====================================================
+     HERO
+===================================================== -->
 
-    <div class="notice-category">
-        EDUCATION • EXAM & ROUTINE
-    </div>
+<section class="hero">
 
+    <div class="hero-inner">
 
-    <h1>
-        পরীক্ষা ও রুটিন সংক্রান্ত সর্বশেষ আপডেট
-    </h1>
+        <div class="hero-label">
+            EDUCATION • EXAM & ROUTINE
+        </div>
 
-
-    <div class="notice-meta">
-
-        <span>
-            📝 Exam & Routine
-        </span>
-
-        <span>
-            📅 সর্বশেষ আপডেট
-        </span>
-
-    </div>
-
-
-    <div class="notice-divider"></div>
-
-
-    <article class="notice-content">
-
-        <p>
-            বিভিন্ন শিক্ষা প্রতিষ্ঠান ও
-            পরীক্ষার সময়সূচি, রুটিন এবং
-            পরীক্ষার গুরুত্বপূর্ণ নির্দেশনা
-            এখানে প্রকাশ করা হবে।
-        </p>
-
-
-        <h2>
-            পরীক্ষার রুটিন
-        </h2>
+        <h1>
+            পরীক্ষা ও রুটিনের
+            <span>সর্বশেষ আপডেট</span>
+        </h1>
 
         <p>
             SSC, HSC, জাতীয় বিশ্ববিদ্যালয় এবং
-            অন্যান্য পরীক্ষার রুটিন প্রকাশিত হলে
-            পরীক্ষার তারিখ ও সময়সূচি সহজভাবে
-            এখানে তুলে ধরা হবে।
+            অন্যান্য পরীক্ষার রুটিন ও
+            গুরুত্বপূর্ণ সময়সূচি এক জায়গায়।
         </p>
 
+    </div>
 
-        <h2>
-            পরীক্ষার সময়সূচি
-        </h2>
-
-        <p>
-            পরীক্ষার তারিখ, সময়, বিষয় এবং
-            প্রয়োজনীয় কেন্দ্র সংক্রান্ত তথ্য
-            অফিসিয়াল বিজ্ঞপ্তি অনুযায়ী
-            প্রকাশ করা হবে।
-        </p>
+</section>
 
 
-        <h2>
-            গুরুত্বপূর্ণ নির্দেশনা
-        </h2>
+<!-- =====================================================
+     SUB CATEGORIES
+===================================================== -->
 
-        <div class="important-box">
+<section class="section">
 
-            <div>
-
-                <strong>
-                    পরীক্ষার আগে
-                </strong>
-
-                <span>
-                    রুটিন ও নির্দেশনা যাচাই করুন
-                </span>
-
-            </div>
-
-
-            <div>
-
-                <strong>
-                    পরীক্ষার সময়
-                </strong>
-
-                <span>
-                    নির্ধারিত সময়ের আগে কেন্দ্রে উপস্থিত হন
-                </span>
-
-            </div>
-
-
-            <div>
-
-                <strong>
-                    অফিসিয়াল তথ্য
-                </strong>
-
-                <span>
-                    সংশ্লিষ্ট কর্তৃপক্ষের নোটিশ অনুসরণ করুন
-                </span>
-
-            </div>
-
-        </div>
-
-
-        <h2>
-            শিক্ষার্থীদের জন্য
-        </h2>
-
-        <p>
-            কোনো পরীক্ষার রুটিন বা সময়সূচি
-            পরিবর্তন হলে সংশ্লিষ্ট কর্তৃপক্ষের
-            অফিসিয়াল নোটিশকে সর্বশেষ তথ্য
-            হিসেবে বিবেচনা করা উচিত।
-        </p>
-
-    </article>
-
-
-    <section class="official-source">
+    <div class="section-heading">
 
         <div>
 
             <span>
-                INFORMATION
+                EXPLORE EXAM
             </span>
 
-            <h3>
-                Exam & Routine Updates
-            </h3>
+            <h2>
+                পরীক্ষা ও রুটিন
+            </h2>
 
         </div>
 
-        <a
-            href="index.html"
-            class="source-btn">
+    </div>
 
-            Latest Updates →
+
+    <div class="category-grid">
+
+
+        <!-- SSC -->
+
+        <a
+            href="#SSC"
+            class="category-card featured"
+            onclick="filterCategory('SSC')">
+
+            <div class="card-icon">
+                SSC
+            </div>
+
+            <div>
+
+                <h3>
+                    SSC
+                </h3>
+
+                <p>
+                    SSC পরীক্ষার রুটিন,
+                    সময়সূচি ও নির্দেশনা।
+                </p>
+
+            </div>
+
+            <strong>
+                →
+            </strong>
 
         </a>
 
-    </section>
+
+        <!-- HSC -->
+
+        <a
+            href="#HSC"
+            class="category-card"
+            onclick="filterCategory('HSC')">
+
+            <div class="card-icon">
+                HSC
+            </div>
+
+            <div>
+
+                <h3>
+                    HSC
+                </h3>
+
+                <p>
+                    HSC পরীক্ষার রুটিন,
+                    সময়সূচি ও নির্দেশনা।
+                </p>
+
+            </div>
+
+            <strong>
+                →
+            </strong>
+
+        </a>
 
 
-    <a
-        href="index.html"
-        class="back-btn">
+        <!-- NATIONAL UNIVERSITY -->
 
-        ← Home-এ ফিরে যান
+        <a
+            href="#NU"
+            class="category-card"
+            onclick="filterCategory('NU')">
 
-    </a>
+            <div class="card-icon">
+                NU
+            </div>
 
-</main>
+            <div>
 
+                <h3>
+                    National University
+                </h3>
+
+                <p>
+                    জাতীয় বিশ্ববিদ্যালয়ের
+                    পরীক্ষা ও রুটিন।
+                </p>
+
+            </div>
+
+            <strong>
+                →
+            </strong>
+
+        </a>
+
+
+        <!-- OTHERS -->
+
+        <a
+            href="#OTHERS"
+            class="category-card"
+            onclick="filterCategory('OTHERS')">
+
+            <div class="card-icon">
+                EX
+            </div>
+
+            <div>
+
+                <h3>
+                    Others
+                </h3>
+
+                <p>
+                    অন্যান্য পরীক্ষা ও
+                    রুটিন সংক্রান্ত তথ্য।
+                </p>
+
+            </div>
+
+            <strong>
+                →
+            </strong>
+
+        </a>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     POSTS
+===================================================== -->
+
+<section
+    id="latestPostsSection"
+    class="latest-section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span id="postSectionLabel">
+                LATEST EXAM UPDATES
+            </span>
+
+            <h2 id="postSectionTitle">
+                সর্বশেষ পরীক্ষা ও রুটিন
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <!-- LOADING -->
+
+    <div
+        id="loadingPosts"
+        style="
+            text-align:center;
+            padding:30px;
+            color:#888;
+            font-size:13px;
+        ">
+
+        পোস্ট লোড হচ্ছে...
+
+    </div>
+
+
+    <!-- POSTS -->
+
+    <div id="postsContainer"></div>
+
+
+    <!-- NO POSTS -->
+
+    <div
+        id="noPosts"
+        hidden
+        style="
+            text-align:center;
+            padding:35px;
+            color:#888;
+            font-size:13px;
+        ">
+
+        এই বিভাগে এখনো কোনো পোস্ট প্রকাশ করা হয়নি।
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ABOUT
+===================================================== -->
+
+<section class="about">
+
+    <div class="about-label">
+        EXAM & ROUTINE
+    </div>
+
+    <h2>
+        পরীক্ষার
+        <span>সঠিক তথ্য</span>
+        এক জায়গায়।
+    </h2>
+
+    <p>
+        Shadat Fatih-এ SSC, HSC, জাতীয় বিশ্ববিদ্যালয়
+        এবং অন্যান্য পরীক্ষার রুটিন, সময়সূচি ও
+        গুরুত্বপূর্ণ নির্দেশনা সহজভাবে প্রকাশ করা হবে।
+    </p>
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
 
 <footer>
 
@@ -286,6 +426,10 @@
             Exam & Routine
         </a>
 
+        <a href="results.html">
+            Results
+        </a>
+
         <a href="notice.html">
             Notices
         </a>
@@ -297,6 +441,391 @@
     </div>
 
 </footer>
+
+
+<!-- =====================================================
+     SUPABASE
+===================================================== -->
+
+<script>
+
+const SUPABASE_URL =
+    "https://ymwhodckmbybccufzjot.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_u31olXCxIcSsMdUeyyt5U_QY_ECWKToH";
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =====================================================
+   SUB CATEGORY NAMES
+===================================================== */
+
+const subCategoryNames = {
+
+    SSC:
+        "SSC",
+
+    HSC:
+        "HSC",
+
+    NU:
+        "National University",
+
+    OTHERS:
+        "Others"
+
+};
+
+
+/* =====================================================
+   CURRENT CATEGORY
+===================================================== */
+
+let currentCategory = null;
+
+
+/* =====================================================
+   LOAD POSTS
+===================================================== */
+
+async function loadPosts(){
+
+    const loading =
+        document.getElementById(
+            "loadingPosts"
+        );
+
+    const container =
+        document.getElementById(
+            "postsContainer"
+        );
+
+    const noPosts =
+        document.getElementById(
+            "noPosts"
+        );
+
+
+    loading.hidden = false;
+
+    noPosts.hidden = true;
+
+    container.innerHTML = "";
+
+
+    let query =
+        supabaseClient
+            .from("posts")
+            .select("*")
+            .eq("category", "EX")
+            .eq("published", true)
+            .order(
+                "published_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+    /* SUB CATEGORY FILTER */
+
+    if(currentCategory){
+
+        query =
+            query.eq(
+                "sub_category",
+                currentCategory
+            );
+
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await query;
+
+
+    loading.hidden = true;
+
+
+    /* ERROR */
+
+    if(error){
+
+        console.error(
+            "Supabase Error:",
+            error
+        );
+
+        container.innerHTML = `
+            <div style="
+                padding:30px;
+                text-align:center;
+                color:#b51222;
+            ">
+                পোস্ট লোড করতে সমস্যা হয়েছে।
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    /* NO POST */
+
+    if(!data || data.length === 0){
+
+        noPosts.hidden = false;
+
+        return;
+
+    }
+
+
+    /* CREATE POSTS */
+
+    container.innerHTML =
+        data
+            .map(createPostHTML)
+            .join("");
+
+}
+
+
+/* =====================================================
+   POST HTML
+===================================================== */
+
+function createPostHTML(post){
+
+    const subCategory =
+        subCategoryNames[
+            post.sub_category
+        ]
+        ||
+        "Exam & Routine";
+
+
+    const date =
+        post.published_at
+        || post.created_at
+        ? new Date(
+            post.published_at
+            || post.created_at
+        ).toLocaleDateString(
+            "bn-BD",
+            {
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+            }
+        )
+        : "";
+
+
+    const image =
+        post.image_url
+        ? `
+            <div class="post-image">
+
+                <img
+                    src="${escapeHtml(
+                        post.image_url
+                    )}"
+                    alt="${escapeHtml(
+                        post.title
+                    )}">
+
+            </div>
+        `
+        : "";
+
+
+    const pdf =
+        post.pdf_url
+        ? `
+            <a
+                href="${escapeHtml(
+                    post.pdf_url
+                )}"
+                target="_blank"
+                rel="noopener"
+                class="read-more">
+
+                PDF দেখুন →
+
+            </a>
+        `
+        : "";
+
+
+    return `
+
+        <article class="news-card">
+
+            ${image}
+
+
+            <div class="news-top">
+
+                <span class="tag red">
+
+                    ${escapeHtml(
+                        subCategory
+                    )}
+
+                </span>
+
+
+                <span class="date">
+
+                    ${escapeHtml(
+                        date
+                    )}
+
+                </span>
+
+            </div>
+
+
+            <h3>
+
+                ${escapeHtml(
+                    post.title
+                )}
+
+            </h3>
+
+
+            <p>
+
+                ${escapeHtml(
+                    post.description
+                    || post.content
+                    || ""
+                )}
+
+            </p>
+
+
+            ${pdf}
+
+        </article>
+
+    `;
+
+}
+
+
+/* =====================================================
+   FILTER CATEGORY
+===================================================== */
+
+function filterCategory(category){
+
+    currentCategory =
+        category;
+
+
+    const name =
+        subCategoryNames[
+            category
+        ]
+        ||
+        "Exam & Routine";
+
+
+    document
+        .getElementById(
+            "postSectionLabel"
+        )
+        .textContent =
+            name.toUpperCase();
+
+
+    document
+        .getElementById(
+            "postSectionTitle"
+        )
+        .textContent =
+            name + " আপডেট";
+
+
+    loadPosts();
+
+
+    setTimeout(
+        function(){
+
+            document
+                .getElementById(
+                    "latestPostsSection"
+                )
+                .scrollIntoView({
+                    behavior: "smooth"
+                });
+
+        },
+        100
+    );
+
+}
+
+
+window.filterCategory =
+    filterCategory;
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value){
+
+    return String(
+        value || ""
+    )
+    .replaceAll(
+        "&",
+        "&amp;"
+    )
+    .replaceAll(
+        "<",
+        "&lt;"
+    )
+    .replaceAll(
+        ">",
+        "&gt;"
+    )
+    .replaceAll(
+        '"',
+        "&quot;"
+    )
+    .replaceAll(
+        "'",
+        "&#039;"
+    );
+
+}
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+loadPosts();
+
+</script>
 
 
 <script src="script.js"></script>
