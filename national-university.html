@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="bn">
+
 <head>
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>National University | Shadat Fatih</title>
@@ -10,9 +12,17 @@
         content="জাতীয় বিশ্ববিদ্যালয়ের ভর্তি, পরীক্ষা, ফলাফল, রুটিন ও সর্বশেষ নোটিশ।">
 
     <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
-<body>
+
+<body class="home-page">
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
 <header class="header">
 
@@ -22,14 +32,27 @@
 
     <div class="header-actions">
 
-        <button class="search-btn" onclick="openSearch()">⌕</button>
+        <button
+            class="search-btn"
+            onclick="openSearch()">
+            ⌕
+        </button>
 
-        <button class="menu-btn" onclick="toggleMenu()">⋮</button>
+        <button
+            class="menu-btn"
+            onclick="toggleMenu()">
+            ⋮
+        </button>
 
     </div>
 
 </header>
 
+
+
+<!-- =====================================================
+     MENU
+===================================================== -->
 
 <nav id="menu" class="menu">
 
@@ -37,28 +60,61 @@
         MENU
     </div>
 
-    <a href="index.html">Home</a>
-    <a href="national-university.html">National University</a>
-    <a href="#">Chattogram Board</a>
-    <a href="#">Admission</a>
-    <a href="#">Exam & Routine</a>
-    <a href="#">Results</a>
-    <a href="#">Notices</a>
+    <a href="index.html">
+        Home
+    </a>
+
+    <a href="national-university.html">
+        National University
+    </a>
+
+    <a href="chattogram-board.html">
+        Chattogram Board
+    </a>
+
+    <a href="admission.html">
+        Admission
+    </a>
+
+    <a href="exam-routine.html">
+        Exam & Routine
+    </a>
+
+    <a href="results.html">
+        Results
+    </a>
+
+    <a href="notice.html">
+        Notices
+    </a>
 
 </nav>
 
+
+
+<!-- =====================================================
+     SEARCH
+===================================================== -->
 
 <div id="searchBox" class="search-box">
 
     <input
         type="search"
+        id="searchInput"
         placeholder="জাতীয় বিশ্ববিদ্যালয়ের তথ্য খুঁজুন..."
     >
 
-    <button onclick="closeSearch()">×</button>
+    <button onclick="closeSearch()">
+        ×
+    </button>
 
 </div>
 
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
 
 <section class="hero">
 
@@ -84,13 +140,23 @@
 </section>
 
 
+
+<!-- =====================================================
+     NU CATEGORY CARDS
+===================================================== -->
+
 <section class="section">
 
     <div class="section-heading">
 
         <div>
+
             <span>EXPLORE NU</span>
-            <h2>জাতীয় বিশ্ববিদ্যালয়</h2>
+
+            <h2>
+                জাতীয় বিশ্ববিদ্যালয়
+            </h2>
+
         </div>
 
     </div>
@@ -98,70 +164,126 @@
 
     <div class="category-grid">
 
-        <a href="#" class="category-card featured">
 
-            <div class="card-icon">AD</div>
+        <!-- ADMISSION -->
+
+        <a
+            href="#admission"
+            class="category-card featured">
+
+            <div class="card-icon">
+                AD
+            </div>
 
             <div>
-                <h3>ভর্তি</h3>
+
+                <h3>
+                    ভর্তি
+                </h3>
+
                 <p>
                     অনার্স, ডিগ্রি, মাস্টার্স ও
                     অন্যান্য ভর্তি আপডেট।
                 </p>
+
             </div>
 
-            <strong>→</strong>
+            <strong>
+                →
+            </strong>
 
         </a>
 
 
-        <a href="#" class="category-card">
 
-            <div class="card-icon">EX</div>
+        <!-- EXAM -->
+
+        <a
+            href="#exam"
+            class="category-card">
+
+            <div class="card-icon">
+                EX
+            </div>
 
             <div>
-                <h3>পরীক্ষা</h3>
+
+                <h3>
+                    পরীক্ষা
+                </h3>
+
                 <p>
                     পরীক্ষা, ফরম পূরণ ও
                     পরীক্ষার সময়সূচি।
                 </p>
+
             </div>
 
-            <strong>→</strong>
+            <strong>
+                →
+            </strong>
 
         </a>
 
 
-        <a href="#" class="category-card">
 
-            <div class="card-icon">RT</div>
+        <!-- ROUTINE -->
+
+        <a
+            href="#routine"
+            class="category-card">
+
+            <div class="card-icon">
+                RT
+            </div>
 
             <div>
-                <h3>রুটিন</h3>
+
+                <h3>
+                    রুটিন
+                </h3>
+
                 <p>
                     বিভিন্ন বর্ষের পরীক্ষার
                     রুটিন ও সময়সূচি।
                 </p>
+
             </div>
 
-            <strong>→</strong>
+            <strong>
+                →
+            </strong>
 
         </a>
 
 
-        <a href="#" class="category-card">
 
-            <div class="card-icon">RS</div>
+        <!-- RESULT -->
+
+        <a
+            href="#result"
+            class="category-card">
+
+            <div class="card-icon">
+                RS
+            </div>
 
             <div>
-                <h3>ফলাফল</h3>
+
+                <h3>
+                    ফলাফল
+                </h3>
+
                 <p>
                     অনার্স, ডিগ্রি ও মাস্টার্স
                     ফলাফল সংক্রান্ত তথ্য।
                 </p>
+
             </div>
 
-            <strong>→</strong>
+            <strong>
+                →
+            </strong>
 
         </a>
 
@@ -170,110 +292,258 @@
 </section>
 
 
+
+<!-- =====================================================
+     LATEST NU UPDATES
+===================================================== -->
+
 <section class="latest-section">
+
 
     <div class="section-heading">
 
         <div>
-            <span>LATEST NU UPDATES</span>
-            <h2>সর্বশেষ নোটিশ</h2>
+
+            <span>
+                LATEST NU UPDATES
+            </span>
+
+            <h2>
+                সর্বশেষ নোটিশ
+            </h2>
+
         </div>
 
     </div>
 
 
-    <article class="news-card">
+    <!-- DYNAMIC POSTS -->
 
-        <div class="news-top">
+    <div id="nuPosts">
 
-            <span class="tag red">
-                NATIONAL UNIVERSITY
-            </span>
+        <article class="news-card">
 
-            <span class="date">
-                সর্বশেষ
-            </span>
+            <p>
+                জাতীয় বিশ্ববিদ্যালয়ের পোস্ট লোড হচ্ছে...
+            </p>
 
-        </div>
+        </article>
 
-        <h3>
-            জাতীয় বিশ্ববিদ্যালয়ের নতুন নোটিশ ও আপডেট
-        </h3>
+    </div>
 
-        <p>
-            জাতীয় বিশ্ববিদ্যালয়ের ভর্তি, পরীক্ষা,
-            ফরম পূরণ, ফলাফল ও অন্যান্য গুরুত্বপূর্ণ
-            তথ্য এখানে প্রকাশ করা হবে।
-        </p>
-
-        <a href="nu-admission.html" class="read-more">
-            বিস্তারিত পড়ুন →
-        </a>
-
-    </article>
-
-
-    <article class="news-card">
-
-        <div class="news-top">
-
-            <span class="tag">
-                EXAM
-            </span>
-
-            <span class="date">
-                আপডেট
-            </span>
-
-        </div>
-
-        <h3>
-            পরীক্ষার সময়সূচি ও রুটিন সংক্রান্ত তথ্য
-        </h3>
-
-        <p>
-            বিভিন্ন বর্ষের পরীক্ষার তারিখ,
-            সময়সূচি এবং রুটিন এখানে পাওয়া যাবে।
-        </p>
-
-        <a href="nu-exam.html" class="read-more">
-            বিস্তারিত পড়ুন →
-        </a>
-
-    </article>
-
-
-    <article class="news-card">
-
-        <div class="news-top">
-
-            <span class="tag">
-                ADMISSION
-            </span>
-
-            <span class="date">
-                আপডেট
-            </span>
-
-        </div>
-
-        <h3>
-            জাতীয় বিশ্ববিদ্যালয়ের ভর্তি সংক্রান্ত আপডেট
-        </h3>
-
-        <p>
-            ভর্তি বিজ্ঞপ্তি, আবেদন সময়সীমা,
-            ফি ও প্রয়োজনীয় নির্দেশনা।
-        </p>
-
-        <a href="nu-result.html" class="read-more">
-            বিস্তারিত পড়ুন →
-        </a>
-
-    </article>
 
 </section>
 
+
+
+<!-- =====================================================
+     ADMISSION
+===================================================== -->
+
+<section
+    id="admission"
+    class="latest-section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span>
+                NU ADMISSION
+            </span>
+
+            <h2>
+                ভর্তি
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <div id="admissionPosts">
+
+        <article class="news-card">
+
+            <p>
+                ভর্তি সংক্রান্ত পোস্ট লোড হচ্ছে...
+            </p>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     EXAM
+===================================================== -->
+
+<section
+    id="exam"
+    class="latest-section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span>
+                NU EXAM
+            </span>
+
+            <h2>
+                পরীক্ষা
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <div id="examPosts">
+
+        <article class="news-card">
+
+            <p>
+                পরীক্ষা সংক্রান্ত পোস্ট লোড হচ্ছে...
+            </p>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     ROUTINE
+===================================================== -->
+
+<section
+    id="routine"
+    class="latest-section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span>
+                NU ROUTINE
+            </span>
+
+            <h2>
+                রুটিন
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <div id="routinePosts">
+
+        <article class="news-card">
+
+            <p>
+                রুটিন সংক্রান্ত পোস্ট লোড হচ্ছে...
+            </p>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     RESULT
+===================================================== -->
+
+<section
+    id="result"
+    class="latest-section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span>
+                NU RESULT
+            </span>
+
+            <h2>
+                ফলাফল
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <div id="resultPosts">
+
+        <article class="news-card">
+
+            <p>
+                ফলাফল সংক্রান্ত পোস্ট লোড হচ্ছে...
+            </p>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     NOTICE
+===================================================== -->
+
+<section
+    id="notice"
+    class="latest-section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span>
+                NU NOTICE
+            </span>
+
+            <h2>
+                গুরুত্বপূর্ণ নোটিশ
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <div id="noticePosts">
+
+        <article class="news-card">
+
+            <p>
+                নোটিশ লোড হচ্ছে...
+            </p>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     ABOUT
+===================================================== -->
 
 <section class="about">
 
@@ -282,19 +552,31 @@
     </div>
 
     <h2>
+
         NU-এর প্রয়োজনীয় তথ্য
-        <span>এক জায়গায়।</span>
+
+        <span>
+            এক জায়গায়।
+        </span>
+
     </h2>
 
     <p>
+
         Shadat Fatih-এ জাতীয় বিশ্ববিদ্যালয়ের
         বিভিন্ন নোটিশ, ভর্তি তথ্য, পরীক্ষার
         সময়সূচি, ফলাফল এবং শিক্ষার্থীদের
         প্রয়োজনীয় আপডেট প্রকাশ করা হবে।
+
     </p>
 
 </section>
 
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
 
 <footer>
 
@@ -308,11 +590,25 @@
 
     <div class="footer-links">
 
-        <a href="index.html">Home</a>
-        <a href="#">About</a>
-        <a href="#">Contact</a>
-        <a href="#">Privacy</a>
-        <a href="#">Disclaimer</a>
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="#">
+            About
+        </a>
+
+        <a href="#">
+            Contact
+        </a>
+
+        <a href="#">
+            Privacy
+        </a>
+
+        <a href="#">
+            Disclaimer
+        </a>
 
     </div>
 
@@ -323,7 +619,444 @@
 </footer>
 
 
+
+<!-- =====================================================
+     SUPABASE
+===================================================== -->
+
+<script>
+
+const SUPABASE_URL =
+    "https://ymwhodckmbybccufzjot.supabase.co";
+
+
+const SUPABASE_ANON_KEY =
+    "sb_publishable_u31olXCxIcSsMdUeyyt5UQ_YeCWKToH";
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value){
+
+    return String(value ?? "")
+
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+
+/* =====================================================
+   POST CARD
+===================================================== */
+
+function createPostHTML(post){
+
+    const date =
+        post.published_at ||
+        post.created_at;
+
+
+    const formattedDate =
+        date
+            ? new Date(date)
+                .toLocaleDateString(
+                    "en-GB",
+                    {
+                        day:"2-digit",
+                        month:"short",
+                        year:"numeric"
+                    }
+                )
+            : "";
+
+
+    const imageHTML =
+        post.image_url
+
+            ? `
+                <img
+                    src="${escapeHtml(post.image_url)}"
+                    alt="${escapeHtml(post.title)}"
+                    style="
+                        width:100%;
+                        max-height:300px;
+                        object-fit:cover;
+                        border-radius:12px;
+                        margin:15px 0;
+                    "
+                >
+            `
+
+            : "";
+
+
+    return `
+
+        <article class="news-card">
+
+            <div class="news-top">
+
+                <span class="tag red">
+
+                    NATIONAL UNIVERSITY
+
+                </span>
+
+
+                <span class="date">
+
+                    ${escapeHtml(formattedDate)}
+
+                </span>
+
+            </div>
+
+
+            <h3>
+
+                ${escapeHtml(post.title)}
+
+            </h3>
+
+
+            ${imageHTML}
+
+
+            <p>
+
+                ${escapeHtml(
+                    post.description ||
+                    post.content ||
+                    ""
+                )}
+
+            </p>
+
+
+            <a
+                href="post.html?id=${encodeURIComponent(post.id)}"
+                class="read-more">
+
+                বিস্তারিত পড়ুন →
+
+            </a>
+
+        </article>
+
+    `;
+
+}
+
+
+
+/* =====================================================
+   RENDER CATEGORY
+===================================================== */
+
+function renderCategory(
+    containerId,
+    posts,
+    subCategory
+){
+
+    const container =
+        document.getElementById(
+            containerId
+        );
+
+
+    if(!container){
+
+        return;
+
+    }
+
+
+    const filtered =
+        posts.filter(
+            post =>
+                String(
+                    post.sub_category || ""
+                ).toUpperCase()
+                === subCategory
+        );
+
+
+    if(!filtered.length){
+
+        container.innerHTML = `
+
+            <article class="news-card">
+
+                <p>
+
+                    এই বিভাগে এখনো কোনো
+                    প্রকাশিত পোস্ট নেই।
+
+                </p>
+
+            </article>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        filtered
+            .map(createPostHTML)
+            .join("");
+
+}
+
+
+
+/* =====================================================
+   LOAD NU POSTS
+===================================================== */
+
+async function loadNUPosts(){
+
+    const latestContainer =
+        document.getElementById(
+            "nuPosts"
+        );
+
+
+    if(latestContainer){
+
+        latestContainer.innerHTML = `
+
+            <article class="news-card">
+
+                <p>
+                    পোস্ট লোড হচ্ছে...
+                </p>
+
+            </article>
+
+        `;
+
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+
+            .from("posts")
+
+            .select("*")
+
+            .eq("category","NU")
+
+            .eq("published",true)
+
+            .order(
+                "created_at",
+                {
+                    ascending:false
+                }
+            )
+
+            .limit(100);
+
+
+
+    if(error){
+
+        console.error(
+            "Supabase error:",
+            error
+        );
+
+
+        if(latestContainer){
+
+            latestContainer.innerHTML = `
+
+                <article class="news-card">
+
+                    <p>
+                        পোস্ট লোড করা যাচ্ছে না।
+                    </p>
+
+                </article>
+
+            `;
+
+        }
+
+        return;
+
+    }
+
+
+    const posts =
+        data || [];
+
+
+    /* ================================================
+       LATEST ALL NU POSTS
+    ================================================= */
+
+    if(!posts.length){
+
+        if(latestContainer){
+
+            latestContainer.innerHTML = `
+
+                <article class="news-card">
+
+                    <p>
+                        এখনো কোনো NU পোস্ট প্রকাশ করা হয়নি।
+                    </p>
+
+                </article>
+
+            `;
+
+        }
+
+    }
+    else{
+
+        if(latestContainer){
+
+            latestContainer.innerHTML =
+                posts
+                    .slice(0,10)
+                    .map(createPostHTML)
+                    .join("");
+
+        }
+
+    }
+
+
+
+    /* ================================================
+       SUB CATEGORIES
+    ================================================= */
+
+    renderCategory(
+        "admissionPosts",
+        posts,
+        "ADMISSION"
+    );
+
+
+    renderCategory(
+        "examPosts",
+        posts,
+        "EXAM"
+    );
+
+
+    renderCategory(
+        "routinePosts",
+        posts,
+        "ROUTINE"
+    );
+
+
+    renderCategory(
+        "resultPosts",
+        posts,
+        "RESULT"
+    );
+
+
+    renderCategory(
+        "noticePosts",
+        posts,
+        "NOTICE"
+    );
+
+}
+
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+const searchInput =
+    document.getElementById(
+        "searchInput"
+    );
+
+
+if(searchInput){
+
+    searchInput.addEventListener(
+        "input",
+        function(){
+
+            const keyword =
+                this.value
+                    .toLowerCase()
+                    .trim();
+
+
+            document
+                .querySelectorAll(
+                    ".news-card"
+                )
+                .forEach(
+                    card => {
+
+                        const text =
+                            card.textContent
+                                .toLowerCase();
+
+
+                        card.style.display =
+                            !keyword ||
+                            text.includes(keyword)
+                                ? ""
+                                : "none";
+
+                    }
+                );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   START
+===================================================== */
+
+loadNUPosts();
+
+</script>
+
+
 <script src="script.js"></script>
 
 </body>
+
 </html>
