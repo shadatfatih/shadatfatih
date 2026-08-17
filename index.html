@@ -499,39 +499,57 @@
 
 <script>
 
-const SUPABASE_URL = "https://ymwhodckmbybccufzjot.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_u31olXCxIcSsMdUeyyt5UQ_YeCWKToH";
+const SUPABASE_URL =
+    "https://ymwhodckmbybccufzjot.supabase.co";
 
-const supabaseClient = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-);
+const SUPABASE_ANON_KEY =
+    "sb_publishable_u31olXCxIcSsMdUeyyt5UQ_YeCWKToH";
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
 
 
 async function loadLatestPosts() {
 
-    const container = document.getElementById("dynamicPosts");
+    const container =
+        document.getElementById("dynamicPosts");
 
     if (!container) return;
 
 
-    const { data, error } = await supabaseClient
-        .from("public_posts")
-        .select("*")
-        .eq("status", "published")
-        .order("created_at", {
-            ascending: false
-        })
-        .limit(10);
+    const { data, error } =
+        await supabaseClient
+
+            .from("posts")
+
+            .select("*")
+
+            .eq("published", true)
+
+            .order("created_at", {
+                ascending: false
+            })
+
+            .limit(10);
 
 
     if (error) {
 
-        console.error("Supabase Error:", error);
+        console.error(
+            "Supabase Error:",
+            error
+        );
 
         container.innerHTML = `
             <div class="news-card">
-                <p>আপডেট লোড করা যাচ্ছে না।</p>
+
+                <p>
+                    আপডেট লোড করা যাচ্ছে না।
+                </p>
+
             </div>
         `;
 
@@ -543,7 +561,11 @@ async function loadLatestPosts() {
 
         container.innerHTML = `
             <div class="news-card">
-                <p>এখনো কোনো নতুন আপডেট প্রকাশ করা হয়নি।</p>
+
+                <p>
+                    এখনো কোনো নতুন আপডেট প্রকাশ করা হয়নি।
+                </p>
+
             </div>
         `;
 
@@ -556,36 +578,61 @@ async function loadLatestPosts() {
 
     data.forEach(post => {
 
-        const article = document.createElement("article");
+        const article =
+            document.createElement("article");
 
-        article.className = "news-card";
+
+        article.className =
+            "news-card";
 
 
         const categoryNames = {
-            NU: "NATIONAL UNIVERSITY",
-            CB: "CHATTOGRAM BOARD",
-            AD: "ADMISSION",
-            EX: "EXAM & ROUTINE",
-            RS: "RESULT",
-            NT: "NOTICE"
+
+            nu:
+                "NATIONAL UNIVERSITY",
+
+            board:
+                "CHATTOGRAM BOARD",
+
+            admission:
+                "ADMISSION",
+
+            exam:
+                "EXAM & ROUTINE",
+
+            result:
+                "RESULT",
+
+            education:
+                "EDUCATION UPDATE"
+
         };
 
 
         const category =
-            categoryNames[post.category] ||
+            categoryNames[post.category]
+            ||
             "EDUCATION UPDATE";
 
 
-        const date = new Date(
-            post.created_at
-        ).toLocaleDateString(
-            "en-GB",
-            {
-                day: "2-digit",
-                month: "short",
-                year: "numeric"
-            }
-        );
+        const dateSource =
+            post.published_at
+            ||
+            post.created_at;
+
+
+        const date =
+            dateSource
+            ? new Date(dateSource)
+                .toLocaleDateString(
+                    "en-GB",
+                    {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric"
+                    }
+                )
+            : "";
 
 
         article.innerHTML = `
@@ -593,19 +640,19 @@ async function loadLatestPosts() {
             <div class="news-top">
 
                 <span class="tag ${
-                    post.category === "NU"
+                    post.category === "nu"
                     ? "red"
                     : ""
                 }">
 
-                    ${category}
+                    ${escapeHtml(category)}
 
                 </span>
 
 
                 <span class="date">
 
-                    ${date}
+                    ${escapeHtml(date)}
 
                 </span>
 
@@ -614,23 +661,31 @@ async function loadLatestPosts() {
 
             <h3>
 
-                ${post.title || ""}
+                ${escapeHtml(
+                    post.title || ""
+                )}
 
             </h3>
 
 
             <p>
 
-                ${post.content || ""}
+                ${escapeHtml(
+                    post.description ||
+                    post.content ||
+                    ""
+                )}
 
             </p>
 
 
-          <a href="post.html?id=${post.id}" class="read-more">
+            <a
+                href="post.html?id=${encodeURIComponent(post.id)}"
+                class="read-more">
 
-    বিস্তারিত পড়ুন →
+                বিস্তারিত পড়ুন →
 
-</a>
+            </a>
 
         `;
 
@@ -641,6 +696,27 @@ async function loadLatestPosts() {
 
 }
 
+
+/* নিরাপদভাবে text দেখানোর জন্য */
+
+function escapeHtml(value) {
+
+    return String(value || "")
+
+        .replace(/&/g, "&amp;")
+
+        .replace(/</g, "&lt;")
+
+        .replace(/>/g, "&gt;")
+
+        .replace(/"/g, "&quot;")
+
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* Load posts */
 
 loadLatestPosts();
 
