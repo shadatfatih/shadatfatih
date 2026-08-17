@@ -556,13 +556,14 @@ async function loadLatestPosts() {
     `;
 
 
-    const { data, error } = await supabaseClient
-        .from("public_posts")
-        .select("*")
-        .order("created_at", {
-            ascending: false
-        })
-        .limit(100);
+   const { data, error } = await supabaseClient
+    .from("posts")
+    .select("*")
+    .eq("published", true)
+    .order("created_at", {
+        ascending: false
+    })
+    .limit(100);
 
 
     if (error) {
