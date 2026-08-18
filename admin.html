@@ -1845,7 +1845,7 @@ const supabaseClient =
 
 const subCategories = {
 
-    /* CHATTOGRAM BOARD — আগেরগুলো অপরিবর্তিত */
+    /* CHATTOGRAM BOARD — অপরিবর্তিত */
     CB: [
         {
             value: "HSC",
@@ -1878,7 +1878,7 @@ const subCategories = {
     ],
 
 
-    /* ADMISSION — existing + database অনুযায়ী */
+    /* ADMISSION — অপরিবর্তিত */
     AD: [
         {
             value: "NU_ADMISSION",
@@ -1895,8 +1895,12 @@ const subCategories = {
     ],
 
 
-    /* EXAM & ROUTINE — নতুন */
+    /* EXAM & ROUTINE */
     EX: [
+        {
+            value: "NU",
+            name: "National University"
+        },
         {
             value: "SSC",
             name: "SSC"
@@ -1907,21 +1911,29 @@ const subCategories = {
         },
         {
             value: "EXAM",
-            name: "Exam & Routine"
+            name: "Others"
         }
     ],
 
 
-    /* RESULTS — নতুন */
+    /* RESULTS */
     RS: [
         {
-            value: "RESULT",
-            name: "Result"
+            value: "NU",
+            name: "National University"
+        },
+        {
+            value: "SSC",
+            name: "SSC"
+        },
+        {
+            value: "HSC",
+            name: "HSC"
         }
     ],
 
 
-    /* NOTICE — নতুন */
+    /* NOTICE — অপরিবর্তিত */
     NT: [
         {
             value: "NOTICE",
