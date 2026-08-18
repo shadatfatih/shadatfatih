@@ -186,7 +186,7 @@
 
         <a
             href="#NU_ADMISSION"
-            onclick="filterCategory('NU_ADMISSION')"
+            onclick="filterCategory('NU_ADMISSION'); return false;"
             class="category-card featured">
 
             <div class="card-icon">
@@ -217,7 +217,7 @@
 
         <a
             href="#HSC_ADMISSION"
-            onclick="filterCategory('HSC_ADMISSION')"
+            onclick="filterCategory('HSC_ADMISSION'); return false;"
             class="category-card">
 
             <div class="card-icon">
@@ -248,7 +248,7 @@
 
         <a
             href="#OTHERS_ADMISSION"
-            onclick="filterCategory('OTHERS_ADMISSION')"
+            onclick="filterCategory('OTHERS_ADMISSION'); return false;"
             class="category-card">
 
             <div class="card-icon">
@@ -419,7 +419,8 @@ const SUPABASE_URL =
     "https://ymwhodckmbybccufzjot.supabase.co";
 
 const SUPABASE_ANON_KEY =
-    "sb_publishable_u31olXCxIcSsMdUeyyt5UQ_YeCWKToH";
+    "sb_publishable_u31olXCxIcSsMdUeyyt5U_QY_ECWKToH";
+
 
 const supabaseClient =
     window.supabase.createClient(
@@ -434,13 +435,13 @@ const supabaseClient =
 
 const subCategoryNames = {
 
-    "NU_ADMISSION":
+    NU_ADMISSION:
         "National University Admission",
 
-    "HSC_ADMISSION":
+    HSC_ADMISSION:
         "HSC Admission",
 
-    "OTHERS_ADMISSION":
+    OTHERS_ADMISSION:
         "Others Admission"
 
 };
@@ -479,22 +480,61 @@ async function loadPosts() {
     try {
 
         /*
-         * প্রথমে শুধু AD + published পোস্ট নেওয়া হচ্ছে।
-         * Sub-category filter পরে JavaScript দিয়ে করা হবে।
+         * প্রথমে AD category-এর published পোস্ট
+         * সরাসরি Supabase থেকে নেওয়া হচ্ছে।
          */
+
+        let query =
+            supabaseClient
+                .from("posts")
+                .select("*")
+                .eq("category", "AD")
+                .eq("published", true);
+
+
+        /*
+         * Subcategory নির্বাচন করা হলে
+         * Supabase query-তেই filter হবে।
+         */
+
+        if (currentCategory) {
+
+            query =
+                query.eq(
+                    "sub_category",
+                    currentCategory
+                );
+
+        }
+
 
         const {
             data,
             error
-        } = await supabaseClient
-            .from("posts")
-            .select("*")
-            .eq("category", "AD")
-            .eq("published", true)
-            .order("created_at", {
-                ascending: false
-            });
+        } =
+            await query
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
 
+
+        console.log(
+            "ADMISSION POSTS:",
+            data
+        );
+
+        console.log(
+            "ADMISSION ERROR:",
+            error
+        );
+
+
+        /* ---------------------------------------------
+           ERROR
+        --------------------------------------------- */
 
         if (error) {
 
@@ -519,9 +559,9 @@ async function loadPosts() {
         }
 
 
-        /*
-         * কোনো পোস্ট না থাকলে
-         */
+        /* ---------------------------------------------
+           NO POSTS
+        --------------------------------------------- */
 
         if (!data || data.length === 0) {
 
@@ -533,59 +573,24 @@ async function loadPosts() {
         }
 
 
-        /*
-         * বর্তমান Sub-category অনুযায়ী
-         * JavaScript filter
-         */
-
-        let posts = data;
-
-
-        if (currentCategory) {
-
-            posts = data.filter(function(post) {
-
-                return String(
-                    post.sub_category || ""
-                ).trim().toUpperCase()
-                ===
-                currentCategory;
-
-            });
-
-        }
-
+        /* ---------------------------------------------
+           POSTS DISPLAY
+        --------------------------------------------- */
 
         loading.hidden = true;
 
-
-        /*
-         * Filter করার পর কোনো পোস্ট না থাকলে
-         */
-
-        if (!posts || posts.length === 0) {
-
-            noPosts.hidden = false;
-
-            return;
-        }
-
-
-        /*
-         * পোস্ট দেখানো
-         */
-
         container.innerHTML =
-            posts
+            data
                 .map(createPostHTML)
                 .join("");
 
 
-    } catch (err) {
+    }
+    catch (error) {
 
         console.error(
             "Unexpected Error:",
-            err
+            error
         );
 
         loading.hidden = true;
@@ -611,7 +616,6 @@ async function loadPosts() {
 
 function createPostHTML(post) {
 
-
     const rawSubCategory =
         String(
             post.sub_category || ""
@@ -629,8 +633,7 @@ function createPostHTML(post) {
 
 
     const date =
-        post.published_at
-        ||
+        post.published_at ||
         post.created_at;
 
 
@@ -760,7 +763,6 @@ function createPostHTML(post) {
 
 function filterCategory(category) {
 
-
     currentCategory =
         String(category)
             .trim()
@@ -844,15 +846,10 @@ function escapeHtml(value) {
     return String(
         value || ""
     )
-
     .replace(/&/g, "&amp;")
-
     .replace(/</g, "&lt;")
-
     .replace(/>/g, "&gt;")
-
     .replace(/"/g, "&quot;")
-
     .replace(/'/g, "&#039;");
 
 }
@@ -865,6 +862,7 @@ function escapeHtml(value) {
 loadPosts();
 
 </script>
+
 
 <script src="script.js"></script>
 
