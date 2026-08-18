@@ -329,7 +329,6 @@
 
 </footer>
 
-
 <!-- =====================================================
      SUPABASE
 ===================================================== -->
@@ -337,11 +336,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-
-
-/* =====================================================
-   SUPABASE CONFIG
-===================================================== */
 
 const SUPABASE_URL =
     "https://ymwhodckmbybccufzjot.supabase.co";
@@ -382,14 +376,9 @@ const selectedSubcategory =
 
 const resultSubcategoryNames = {
 
-    NU:
-        "National University",
-
-    SSC:
-        "SSC",
-
-    HSC:
-        "HSC"
+    NU: "National University",
+    SSC: "SSC",
+    HSC: "HSC"
 
 };
 
@@ -401,21 +390,15 @@ const resultSubcategoryNames = {
 function updateResultsHeading() {
 
     const label =
-        document.getElementById(
-            "resultsLabel"
-        );
+        document.getElementById("resultsLabel");
 
     const title =
-        document.getElementById(
-            "resultsTitle"
-        );
+        document.getElementById("resultsTitle");
 
 
     if (
         selectedSubcategory &&
-        resultSubcategoryNames[
-            selectedSubcategory
-        ]
+        resultSubcategoryNames[selectedSubcategory]
     ) {
 
         const name =
@@ -423,21 +406,16 @@ function updateResultsHeading() {
                 selectedSubcategory
             ];
 
-
         label.textContent =
             name.toUpperCase();
-
 
         title.textContent =
             name + " ফলাফল";
 
-    }
-
-    else {
+    } else {
 
         label.textContent =
             "RESULTS UPDATES";
-
 
         title.textContent =
             "সর্বশেষ ফলাফল";
@@ -478,24 +456,37 @@ async function loadResultsPosts() {
 
     try {
 
+        /*
+         * শুধু প্রয়োজনীয় column নেওয়া হচ্ছে
+         */
 
-        /* =================================================
-           GET ALL RESULTS POSTS
-        ================================================= */
-
-        const {
-            data,
-            error
-        } =
+        const response =
             await supabaseClient
                 .from("posts")
-                .select("*")
+                .select(`
+                    id,
+                    title,
+                    description,
+                    content,
+                    category,
+                    sub_category,
+                    published,
+                    published_at,
+                    created_at
+                `)
                 .eq("category", "RS")
                 .eq("published", true);
 
 
+        const data =
+            response.data;
+
+        const error =
+            response.error;
+
+
         console.log(
-            "RESULTS POSTS:",
+            "RESULTS DATA:",
             data
         );
 
@@ -522,10 +513,45 @@ async function loadResultsPosts() {
 
             container.innerHTML = `
 
-                <div class="news-card">
+                <div
+                    class="news-card"
+                    style="
+                        border:1px solid #ddd;
+                        padding:20px;
+                    ">
 
                     <p>
                         পোস্ট লোড করতে সমস্যা হয়েছে।
+                    </p>
+
+                    <p
+                        style="
+                            margin-top:10px;
+                            color:#b51222;
+                            font-size:12px;
+                            word-break:break-word;
+                        ">
+
+                        ${escapeHtml(
+                            error.message ||
+                            "Unknown Supabase error"
+                        )}
+
+                    </p>
+
+                    <p
+                        style="
+                            margin-top:8px;
+                            color:#777;
+                            font-size:11px;
+                            word-break:break-word;
+                        ">
+
+                        Code:
+                        ${escapeHtml(
+                            error.code || ""
+                        )}
+
                     </p>
 
                 </div>
@@ -557,30 +583,24 @@ async function loadResultsPosts() {
 
 
         /* =================================================
-           SORT BY CREATED DATE
+           SORT
         ================================================= */
 
         data.sort(function(a, b) {
 
-            const dateA =
-                new Date(
-                    a.created_at || 0
-                ).getTime();
-
-
-            const dateB =
-                new Date(
-                    b.created_at || 0
-                ).getTime();
-
-
-            return dateB - dateA;
+            return new Date(
+                b.created_at || 0
+            ).getTime()
+            -
+            new Date(
+                a.created_at || 0
+            ).getTime();
 
         });
 
 
         /* =================================================
-           FILTER SUBCATEGORY
+           SUBCATEGORY FILTER
         ================================================= */
 
         let posts = data;
@@ -596,18 +616,13 @@ async function loadResultsPosts() {
             posts =
                 data.filter(function(post) {
 
-                    const postSubcategory =
-                        String(
-                            post.sub_category || ""
-                        )
-                        .trim()
-                        .toUpperCase();
-
-
-                    return (
-                        postSubcategory ===
-                        selectedSubcategory
-                    );
+                    return String(
+                        post.sub_category || ""
+                    )
+                    .trim()
+                    .toUpperCase()
+                    ===
+                    selectedSubcategory;
 
                 });
 
@@ -615,7 +630,7 @@ async function loadResultsPosts() {
 
 
         /* =================================================
-           NO POST FOR SUBCATEGORY
+           NO SUBCATEGORY POST
         ================================================= */
 
         if (
@@ -626,10 +641,15 @@ async function loadResultsPosts() {
             empty.hidden = false;
 
             empty.textContent =
-                resultSubcategoryNames[
-                    selectedSubcategory
-                ]
-                + " এর কোনো ফলাফল এখনো প্রকাশ করা হয়নি।";
+                (
+                    resultSubcategoryNames[
+                        selectedSubcategory
+                    ]
+                    ||
+                    "এই বিভাগের"
+                )
+                +
+                " কোনো ফলাফল এখনো প্রকাশ করা হয়নি।";
 
             return;
 
@@ -637,7 +657,7 @@ async function loadResultsPosts() {
 
 
         /* =================================================
-           DISPLAY POSTS
+           DISPLAY
         ================================================= */
 
         container.innerHTML =
@@ -647,8 +667,8 @@ async function loadResultsPosts() {
                 )
                 .join("");
 
-
     }
+
 
     catch (error) {
 
@@ -663,10 +683,26 @@ async function loadResultsPosts() {
 
         container.innerHTML = `
 
-            <div class="news-card">
+            <div
+                class="news-card">
 
                 <p>
                     পোস্ট লোড করতে সমস্যা হয়েছে।
+                </p>
+
+                <p
+                    style="
+                        margin-top:10px;
+                        color:#b51222;
+                        font-size:12px;
+                        word-break:break-word;
+                    ">
+
+                    ${escapeHtml(
+                        error.message ||
+                        String(error)
+                    )}
+
                 </p>
 
             </div>
@@ -679,11 +715,10 @@ async function loadResultsPosts() {
 
 
 /* =====================================================
-   CREATE RESULT POST
+   CREATE POST
 ===================================================== */
 
 function createResultPost(post) {
-
 
     const rawSubcategory =
         String(
@@ -702,8 +737,7 @@ function createResultPost(post) {
 
 
     const dateSource =
-        post.published_at
-        ||
+        post.published_at ||
         post.created_at;
 
 
@@ -711,63 +745,20 @@ function createResultPost(post) {
         dateSource
         ? new Date(
             dateSource
-          ).toLocaleDateString(
+        ).toLocaleDateString(
             "bn-BD",
             {
                 year: "numeric",
                 month: "long",
                 day: "numeric"
             }
-          )
-        : "";
-
-
-    const image =
-        post.image_url
-        ? `
-
-            <div class="post-image">
-
-                <img
-                    src="${escapeHtml(
-                        post.image_url
-                    )}"
-                    alt="${escapeHtml(
-                        post.title
-                    )}"
-                >
-
-            </div>
-
-        `
-        : "";
-
-
-    const pdf =
-        post.pdf_url
-        ? `
-
-            <a
-                href="${escapeHtml(
-                    post.pdf_url
-                )}"
-                target="_blank"
-                rel="noopener"
-                class="read-more">
-
-                PDF দেখুন →
-
-            </a>
-
-        `
+        )
         : "";
 
 
     return `
 
         <article class="news-card">
-
-            ${image}
 
 
             <div class="news-top">
@@ -812,9 +803,6 @@ function createResultPost(post) {
             </p>
 
 
-            ${pdf}
-
-
             <a
                 href="post.html?id=${encodeURIComponent(
                     post.id
@@ -824,6 +812,7 @@ function createResultPost(post) {
                 বিস্তারিত পড়ুন →
 
             </a>
+
 
         </article>
 
@@ -838,34 +827,12 @@ function createResultPost(post) {
 
 function escapeHtml(value) {
 
-    return String(
-        value || ""
-    )
-
-    .replaceAll(
-        "&",
-        "&amp;"
-    )
-
-    .replaceAll(
-        "<",
-        "&lt;"
-    )
-
-    .replaceAll(
-        ">",
-        "&gt;"
-    )
-
-    .replaceAll(
-        '"',
-        "&quot;"
-    )
-
-    .replaceAll(
-        "'",
-        "&#039;"
-    );
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
 }
 
@@ -878,12 +845,9 @@ updateResultsHeading();
 
 loadResultsPosts();
 
-
 </script>
 
-
 <script src="script.js"></script>
-
 
 </body>
 </html>
