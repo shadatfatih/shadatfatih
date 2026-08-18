@@ -879,7 +879,6 @@ const categoryNames = {
 
 };
 
-
 async function loadLatestPosts() {
 
     const container =
@@ -887,172 +886,180 @@ async function loadLatestPosts() {
 
     if (!container) return;
 
-
     container.innerHTML = `
         <div class="news-card">
-            <p>সর্বশেষ আপডেট লোড হচ্ছে...</p>
+            <p>পোস্ট লোড হচ্ছে...</p>
         </div>
     `;
 
+    try {
 
-    const { data, error } =
-        await supabaseClient
-            .from("posts")
-            .select("*")
-            .eq("published", true)
-            .order("created_at", {
-                ascending: false
-            })
-            .limit(100);
+        const result =
+            await supabaseClient
+                .from("posts")
+                .select("*")
+                .eq("published", true);
 
+        console.log("SUPABASE RESULT:", result);
 
-    console.log("POSTS:", data);
-    console.log("ERROR:", error);
+        const data = result.data;
+        const error = result.error;
 
+        if (error) {
 
-    if (error) {
+            console.error("SUPABASE ERROR:", error);
 
-        container.innerHTML = `
-            <div class="news-card">
-                <p>
-                    পোস্ট লোড করতে সমস্যা হয়েছে।
-                </p>
-            </div>
-        `;
+            container.innerHTML = `
+                <div class="news-card">
+                    <p style="color:red;">
+                        ${escapeHtml(
+                            error.message ||
+                            JSON.stringify(error)
+                        )}
+                    </p>
+                </div>
+            `;
 
-        return;
-    }
-
-
-    if (!data || data.length === 0) {
-
-        container.innerHTML = `
-            <div class="news-card">
-                <p>
-                    এখনো কোনো নতুন আপডেট প্রকাশ করা হয়নি।
-                </p>
-            </div>
-        `;
-
-        return;
-    }
-
-
-    container.innerHTML = "";
-
-
-    data.forEach(function(post) {
-
-        const article =
-            document.createElement("article");
-
-        article.className =
-            "news-card";
-
-
-        const rawCategory =
-            String(
-                post.category || ""
-            )
-            .trim()
-            .toUpperCase();
-
-
-        const category =
-            categoryNames[rawCategory]
-            || "EDUCATION UPDATE";
-
-
-        const dateSource =
-            post.published_at
-            || post.created_at;
-
-
-        let date = "";
-
-        if (dateSource) {
-
-            date =
-                new Date(
-                    dateSource
-                ).toLocaleDateString(
-                    "en-GB",
-                    {
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric"
-                    }
-                );
-
+            return;
         }
 
+        if (!data || data.length === 0) {
 
-        const title =
-            escapeHtml(
-                post.title || ""
+            container.innerHTML = `
+                <div class="news-card">
+                    <p>
+                        এখনো কোনো নতুন আপডেট প্রকাশ করা হয়নি।
+                    </p>
+                </div>
+            `;
+
+            return;
+        }
+
+        data.sort(function(a, b) {
+
+            return new Date(
+                b.created_at || 0
+            ) - new Date(
+                a.created_at || 0
             );
 
+        });
 
-        const description =
-            escapeHtml(
-                post.description
-                || post.content
-                || ""
-            );
+        container.innerHTML = "";
 
+        data.forEach(function(post) {
 
-        article.innerHTML = `
+            const article =
+                document.createElement("article");
 
-            <div class="news-top">
+            article.className = "news-card";
 
-                <span class="tag ${
-                    rawCategory === "NU"
-                    ? "red"
-                    : ""
-                }">
+            const rawCategory =
+                String(
+                    post.category || ""
+                )
+                .trim()
+                .toUpperCase();
 
-                    ${escapeHtml(category)}
+            const category =
+                categoryNames[rawCategory]
+                || "EDUCATION UPDATE";
 
-                </span>
+            const dateSource =
+                post.published_at ||
+                post.created_at;
 
+            let date = "";
 
-                <span class="date">
+            if (dateSource) {
 
-                    ${escapeHtml(date)}
+                date =
+                    new Date(
+                        dateSource
+                    ).toLocaleDateString(
+                        "en-GB",
+                        {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric"
+                        }
+                    );
 
-                </span>
+            }
 
+            article.innerHTML = `
+
+                <div class="news-top">
+
+                    <span class="tag">
+
+                        ${escapeHtml(category)}
+
+                    </span>
+
+                    <span class="date">
+
+                        ${escapeHtml(date)}
+
+                    </span>
+
+                </div>
+
+                <h3>
+                    ${escapeHtml(
+                        post.title || ""
+                    )}
+                </h3>
+
+                <p>
+                    ${escapeHtml(
+                        post.description ||
+                        post.content ||
+                        ""
+                    )}
+                </p>
+
+                <a
+                    href="post.html?id=${encodeURIComponent(
+                        post.id
+                    )}"
+                    class="read-more">
+
+                    বিস্তারিত পড়ুন →
+
+                </a>
+
+            `;
+
+            container.appendChild(article);
+
+        });
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "UNEXPECTED ERROR:",
+            error
+        );
+
+        container.innerHTML = `
+            <div class="news-card">
+                <p style="color:red;">
+                    ${escapeHtml(
+                        error.message ||
+                        String(error)
+                    )}
+                </p>
             </div>
-
-
-            <h3>
-                ${title}
-            </h3>
-
-
-            <p>
-                ${description}
-            </p>
-
-
-            <a
-                href="post.html?id=${encodeURIComponent(
-                    post.id
-                )}"
-                class="read-more">
-
-                বিস্তারিত পড়ুন →
-
-            </a>
-
         `;
 
-
-        container.appendChild(article);
-
-    });
+    }
 
 }
+
 
 
 function escapeHtml(value) {
