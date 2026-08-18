@@ -1060,6 +1060,38 @@ async function loadLatestPosts() {
 
 }
 
+<script>
+
+const SUPABASE_URL =
+    "https://ymwhodckmbybccufzjot.supabase.co";
+
+const SUPABASE_ANON_KEY =
+    "sb_publishable_u31olXCxIcSsMdUeyyt5UQ_YeCWKToH";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+
+/* আপনার categoryNames এখানে থাকবে */
+
+
+/* আপনার বর্তমান loadLatestPosts() এখানে থাকবে */
+
+async function loadLatestPosts() {
+
+    // আপনার বর্তমান পুরো function
+    // এখানে কোনো পরিবর্তন করবেন না
+
+}
+
+
+/* =====================================================
+   BREAKING LATEST
+===================================================== */
+
 async function loadBreakingLatest() {
 
     const breakingText =
@@ -1105,8 +1137,22 @@ async function loadBreakingLatest() {
             return;
         }
 
+        const latestPost = data[0];
+
         breakingText.textContent =
-            data[0].title || "সর্বশেষ আপডেট";
+            latestPost.title || "সর্বশেষ আপডেট";
+
+        breakingText.style.cursor = "pointer";
+
+        breakingText.onclick = function () {
+
+            window.location.href =
+                "post.html?id=" +
+                encodeURIComponent(
+                    latestPost.id
+                );
+
+        };
 
     }
 
@@ -1123,6 +1169,16 @@ async function loadBreakingLatest() {
     }
 
 }
+
+
+/* =====================================================
+   START
+===================================================== */
+
+loadLatestPosts();
+loadBreakingLatest();
+
+</script>
 
 function escapeHtml(value) {
 
