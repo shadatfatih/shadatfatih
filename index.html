@@ -824,6 +824,21 @@
 
 </section>
 
+<!-- TOTAL VISITS -->
+
+<div class="total-visits">
+
+    <span>👁</span>
+
+    <strong id="totalVisits">
+        0
+    </strong>
+
+    <small>
+        TOTAL VISITS
+    </small>
+
+</div>
 
 <!-- FOOTER -->
 
@@ -1158,6 +1173,46 @@ function escapeHtml(value) {
 
 loadLatestPosts();
 loadBreakingLatest();
+
+async function loadTotalVisits() {
+
+    const visitElement =
+        document.getElementById("totalVisits");
+
+    if (!visitElement) return;
+
+    try {
+
+        const { data, error } =
+            await supabaseClient
+                .from("site_stats")
+                .select("total_visits")
+                .eq("id", 1)
+                .single();
+
+        if (error) {
+            console.error("VISIT ERROR:", error);
+            return;
+        }
+
+        visitElement.textContent =
+            Number(data.total_visits || 0)
+                .toLocaleString("en-US");
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "VISIT UNEXPECTED ERROR:",
+            error
+        );
+
+    }
+
+}
+
+loadTotalVisits();
 
 </script>
 
