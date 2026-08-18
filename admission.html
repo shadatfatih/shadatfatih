@@ -408,7 +408,6 @@
 
 </footer>
 
-
 <!-- =====================================================
      SUPABASE + ADMISSION POSTS
 ===================================================== -->
@@ -419,8 +418,7 @@ const SUPABASE_URL =
     "https://ymwhodckmbybccufzjot.supabase.co";
 
 const SUPABASE_ANON_KEY =
-    "
-sb_publishable_u31olXCxIcSsMdUeyyt5UQ_YeCWKToH";
+    "sb_publishable_u31olXCxIcSsMdUeyyt5U_QY_ECWKToH";
 
 
 const supabaseClient =
@@ -471,6 +469,14 @@ async function loadPosts() {
         document.getElementById("noPosts");
 
 
+    if (!loading || !container || !noPosts) {
+        console.error(
+            "Admission elements not found."
+        );
+        return;
+    }
+
+
     loading.hidden = false;
 
     noPosts.hidden = true;
@@ -481,88 +487,65 @@ async function loadPosts() {
     try {
 
         /*
-         * প্রথমে AD category-এর published পোস্ট
-         * সরাসরি Supabase থেকে নেওয়া হচ্ছে।
+         * প্রথমে AD category-এর
+         * সব published পোস্ট নেওয়া হবে।
          */
 
-        let query =
-            supabaseClient
+        const result =
+            await supabaseClient
                 .from("posts")
                 .select("*")
                 .eq("category", "AD")
                 .eq("published", true);
 
 
-        /*
-         * Subcategory নির্বাচন করা হলে
-         * Supabase query-তেই filter হবে।
-         */
-
-        if (currentCategory) {
-
-            query =
-                query.eq(
-                    "sub_category",
-                    currentCategory
-                );
-
-        }
-
-
-        const {
-            data,
-            error
-        } =
-            await query
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                );
-
-
         console.log(
-            "ADMISSION POSTS:",
-            data
-        );
-
-        console.log(
-            "ADMISSION ERROR:",
-            error
+            "ADMISSION RESULT:",
+            result
         );
 
 
-        /* ---------------------------------------------
-           ERROR
-        --------------------------------------------- */
+        const data =
+            result.data;
+
+        const error =
+            result.error;
+
+
+        /* =================================================
+           SUPABASE ERROR
+        ================================================= */
 
         if (error) {
 
             console.error(
-                "Supabase Error:",
+                "ADMISSION SUPABASE ERROR:",
                 error
             );
 
+
             loading.hidden = true;
 
+
             container.innerHTML = `
-                <div style="
-                    padding:30px;
-                    text-align:center;
-                    color:#b51222;
-                ">
-                    পোস্ট লোড করতে সমস্যা হয়েছে।
+                <div class="news-card">
+                    <p style="color:red;">
+                        ${escapeHtml(
+                            error.message ||
+                            JSON.stringify(error)
+                        )}
+                    </p>
                 </div>
             `;
+
 
             return;
         }
 
 
-        /* ---------------------------------------------
-           NO POSTS
-        --------------------------------------------- */
+        /* =================================================
+           NO AD POSTS
+        ================================================= */
 
         if (!data || data.length === 0) {
 
@@ -570,39 +553,132 @@ async function loadPosts() {
 
             noPosts.hidden = false;
 
+            noPosts.textContent =
+                "এখনো কোনো ভর্তি পোস্ট প্রকাশ করা হয়নি।";
+
             return;
         }
 
 
-        /* ---------------------------------------------
-           POSTS DISPLAY
-        --------------------------------------------- */
+        /* =================================================
+           SORT POSTS
+        ================================================= */
+
+        data.sort(function(a, b) {
+
+            return new Date(
+                b.created_at || 0
+            ) - new Date(
+                a.created_at || 0
+            );
+
+        });
+
+
+        /* =================================================
+           SUBCATEGORY FILTER
+        ================================================= */
+
+        let posts = data;
+
+
+        if (
+            currentCategory &&
+            subCategoryNames[
+                currentCategory
+            ]
+        ) {
+
+            posts =
+                data.filter(function(post) {
+
+                    const postSubCategory =
+                        String(
+                            post.sub_category || ""
+                        )
+                        .trim()
+                        .toUpperCase();
+
+
+                    return (
+                        postSubCategory ===
+                        currentCategory
+                    );
+
+                });
+
+        }
+
+
+        /* =================================================
+           NO POST FOR SELECTED SUBCATEGORY
+        ================================================= */
+
+        if (
+            !posts ||
+            posts.length === 0
+        ) {
+
+            loading.hidden = true;
+
+            noPosts.hidden = false;
+
+
+            const selectedName =
+                subCategoryNames[
+                    currentCategory
+                ]
+                ||
+                "এই বিভাগ";
+
+
+            noPosts.textContent =
+                selectedName +
+                " এর কোনো পোস্ট এখনো প্রকাশ করা হয়নি।";
+
+
+            return;
+        }
+
+
+        /* =================================================
+           DISPLAY POSTS
+        ================================================= */
 
         loading.hidden = true;
 
+        noPosts.hidden = true;
+
+
         container.innerHTML =
-            data
-                .map(createPostHTML)
+            posts
+                .map(
+                    createPostHTML
+                )
                 .join("");
 
 
     }
+
     catch (error) {
 
         console.error(
-            "Unexpected Error:",
+            "UNEXPECTED ADMISSION ERROR:",
             error
         );
 
+
         loading.hidden = true;
 
+
         container.innerHTML = `
-            <div style="
-                padding:30px;
-                text-align:center;
-                color:#b51222;
-            ">
-                পোস্ট লোড করতে সমস্যা হয়েছে।
+            <div class="news-card">
+                <p style="color:red;">
+                    ${escapeHtml(
+                        error.message ||
+                        String(error)
+                    )}
+                </p>
             </div>
         `;
 
@@ -633,22 +709,23 @@ function createPostHTML(post) {
         "Admission";
 
 
-    const date =
+    const dateSource =
         post.published_at ||
         post.created_at;
 
 
     const formattedDate =
-        date
-        ? new Date(date)
-            .toLocaleDateString(
-                "en-GB",
-                {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric"
-                }
-            )
+        dateSource
+        ? new Date(
+            dateSource
+        ).toLocaleDateString(
+            "en-GB",
+            {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            }
+        )
         : "";
 
 
