@@ -96,8 +96,8 @@
         সর্বশেষ
     </div>
 
-    <div class="breaking-text">
-        শিক্ষা সংক্রান্ত সর্বশেষ আপডেট ও গুরুত্বপূর্ণ নোটিশ এখানে প্রকাশ করা হবে।
+    <div class="breaking-text" id="breakingText">
+        সর্বশেষ আপডেট লোড হচ্ছে...
     </div>
 
 </div>
@@ -1060,7 +1060,69 @@ async function loadLatestPosts() {
 
 }
 
+async function loadBreakingLatest() {
 
+    const breakingText =
+        document.getElementById("breakingText");
+
+    if (!breakingText) return;
+
+    try {
+
+        const { data, error } =
+            await supabaseClient
+                .from("posts")
+                .select(`
+                    id,
+                    title,
+                    published,
+                    created_at
+                `)
+                .eq("published", true)
+                .order("created_at", {
+                    ascending: false
+                })
+                .limit(1);
+
+        if (error) {
+
+            console.error(
+                "BREAKING ERROR:",
+                error
+            );
+
+            breakingText.textContent =
+                "সর্বশেষ আপডেট লোড করা যাচ্ছে না।";
+
+            return;
+        }
+
+        if (!data || data.length === 0) {
+
+            breakingText.textContent =
+                "এখনো কোনো নতুন আপডেট প্রকাশ করা হয়নি।";
+
+            return;
+        }
+
+        breakingText.textContent =
+            data[0].title || "সর্বশেষ আপডেট";
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "BREAKING UNEXPECTED ERROR:",
+            error
+        );
+
+        breakingText.textContent =
+            "সর্বশেষ আপডেট লোড করা যাচ্ছে না।";
+
+    }
+
+}
 
 function escapeHtml(value) {
 
@@ -1075,7 +1137,7 @@ function escapeHtml(value) {
 
 
 loadLatestPosts();
-
+loadBreakingLatest();
 </script>
 
 <script src="script.js"></script>
