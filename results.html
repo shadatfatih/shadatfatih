@@ -105,6 +105,132 @@
 
 <main class="notice-page">
 
+
+    <!-- =====================================================
+         RESULTS SUBCATEGORIES
+    ====================================================== -->
+
+    <section class="section" id="results-categories">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span>
+                    RESULTS
+                </span>
+
+                <h2>
+                    ফলাফলের বিভাগ
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="category-grid">
+
+
+            <!-- NATIONAL UNIVERSITY -->
+
+            <a
+                href="results.html?subcategory=NU"
+                class="category-card featured">
+
+                <div class="card-icon">
+                    NU
+                </div>
+
+                <div>
+
+                    <h3>
+                        National University
+                    </h3>
+
+                    <p>
+                        জাতীয় বিশ্ববিদ্যালয়ের
+                        বিভিন্ন পরীক্ষার ফলাফল।
+                    </p>
+
+                </div>
+
+                <strong>
+                    →
+                </strong>
+
+            </a>
+
+
+            <!-- SSC -->
+
+            <a
+                href="results.html?subcategory=SSC"
+                class="category-card">
+
+                <div class="card-icon">
+                    SSC
+                </div>
+
+                <div>
+
+                    <h3>
+                        SSC
+                    </h3>
+
+                    <p>
+                        SSC পরীক্ষার ফলাফল,
+                        পুনঃনিরীক্ষণ ও আপডেট।
+                    </p>
+
+                </div>
+
+                <strong>
+                    →
+                </strong>
+
+            </a>
+
+
+            <!-- HSC -->
+
+            <a
+                href="results.html?subcategory=HSC"
+                class="category-card">
+
+                <div class="card-icon">
+                    HSC
+                </div>
+
+                <div>
+
+                    <h3>
+                        HSC
+                    </h3>
+
+                    <p>
+                        HSC পরীক্ষার ফলাফল,
+                        পুনঃনিরীক্ষণ ও আপডেট।
+                    </p>
+
+                </div>
+
+                <strong>
+                    →
+                </strong>
+
+            </a>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         RESULTS INTRO
+    ====================================================== -->
+
     <div class="notice-category">
         EDUCATION • RESULTS
     </div>
@@ -236,6 +362,10 @@
     </article>
 
 
+    <!-- =====================================================
+         OFFICIAL SOURCE
+    ====================================================== -->
+
     <section class="official-source">
 
         <div>
@@ -312,7 +442,9 @@
 
 </footer>
 
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
 <script>
 
@@ -322,6 +454,7 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
     "sb_publishable_u31olXCxIcSsMdUeyyt5U_QY_ECWKToH";
 
+
 const supabaseClient =
     window.supabase.createClient(
         SUPABASE_URL,
@@ -329,50 +462,157 @@ const supabaseClient =
     );
 
 
+
+/* =====================================================
+   RESULTS SUBCATEGORY
+===================================================== */
+
+const urlParams =
+    new URLSearchParams(
+        window.location.search
+    );
+
+
+const selectedSubcategory =
+    urlParams.get("subcategory");
+
+
+
+/* =====================================================
+   SUBCATEGORY NAME
+===================================================== */
+
+const resultSubcategoryNames = {
+
+    NU: "NATIONAL UNIVERSITY",
+
+    SSC: "SSC",
+
+    HSC: "HSC"
+
+};
+
+
+
+/* =====================================================
+   LOAD RESULTS POSTS
+===================================================== */
+
 async function loadResultsPosts() {
 
     const container =
         document.createElement("section");
 
-    container.className = "latest-section";
+    container.className =
+        "latest-section";
+
 
     container.innerHTML = `
+
         <div class="section-heading">
+
             <div>
-                <span>RESULTS UPDATES</span>
-                <h2>সর্বশেষ ফলাফল</h2>
+
+                <span>
+                    RESULTS UPDATES
+                </span>
+
+                <h2>
+                    ${
+                        resultSubcategoryNames[
+                            selectedSubcategory
+                        ]
+                        || "সর্বশেষ ফলাফল"
+                    }
+                </h2>
+
             </div>
+
         </div>
+
 
         <div id="resultsPosts">
+
             <div class="news-card">
-                <p>ফলাফল লোড হচ্ছে...</p>
+
+                <p>
+                    ফলাফল লোড হচ্ছে...
+                </p>
+
             </div>
+
         </div>
+
     `;
 
-    const main =
-        document.querySelector(".notice-page");
 
-    main.appendChild(container);
+    const main =
+        document.querySelector(
+            ".notice-page"
+        );
+
+
+    main.appendChild(
+        container
+    );
 
 
     const postsBox =
-        document.getElementById("resultsPosts");
+        document.getElementById(
+            "resultsPosts"
+        );
 
+
+
+    /* =================================================
+       BASE QUERY
+    ================================================= */
+
+    let query =
+        supabaseClient
+            .from("posts")
+            .select("*")
+            .eq("category", "RS")
+            .eq("published", true);
+
+
+
+    /* =================================================
+       SUBCATEGORY FILTER
+    ================================================= */
+
+    if (selectedSubcategory) {
+
+        query =
+            query.eq(
+                "sub_category",
+                selectedSubcategory
+            );
+
+    }
+
+
+
+    /* =================================================
+       FETCH
+    ================================================= */
 
     const {
         data,
         error
-    } = await supabaseClient
-        .from("posts")
-        .select("*")
-        .eq("category", "RS")
-        .eq("published", true)
-        .order("created_at", {
-            ascending: false
-        });
+    } = await query
+        .order(
+            "created_at",
+            {
+                ascending: false
+            }
+        );
 
+
+
+    /* =================================================
+       ERROR
+    ================================================= */
 
     if (error) {
 
@@ -381,117 +621,228 @@ async function loadResultsPosts() {
             error
         );
 
+
         postsBox.innerHTML = `
+
             <div class="news-card">
+
                 <p>
                     ফলাফল লোড করতে সমস্যা হয়েছে।
                 </p>
+
             </div>
+
         `;
 
         return;
+
     }
 
 
-    if (!data || data.length === 0) {
+
+    /* =================================================
+       NO DATA
+    ================================================= */
+
+    if (
+        !data ||
+        data.length === 0
+    ) {
+
+        const message =
+            selectedSubcategory
+
+                ? (
+                    resultSubcategoryNames[
+                        selectedSubcategory
+                    ]
+                    + " এর কোনো ফলাফল এখনো প্রকাশ করা হয়নি।"
+                  )
+
+                : "এখনো কোনো ফলাফল প্রকাশ করা হয়নি।";
+
 
         postsBox.innerHTML = `
+
             <div class="news-card">
+
                 <p>
-                    এখনো কোনো ফলাফল প্রকাশ করা হয়নি।
+                    ${escapeHtml(message)}
                 </p>
+
             </div>
+
         `;
 
         return;
+
     }
 
 
-    postsBox.innerHTML =
-        data.map(post => {
 
-            const date =
-                post.published_at ||
-                post.created_at
-                ? new Date(
+    /* =================================================
+       DISPLAY POSTS
+    ================================================= */
+
+    postsBox.innerHTML =
+        data.map(
+            post => {
+
+
+                const date =
                     post.published_at ||
                     post.created_at
-                ).toLocaleDateString(
-                    "bn-BD",
-                    {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric"
-                    }
-                )
-                : "";
+
+                    ? new Date(
+                        post.published_at ||
+                        post.created_at
+                    ).toLocaleDateString(
+                        "bn-BD",
+                        {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric"
+                        }
+                    )
+
+                    : "";
 
 
-            return `
-                <article class="news-card">
 
-                    <div class="news-top">
-
-                        <span class="tag red">
-                            RESULTS
-                        </span>
-
-                        <span class="date">
-                            ${escapeHtml(date)}
-                        </span>
-
-                    </div>
-
-
-                    <h3>
-                        ${escapeHtml(
-                            post.title
-                        )}
-                    </h3>
-
-
-                    <p>
-                        ${escapeHtml(
-                            post.description ||
-                            post.content ||
+                const subcategoryName =
+                    resultSubcategoryNames[
+                        String(
+                            post.sub_category ||
                             ""
-                        )}
-                    </p>
+                        )
+                        .trim()
+                        .toUpperCase()
+                    ]
+                    || "RESULTS";
 
 
-                    <a
-                        href="post.html?id=${encodeURIComponent(post.id)}"
-                        class="read-more">
 
-                        বিস্তারিত পড়ুন →
+                return `
 
-                    </a>
+                    <article
+                        class="news-card">
 
-                </article>
-            `;
 
-        }).join("");
+                        <div
+                            class="news-top">
+
+
+                            <span
+                                class="tag red">
+
+                                ${escapeHtml(
+                                    subcategoryName
+                                )}
+
+                            </span>
+
+
+                            <span
+                                class="date">
+
+                                ${escapeHtml(
+                                    date
+                                )}
+
+                            </span>
+
+
+                        </div>
+
+
+                        <h3>
+
+                            ${escapeHtml(
+                                post.title
+                            )}
+
+                        </h3>
+
+
+                        <p>
+
+                            ${escapeHtml(
+                                post.description ||
+                                post.content ||
+                                ""
+                            )}
+
+                        </p>
+
+
+                        <a
+                            href="post.html?id=${encodeURIComponent(
+                                post.id
+                            )}"
+                            class="read-more">
+
+                            বিস্তারিত পড়ুন →
+
+                        </a>
+
+
+                    </article>
+
+                `;
+
+            }
+        )
+        .join("");
 
 }
 
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
 
 function escapeHtml(value) {
 
-    return String(value || "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+    return String(
+        value || ""
+    )
+    .replaceAll(
+        "&",
+        "&amp;"
+    )
+    .replaceAll(
+        "<",
+        "&lt;"
+    )
+    .replaceAll(
+        ">",
+        "&gt;"
+    )
+    .replaceAll(
+        '"',
+        "&quot;"
+    )
+    .replaceAll(
+        "'",
+        "&#039;"
+    );
 
 }
 
+
+
+/* =====================================================
+   START
+===================================================== */
 
 loadResultsPosts();
 
 </script>
 
+
 <script src="script.js"></script>
+
 
 </body>
 </html>
