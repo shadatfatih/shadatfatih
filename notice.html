@@ -285,7 +285,6 @@ const SUPABASE_URL =
     "https://ymwhodckmbybccufzjot.supabase.co";
 
 const SUPABASE_KEY =
-    "
 "sb_publishable_u31olXCxIcSsMdUeyyt5UQ_YeCWKToH";
 
 const supabaseClient =
@@ -303,6 +302,22 @@ let currentNoticeFilter = "all";
 
 
 /* =====================================================
+   CATEGORY NAMES
+===================================================== */
+
+const noticeCategoryNames = {
+
+    NU: "NATIONAL UNIVERSITY",
+    CB: "CHATTOGRAM BOARD",
+    AD: "ADMISSION",
+    EX: "EXAM & ROUTINE",
+    RS: "RESULT",
+    GENERAL: "GENERAL"
+
+};
+
+
+/* =====================================================
    LOAD NOTICES
 ===================================================== */
 
@@ -317,40 +332,162 @@ async function loadNotices() {
 
     container.innerHTML = `
         <div class="notice-list-card">
-
             <p style="text-align:center;">
                 নোটিশ লোড হচ্ছে...
             </p>
-
         </div>
     `;
 
     noNotice.style.display = "none";
 
 
-    let query =
-        supabaseClient
-            .from("posts")
-            .select("*")
-            .eq("category", "NT")
-            .eq("published", true)
-            .order("created_at", {
-                ascending: false
-            });
+    try {
+
+        const response =
+            await supabaseClient
+                .from("posts")
+                .select(`
+                    id,
+                    title,
+                    description,
+                    content,
+                    category,
+                    subcategory,
+                    published,
+                    published_at,
+                    created_at
+                `)
+                .eq("category", "NT")
+                .eq("published", true)
+                .order("created_at", {
+                    ascending: false
+                });
 
 
-    const {
-        data,
-        error
-    } = await query;
+        const data = response.data;
+        const error = response.error;
 
 
-    if (error) {
+        console.log(
+            "NOTICE DATA:",
+            data
+        );
 
-        console.error(
-            "Notice Supabase Error:",
+        console.log(
+            "NOTICE ERROR:",
             error
         );
+
+
+        if (error) {
+
+            console.error(
+                "Notice Supabase Error:",
+                error
+            );
+
+            container.innerHTML = `
+                <div class="notice-list-card">
+
+                    <p style="
+                        text-align:center;
+                        color:#b51222;
+                    ">
+                        নোটিশ লোড করতে সমস্যা হয়েছে।
+                    </p>
+
+                </div>
+            `;
+
+            return;
+        }
+
+
+        if (!data || data.length === 0) {
+
+            container.innerHTML = "";
+
+            noNotice.textContent =
+                "এখনো কোনো নোটিশ প্রকাশ করা হয়নি।";
+
+            noNotice.style.display = "block";
+
+            return;
+        }
+
+
+        /* =================================================
+           FILTER BY SUBCATEGORY
+        ================================================= */
+
+        let filteredData = data;
+
+
+        if (currentNoticeFilter !== "all") {
+
+            filteredData =
+                data.filter(function(post) {
+
+                    const subcategory =
+                        String(
+                            post.subcategory || ""
+                        )
+                        .trim()
+                        .toUpperCase();
+
+
+                    return (
+                        subcategory ===
+                        getFilterSubcategory(
+                            currentNoticeFilter
+                        )
+                    );
+
+                });
+
+        }
+
+
+        /* =================================================
+           NO FILTER RESULT
+        ================================================= */
+
+        if (
+            !filteredData ||
+            filteredData.length === 0
+        ) {
+
+            container.innerHTML = "";
+
+            noNotice.textContent =
+                "এই বিভাগে এখনো কোনো নোটিশ প্রকাশ করা হয়নি।";
+
+            noNotice.style.display = "block";
+
+            return;
+        }
+
+
+        noNotice.style.display = "none";
+
+
+        /* =================================================
+           DISPLAY
+        ================================================= */
+
+        container.innerHTML =
+            filteredData
+                .map(createNoticeCard)
+                .join("");
+
+
+    } catch (error) {
+
+        console.error(
+            "Unexpected Notice Error:",
+            error
+        );
+
 
         container.innerHTML = `
             <div class="notice-list-card">
@@ -362,126 +499,53 @@ async function loadNotices() {
                     নোটিশ লোড করতে সমস্যা হয়েছে।
                 </p>
 
+                <p style="
+                    margin-top:10px;
+                    text-align:center;
+                    font-size:12px;
+                    color:#888;
+                ">
+                    ${escapeHtml(
+                        error.message ||
+                        String(error)
+                    )}
+                </p>
+
             </div>
         `;
 
-        return;
     }
 
-
-    if (!data || data.length === 0) {
-
-        container.innerHTML = "";
-
-        noNotice.style.display = "block";
-
-        return;
-    }
+}
 
 
-    let filteredData = data;
+/* =====================================================
+   FILTER → SUBCATEGORY
+===================================================== */
 
+function getFilterSubcategory(filter) {
 
-    /* =================================================
-       FILTER
-    ================================================= */
+    switch (filter) {
 
-    if (currentNoticeFilter !== "all") {
+        case "nu":
+            return "NU";
 
-        filteredData =
-            data.filter(function(post) {
+        case "board":
+            return "CB";
 
-                const category =
-                    String(
-                        post.sub_category || ""
-                    ).toLowerCase();
+        case "admission":
+            return "AD";
 
+        case "exam":
+            return "EX";
 
-                if (
-                    currentNoticeFilter === "nu"
-                ) {
+        case "result":
+            return "RS";
 
-                    return (
-                        post.category === "NU" ||
-                        category === "nu"
-                    );
-
-                }
-
-
-                if (
-                    currentNoticeFilter === "board"
-                ) {
-
-                    return (
-                        post.category === "CB" ||
-                        category === "board" ||
-                        category === "chattogram board"
-                    );
-
-                }
-
-
-                if (
-                    currentNoticeFilter === "admission"
-                ) {
-
-                    return (
-                        post.category === "AD" ||
-                        category === "admission"
-                    );
-
-                }
-
-
-                if (
-                    currentNoticeFilter === "exam"
-                ) {
-
-                    return (
-                        post.category === "EX" ||
-                        category === "exam"
-                    );
-
-                }
-
-
-                if (
-                    currentNoticeFilter === "result"
-                ) {
-
-                    return (
-                        post.category === "RS" ||
-                        category === "result"
-                    );
-
-                }
-
-
-                return false;
-
-            });
+        default:
+            return "";
 
     }
-
-
-    if (filteredData.length === 0) {
-
-        container.innerHTML = "";
-
-        noNotice.style.display = "block";
-
-        return;
-    }
-
-
-    noNotice.style.display = "none";
-
-
-    container.innerHTML =
-        filteredData
-            .map(createNoticeCard)
-            .join("");
 
 }
 
@@ -492,8 +556,20 @@ async function loadNotices() {
 
 function createNoticeCard(post) {
 
+    const subcategory =
+        String(
+            post.subcategory || ""
+        )
+        .trim()
+        .toUpperCase();
+
+
     const category =
-        getNoticeCategory(post);
+        noticeCategoryNames[
+            subcategory
+        ]
+        ||
+        "GENERAL NOTICE";
 
 
     const dateSource =
@@ -514,10 +590,6 @@ function createNoticeCard(post) {
                 }
               )
             : "";
-
-
-    const targetPage =
-        getTargetPage(post);
 
 
     return `
@@ -554,7 +626,7 @@ function createNoticeCard(post) {
             <h2>
 
                 ${escapeHtml(
-                    post.title
+                    post.title || ""
                 )}
 
             </h2>
@@ -604,58 +676,20 @@ function createNoticeCard(post) {
 
 
 /* =====================================================
-   CATEGORY NAME
-===================================================== */
-
-function getNoticeCategory(post) {
-
-    const category =
-        String(
-            post.category || ""
-        ).toUpperCase();
-
-
-    switch (category) {
-
-        case "NU":
-            return "NATIONAL UNIVERSITY";
-
-        case "CB":
-            return "CHATTOGRAM BOARD";
-
-        case "AD":
-            return "ADMISSION";
-
-        case "EX":
-            return "EXAM & ROUTINE";
-
-        case "RS":
-            return "RESULT";
-
-        case "NT":
-            return "NOTICE";
-
-        default:
-            return "EDUCATION";
-
-    }
-
-}
-
-
-/* =====================================================
    FILTER CATEGORY
 ===================================================== */
 
 function getFilterCategory(post) {
 
-    const category =
+    const subcategory =
         String(
-            post.category || ""
-        ).toUpperCase();
+            post.subcategory || ""
+        )
+        .trim()
+        .toUpperCase();
 
 
-    switch (category) {
+    switch (subcategory) {
 
         case "NU":
             return "nu";
@@ -686,13 +720,15 @@ function getFilterCategory(post) {
 
 function getIcon(post) {
 
-    const category =
+    const subcategory =
         String(
-            post.category || ""
-        ).toUpperCase();
+            post.subcategory || ""
+        )
+        .trim()
+        .toUpperCase();
 
 
-    switch (category) {
+    switch (subcategory) {
 
         case "NU":
             return "🎓";
@@ -709,48 +745,8 @@ function getIcon(post) {
         case "RS":
             return "📊";
 
-        case "NT":
+        default:
             return "📢";
-
-        default:
-            return "📄";
-
-    }
-
-}
-
-
-/* =====================================================
-   TARGET PAGE
-===================================================== */
-
-function getTargetPage(post) {
-
-    const category =
-        String(
-            post.category || ""
-        ).toUpperCase();
-
-
-    switch (category) {
-
-        case "NU":
-            return "national-university.html";
-
-        case "CB":
-            return "chattogram-board.html";
-
-        case "AD":
-            return "admission.html";
-
-        case "EX":
-            return "exam-routine.html";
-
-        case "RS":
-            return "results.html";
-
-        default:
-            return "notice.html";
 
     }
 
