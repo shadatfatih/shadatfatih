@@ -502,62 +502,21 @@ async function loadResultsPosts() {
 
         if (error) {
 
-            console.error(
-                "Supabase Results Error:",
-                error
-            );
+    console.error("SUPABASE ERROR:", error);
 
+    container.innerHTML = `
+        <div class="news-card">
+            <p style="color:red;">
+                ${escapeHtml(
+                    error.message ||
+                    JSON.stringify(error)
+                )}
+            </p>
+        </div>
+    `;
 
-            container.innerHTML = `
-
-                <div
-                    class="news-card"
-                    style="
-                        border:1px solid #ddd;
-                        padding:20px;
-                    ">
-
-                    <p>
-                        পোস্ট লোড করতে সমস্যা হয়েছে।
-                    </p>
-
-                    <p
-                        style="
-                            margin-top:10px;
-                            color:#b51222;
-                            font-size:12px;
-                            word-break:break-word;
-                        ">
-
-                        ${escapeHtml(
-                            error.message ||
-                            "Unknown Supabase error"
-                        )}
-
-                    </p>
-
-                    <p
-                        style="
-                            margin-top:8px;
-                            color:#777;
-                            font-size:11px;
-                            word-break:break-word;
-                        ">
-
-                        Code:
-                        ${escapeHtml(
-                            error.code || ""
-                        )}
-
-                    </p>
-
-                </div>
-
-            `;
-
-            return;
-
-        }
+    return;
+}
 
 
         /* =================================================
