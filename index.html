@@ -1183,7 +1183,6 @@ async function loadTotalVisits() {
 
     try {
 
-        // বর্তমান ভিজিট সংখ্যা নেওয়া
         const { data, error } =
             await supabaseClient
                 .from("site_stats")
@@ -1196,45 +1195,38 @@ async function loadTotalVisits() {
             return;
         }
 
-        const currentVisits =
-            Number(data.total_visits || 0);
-
-        // ১ যোগ করা
         const newVisits =
-            currentVisits + 1;
+            Number(data.total_visits || 0) + 1;
 
-        // Database-এ নতুন সংখ্যা Save করা
-        const { error: updateError } =
+        const { data: updatedData, error: updateError } =
             await supabaseClient
                 .from("site_stats")
                 .update({
                     total_visits: newVisits
                 })
-                .eq("id", 1);
+                .eq("id", 1)
+                .select("total_visits")
+                .single();
 
         if (updateError) {
             console.error(
                 "VISIT UPDATE ERROR:",
                 updateError
             );
-
-            // অন্তত পুরোনো সংখ্যা দেখাবে
-            visitElement.textContent =
-                currentVisits.toLocaleString("en-US");
-
             return;
         }
 
-        // Homepage-এ নতুন সংখ্যা দেখানো
         visitElement.textContent =
-            newVisits.toLocaleString("en-US");
+            Number(
+                updatedData.total_visits
+            ).toLocaleString("en-US");
 
     }
 
     catch (error) {
 
         console.error(
-            "VISIT UNEXPECTED ERROR:",
+            "VISIT ERROR:",
             error
         );
 
