@@ -502,17 +502,21 @@ async function loadResultsPosts() {
 
         if (error) {
 
-    console.error("SUPABASE ERROR:", error);
+    console.error(
+        "Supabase Results Error:",
+        error
+    );
 
     container.innerHTML = `
+
         <div class="news-card">
-            <p style="color:red;">
-                ${escapeHtml(
-                    error.message ||
-                    JSON.stringify(error)
-                )}
+
+            <p>
+                পোস্ট লোড করতে সমস্যা হয়েছে।
             </p>
+
         </div>
+
     `;
 
     return;
