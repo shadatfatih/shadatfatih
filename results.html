@@ -470,7 +470,7 @@ async function loadResultsPosts() {
                     description,
                     content,
                     category,
-                    sub_category,
+                    subcategory,
                     published,
                     published_at,
                     created_at
@@ -581,7 +581,7 @@ async function loadResultsPosts() {
                 data.filter(function(post) {
 
                     return String(
-                        post.sub_category || ""
+                        post.subcategory || ""
                     )
                     .trim()
                     .toUpperCase()
@@ -686,7 +686,7 @@ function createResultPost(post) {
 
     const rawSubcategory =
         String(
-            post.sub_category || ""
+            post.subcategory || ""
         )
         .trim()
         .toUpperCase();
