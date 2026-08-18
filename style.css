@@ -1353,12 +1353,27 @@ footer > p {
 }
 
 /* =====================================================
-   BREAKING NEWS SCROLL
+   BREAKING NEWS
 ===================================================== */
 
-.breaking-text {
-    white-space: nowrap;
+.breaking {
+    display: flex;
+    align-items: center;
     overflow: hidden;
+}
+
+.breaking-label {
+    flex-shrink: 0;
+    position: relative;
+    z-index: 10;
+}
+
+.breaking-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
 }
 
 .breaking-text {
