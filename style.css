@@ -1351,3 +1351,28 @@ footer > p {
     display: block;
     object-fit: contain;
 }
+
+/* =====================================================
+   BREAKING NEWS SCROLL
+===================================================== */
+
+.breaking-text {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.breaking-text {
+    animation: breakingScroll 15s linear infinite;
+}
+
+@keyframes breakingScroll {
+
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+
+}
